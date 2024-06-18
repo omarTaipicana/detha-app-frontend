@@ -1,11 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./styles/PrincipalHeader.css";
+import { useNavigate } from "react-router-dom";
 
 const PrincipalHeader = () => {
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.user ? localStorage.user : 0);
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
+
   return (
     <header className="principal__header">
-
       <Link className="title__principal__header" to="/">
         <img
           className="img__header"
@@ -20,15 +28,10 @@ const PrincipalHeader = () => {
         </div>
       </Link>
 
-      {/* <nav className="nav__principal__header">
-        <ul className="ul_principal__header">
-          <li>
-            <Link className="link__principal__header" to="/login">
-              login
-            </Link>
-          </li>
-        </ul>
-      </nav> */}
+      <div>
+        <span>{user? `Saludos Cordiales ${user.firstName} ${user.lastName}`:""}</span>
+        <button className="link__principal__header" onClick={handleLogout}>Logout</button>
+      </div>
     </header>
   );
 };

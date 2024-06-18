@@ -1,0 +1,75 @@
+.create__user__card {
+  width: 60%;
+
+  padding: 1em;
+  margin-top: 2em;
+}
+
+.title__create__user__card {
+  text-align: center;
+  font-size: 1.5em;
+  margin-bottom: 0.5em;
+  color: var(--blue-color);
+  text-shadow: 1px 1px 3px black;
+}
+
+.create__user__form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+}
+
+.label__create__user__card {
+  display: flex;
+
+  gap: 0.2em;
+  width: 70%;
+  margin: 0 auto;
+}
+
+.span__create__user__card {
+  width: 40%;
+  font-size: 1em;
+  font-weight: 500;
+  color: var(--black-color);
+}
+
+.input__create__user__card {
+  width: 60%;
+  font-size: 1em;
+  border-radius: 5px;
+}
+
+.create__user__card__btn {
+  width: 20%;
+  border: none;
+  font-size: 1em;
+  padding: 0.2em;
+  font-weight: 800;
+  color: var(--blue-color);
+  background: transparent;
+  border: 3px solid var(--plomo-color);
+  border-radius: 5px;
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  -webkit-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+.create__user__card__btn:hover {
+  background: var(--blue-color);
+  color: var(--plomo-color);
+  border: 3px solid var(--plomo-color);
+  -webkit-transition: all 0.35s ease;
+  transition: all 0.35s ease;
+}
+
+@media (max-width: 600px) {
+  .create__user__card {
+    width: 80%;
+  }
+  .logued__card {
+    width: 90%;
+  }
+}
