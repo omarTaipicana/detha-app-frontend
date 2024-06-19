@@ -8,7 +8,7 @@ const CreateUsers = () => {
   const [registerUser, loginUser] = useAuth();
 
   const submit = (data) => {
-    const frontBaseUrl = `${location.protocol}//${location.host}/auth/verify_email`;
+    const frontBaseUrl = `${location.protocol}//${location.host}/users/verify`;
     const body = { ...data, frontBaseUrl }
     console.log(body);
     registerUser(body);
@@ -94,18 +94,11 @@ const CreateUsers = () => {
               Administrador
             </option>
           </select>
-        </label>
-        <label className="label__create__user__card">
-          <span className="span__create__user__card">Contraseña:</span>
-          <input
-            {...register("password")}
-            className="input__create__user__card"
-            type="password"
-            required
-          />
-        </label>
-
+          
         <button className="create__user__card__btn">Crear</button>
+        </label>
+   
+
       </form>
     </div>
   );
