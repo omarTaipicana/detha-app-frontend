@@ -3,7 +3,7 @@ import HomePage from "./Login";
 
 const ProtectedRoutes = () => {
   if (localStorage.getItem("token")) {
-    return <HomePage />;
+    return <Outlet />;
   } else {
     return <Navigate to="/login" />;
   }
