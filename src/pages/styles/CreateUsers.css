@@ -66,6 +66,10 @@
   transition: all 0.35s ease;
 }
 
+
+
+
+
 @media (max-width: 600px) {
   .create__user__card {
     width: 80%;

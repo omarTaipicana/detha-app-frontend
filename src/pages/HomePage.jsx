@@ -1,9 +1,9 @@
 import React from 'react'
-
+import "./styles/HomePage.css";
 const HomePage = () => {
   return (
-    <div>HomePage
-        <h2>AQUI VAN TODOS LOS JUGUETES, BIENVENIDO AL SISTEMA DE TALENTO HUMANO DE LA DIGIN EN DESARROLLO</h2>
+    <div>
+        <h2 className='home_mesagge'>AQUI VAN TODOS LOS JUGUETES, BIENVENIDO AL SISTEMA DE TALENTO HUMANO DE LA DIGIN EN DESARROLLO</h2>
     </div>
   )
 }

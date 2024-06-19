@@ -1,0 +1,8 @@
+.home_mesagge{
+    width: 50%;
+    margin: 5vh auto;
+    text-align: center;
+    font-weight: 800;
+    color: rgb(2, 2, 57);
+    text-shadow: 2px 2px 5px rgb(79, 82, 79);
+}
