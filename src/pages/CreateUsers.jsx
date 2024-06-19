@@ -8,8 +8,8 @@ const CreateUsers = () => {
   const [registerUser, loginUser] = useAuth();
 
   const submit = (data) => {
-    const frontBaseUrl = `${location.protocol}//${location.host}/users/verify`;
-    const body = { ...data, frontBaseUrl }
+    const frontBaseUrl = `${location.protocol}//${location.host}/#/reset_password`;
+    const body = { ...data, frontBaseUrl };
     console.log(body);
     registerUser(body);
     reset({
@@ -94,11 +94,9 @@ const CreateUsers = () => {
               Administrador
             </option>
           </select>
-          
-        <button className="create__user__card__btn">Crear</button>
-        </label>
-   
 
+          <button className="create__user__card__btn">Crear</button>
+        </label>
       </form>
     </div>
   );

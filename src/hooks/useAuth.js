@@ -5,6 +5,7 @@ const urlBase = "https://detha-app-backend.onrender.com";
 
 const useAuth = () => {
   const navigate = useNavigate();
+
   const registerUser = (data) => {
     const url = `${urlBase}/users`;
     axios
@@ -31,8 +32,34 @@ const useAuth = () => {
         localStorage.removeItem("user");
       });
   };
-  
-  return [registerUser, loginUser];
+
+  const verifyUser = (data, code) => {
+    const url = `${urlBase}/users/reset_password/${code}`;
+    axios
+      .post(url, data)
+      .then((res) => {
+        console.log(res.data);
+        navigate("/login");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const sendEmail = (data) => {
+    const url = `${urlBase}/users/reset_password`;
+    axios
+      .post(url, data)
+      .then((res) => {
+        console.log(res.data);
+        navigate("/login");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  return [registerUser, loginUser, verifyUser, sendEmail];
 };
 
 export default useAuth;
