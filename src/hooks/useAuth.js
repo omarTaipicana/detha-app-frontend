@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import getConfigToken from "../services/getConfigToken";
 
 const useAuth = () => {
-  const urlBase = "http://localhost:8080";
+  const urlBase = "https://detha-app-backend.onrender.com";
   const navigate = useNavigate();
   const [err, setErr] = useState();
   const [isLoading, setIsLoading] = useState(false);
