@@ -29,9 +29,16 @@ const PrincipalHeader = () => {
       </Link>
 
       <div className="greeting__principal__header">
-        <span>{user? `Saludos Cordiales `:""}</span>
-        <span>{user? `${user.firstName} ${user.lastName}`:""}</span>
-        <button className="link__principal__header" onClick={handleLogout}>Logout</button>
+        <span className="greeting__text">
+          {user ? `Saludos Cordiales ` : ""}
+        </span>
+        <span className="greeting__text">
+          {user ? `${user.firstName} ${user.lastName}` : ""}
+        </span>
+        <button className="link__principal__header" onClick={handleLogout}>
+          <span className="link__exit__text">Salir</span>
+          {/* <img className="img__exit" src="../../../../exit.png" alt="" /> */}
+        </button>
       </div>
     </header>
   );

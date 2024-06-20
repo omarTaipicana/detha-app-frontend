@@ -1,22 +1,34 @@
 import axios from "axios";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-const urlBase = "https://detha-app-backend.onrender.com";
+import getConfigToken from "../services/getConfigToken";
 
 const useAuth = () => {
+  const urlBase = "http://localhost:8080";
   const navigate = useNavigate();
+  const [err, setErr] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+  const [users, setUsers] = useState();
 
   const registerUser = (data) => {
+    setIsLoading(true);
     const url = `${urlBase}/users`;
     axios
-      .post(url, data)
+      .post(url, data, getConfigToken())
       .then((res) => {
         console.log(res.data);
+        setErr(res.data);
+        setUsers(users ? [...users, res.data] : [res.data]);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setErr(err);
+      })
+      .finally(() => setIsLoading(false));
   };
 
   const loginUser = (data) => {
+    setIsLoading(true);
     const url = `${urlBase}/users/login`;
     axios
       .post(url, data)
@@ -27,13 +39,16 @@ const useAuth = () => {
         navigate("/");
       })
       .catch((err) => {
+        setErr(err);
         console.log(err);
         localStorage.removeItem("token");
         localStorage.removeItem("user");
-      });
+      })
+      .finally(() => setIsLoading(false));
   };
 
   const verifyUser = (data, code) => {
+    setIsLoading(true);
     const url = `${urlBase}/users/reset_password/${code}`;
     axios
       .post(url, data)
@@ -43,10 +58,13 @@ const useAuth = () => {
       })
       .catch((err) => {
         console.log(err);
-      });
+        setErr(err);
+      })
+      .finally(() => setIsLoading(false));
   };
 
   const sendEmail = (data) => {
+    setIsLoading(true);
     const url = `${urlBase}/users/reset_password`;
     axios
       .post(url, data)
@@ -56,10 +74,34 @@ const useAuth = () => {
       })
       .catch((err) => {
         console.log(err);
-      });
+        setErr(err);
+      })
+      .finally(() => setIsLoading(false));
   };
 
-  return [registerUser, loginUser, verifyUser, sendEmail];
+  const getUsers = () => {
+    setIsLoading(true);
+    const url = `${urlBase}/users`;
+    axios
+      .get(url, getConfigToken())
+      .then((res) => setUsers(res.data))
+      .catch((err) => {
+        setErr(err);
+        console.log(err);
+      })
+      .finally(() => setIsLoading(false));
+  };
+
+  return [
+    registerUser,
+    loginUser,
+    verifyUser,
+    sendEmail,
+    err,
+    isLoading,
+    users,
+    getUsers,
+  ];
 };
 
 export default useAuth;

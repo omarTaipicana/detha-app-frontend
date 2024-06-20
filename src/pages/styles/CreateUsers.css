@@ -1,6 +1,9 @@
+.create__users__list__users{
+  display: flex;
+}
+
 .create__user__card {
   width: 60%;
-
   padding: 1em;
   margin-top: 2em;
 }

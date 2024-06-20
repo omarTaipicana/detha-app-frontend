@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./styles/ChangePassword.css";
 import { useForm } from "react-hook-form";
 import useAuth from "../hooks/useAuth";
 import { useParams } from "react-router-dom";
+import IsLoading from "../components/HomePage/IsLoading";
 
 const ChangePassword = () => {
   const { code: code } = useParams();
   const { register, handleSubmit, reset } = useForm();
-  const [registerUser, loginUser, verifyUser] = useAuth();
+  const [, , verifyUser, , err, isLoading] = useAuth();
+  const [message, setMessage] = useState("");
 
   const submit = (data) => {
     if (data.password === data.confirmPassword) {
@@ -15,43 +17,57 @@ const ChangePassword = () => {
         password: data.password,
       };
       verifyUser(body, code);
+      setMessage(err?.response.data.mesagge);
     } else {
-      console.log("no igual");
+      setMessage("Las contraseñas no coinciden");
     }
-
     reset({
       password: "",
       confirmPassword: "",
     });
   };
 
-  return (
-    <div className="change__password__card">
-      <h2 className="title__change__password__card">Cambie su Contraseña</h2>
-      <form className="change__password__form" onSubmit={handleSubmit(submit)}>
-        <label className="label__change__password__card">
-          <span className="span__change__password__card">
-            Escriba su nueva Contraseña
-          </span>
-          <input
-            className="input__change__password__card"
-            type="password"
-            {...register("password")}
-          />
-        </label>
-        <label className="label__change__password__card">
-          <span className="span__change__password__card">
-            Valide su Contraseña
-          </span>
-          <input
-            className="input__change__password__card"
-            type="password"
-            {...register("confirmPassword")}
-          />
-        </label>
+  useEffect(() => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+  }, [code]);
 
-        <button className="change__password__card__btn">Enviar</button>
-      </form>
+  return (
+    <div>
+      {isLoading && <IsLoading />}
+      <div className="change__password__card">
+        <h2 className="title__change__password__card">Cambie su Contraseña</h2>
+        <form
+          className="change__password__form"
+          onSubmit={handleSubmit(submit)}
+        >
+          <label className="label__change__password__card">
+            <span className="span__change__password__card">
+              Escriba su nueva Contraseña
+            </span>
+            <input
+              className="input__change__password__card"
+              type="password"
+              {...register("password")}
+            />
+          </label>
+          <label className="label__change__password__card">
+            <span className="span__change__password__card">
+              Valide su Contraseña
+            </span>
+            <input
+              className="input__change__password__card"
+              type="password"
+              {...register("confirmPassword")}
+            />
+          </label>
+
+          <button className="change__password__card__btn">Enviar</button>
+          <span className="text__err">
+            {message ? message : err?.response.data.mesagge}
+          </span>
+        </form>
+      </div>
     </div>
   );
 };

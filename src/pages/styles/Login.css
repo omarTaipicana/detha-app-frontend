@@ -8,7 +8,7 @@
 
 .title__login__card {
   text-align: center;
-  font-size: 2em;
+  font-size: 2.5em;
   margin-bottom: 0.5em;
   color: var(--blue-color);
   text-shadow: 1px 1px 3px black;
@@ -54,10 +54,11 @@
 
 .span__login__card {
   font-size: 1.4em;
-  font-weight: 800;
-  color: var(--plomo-color);
+  font-weight: 600;
+  color: var(--black-color);
   -webkit-text-stroke-width: 0.04em;
   -webkit-text-stroke-color: var(--black-color);
+  font-style: italic;
 }
 
 .input__login__card {
@@ -65,38 +66,12 @@
   text-align: center;
 }
 
-/* ------------------------------------ */
-.logued__card {
-  width: 20%;
-  margin: 0 auto;
-  padding: 1em;
-  margin-top: 2em;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.img__logued {
-  width: 100%;
-}
-
-.user__logued {
-  text-align: center;
-  font-size: 2em;
-  color: rgb(4, 4, 55);
-  margin: 0.5em 0;
-}
-
-.user__logued__btn {
-  width: 70%;
-  margin: 0 auto;
-  margin: 1em 1em 2em 1em;
-  background-color: rgba(208, 43, 43, 0.982);
-  border: none;
-  font-size: 1.5em;
-  padding: 0.2em;
-  color: white;
+.text__err {
+  font-size: 1.2em;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--red-color);
+  text-shadow: 1px 1px 3px var(--blue-color);
 }
 
 @media (max-width: 600px) {

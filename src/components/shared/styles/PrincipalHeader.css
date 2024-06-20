@@ -1,11 +1,11 @@
 .principal__header {
   width: 100%;
+  height: 25vh;
   background-color: var(--plomo-color);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1em 2em;
-  text-shadow: 2px 1px 3px black;
 }
 
 .title__principal__header {
@@ -19,7 +19,7 @@
 }
 
 .img__header {
-  height: 3.5em;
+  height: 3em;
   margin-right: 1em;
 }
 .title__content {
@@ -30,28 +30,40 @@
   font-style: italic;
 }
 
-
-
+.title__span__header {
+  font-size: 0.8em;
+}
 
 .link__principal__header {
-  width: 50%;
+  width: 55%;
   margin: 1em auto;
+  font-size: 1.2em;
   color: var(--blue-color);
   text-decoration: none;
-  font-weight: 700;
+  font-weight: 800;
   border: solid 0.15rem black;
   background-color: var(--plomo-color);
   padding: 0.1em 0.8em;
   border-radius: 0.5em;
+  /* display: flex;
+  justify-content: space-between; */
 }
+/* .link__exit__text{
+  margin: 0 0.1em;
+} */
 
 .link__principal__header:hover {
   color: var(--white-color);
   background-color: var(--blue-color);
 }
 
+.greeting__text {
+  font-size: 1.2em;
+  font-weight: 700;
+  text-shadow: 1px 1px 2px rgba(134, 134, 134, 0.487);
+}
 
-.greeting__principal__header{
+.greeting__principal__header {
   text-align: center;
   font-size: 1em;
   width: 15%;
