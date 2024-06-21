@@ -1,4 +1,4 @@
-.create__users__list__users{
+.create__users__list__users {
   display: flex;
 }
 
@@ -69,15 +69,34 @@
   transition: all 0.35s ease;
 }
 
-
-
-
-
 @media (max-width: 600px) {
+  .create__users__list__users {
+    display: flex;
+    flex-direction: column;
+  }
+
   .create__user__card {
+    width: 100%;
+    padding: 0em;
+    margin-top: 1em;
+  }
+
+  .title__create__user__card {
+    font-size: 1.5em;
+  }
+
+  .create__user__form {
+    gap: 0.5em;
+  }
+
+  .label__create__user__card {
     width: 80%;
   }
-  .logued__card {
-    width: 90%;
+
+  .input__create__user__card {
+    width: 70%;
+    font-size: 0.8em;
   }
+
+
 }

@@ -12,7 +12,36 @@
 }
 
 .card__ul{
+    display: flex;
     font-size: 0.8em;
     display: flex;
     text-align: center;
+}
+
+
+@media (max-width: 600px) {
+
+    .card__users__content{
+        width: 100%;
+        padding: 1em;
+    }
+    
+    .card__user{
+        display: flex;
+        margin: 1em 0;
+        border:none;
+        border-radius: 0.5em;
+        padding: 0.2em;
+    }
+    
+    .card__ul{
+        margin: 0.5em auto;
+        font-size: 0.8em;
+        display: flex;
+        text-align: center;
+        flex-direction: column;
+    }
+    .card__li{
+        border: 1px solid black;
+    }
 }

@@ -33,7 +33,7 @@ const PrincipalHeader = () => {
           {user ? `Saludos Cordiales ` : ""}
         </span>
         <span className="greeting__text">
-          {user ? `${user.firstName} ${user.lastName}` : ""}
+          {user ? `${user.firstName} ${user.lastName} ${user.rol}` : ""}
         </span>
         <button className="link__principal__header" onClick={handleLogout}>
           <span className="link__exit__text">Salir</span>

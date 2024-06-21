@@ -9,9 +9,22 @@ const CreateUsers = () => {
   const { register, handleSubmit, reset } = useForm();
   const [registerUser, , , , err, isLoading] = useAuth();
 
+  const userRol = JSON.parse(localStorage.user).rol;
+
   const submit = (data) => {
     const frontBaseUrl = `${location.protocol}//${location.host}/#/reset_password`;
-    const body = { ...data, frontBaseUrl };
+    // const body = { ...data, frontBaseUrl };
+    const body = {
+      cI: data.cI,
+      email: data.email,
+      enabled: data.enabled === "true" ? true : false,
+      firstName: data.firstName,
+      frontBaseUrl: frontBaseUrl,
+      lastName: data.lastName,
+      nomenclature: data.nomenclature,
+      rol: data.rol,
+    };
+    // console.log(body)
     registerUser(body);
     reset({
       cI: "",
@@ -31,9 +44,7 @@ const CreateUsers = () => {
           <h2 className="title__create__user__card">Cree un nuevo Usuario</h2>
           <form className="create__user__form" onSubmit={handleSubmit(submit)}>
             <label className="label__create__user__card">
-              <span className="span__create__user__card">
-                Cedula de identidad:
-              </span>
+              <span className="span__create__user__card">Cedula:</span>
               <input
                 className="input__create__user__card"
                 {...register("cI")}
@@ -42,9 +53,7 @@ const CreateUsers = () => {
               />
             </label>
             <label className="label__create__user__card">
-              <span className="span__create__user__card">
-                Correo electrónico:
-              </span>
+              <span className="span__create__user__card">Email:</span>
               <input
                 {...register("email")}
                 className="input__create__user__card"
@@ -73,9 +82,7 @@ const CreateUsers = () => {
               />
             </label>
             <label className="label__create__user__card">
-              <span className="span__create__user__card">
-                Nomenclatura de pase:
-              </span>
+              <span className="span__create__user__card">Nomenclatura:</span>
               <input
                 className="input__create__user__card"
                 {...register("nomenclature")}
@@ -84,6 +91,22 @@ const CreateUsers = () => {
               />
             </label>
             <label className="label__create__user__card">
+              <span className="span__create__user__card">Habilitado:</span>
+              <select name="rol" id="rol" {...register("enabled")}>
+                <option className="input__create__user__card" value="true">
+                  Habilitado
+                </option>
+                <option className="input__create__user__card" value="false">
+                  Deshabilitado
+                </option>
+              </select>
+            </label>
+            <label
+              className="label__create__user__card"
+              style={{
+                display: userRol === "Administrador" ? "block" : "none",
+              }}
+            >
               <span className="span__create__user__card">Rol de Usuario:</span>
               <select name="rol" id="rol" {...register("rol")}>
                 <option
@@ -105,9 +128,8 @@ const CreateUsers = () => {
                   Administrador
                 </option>
               </select>
-
-              <button className="create__user__card__btn">Crear</button>
             </label>
+            <button className="create__user__card__btn">Crear</button>
             <span className="text__err">
               {err?.response?.data?.message ===
               "llave duplicada viola restricción de unicidad «users_cI_key»"

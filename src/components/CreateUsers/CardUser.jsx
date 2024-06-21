@@ -29,8 +29,13 @@ const CardUser = ({ user }) => {
           <span className="card__label">Rol de usuario: </span>
           <span className="card__value">{user.rol}</span>
         </li>
+        <li className="card__li">
+          <span className="card__label">Hbilitado: </span>
+          <span className="card__value">
+            {user.enabled ? "Habilitado" : "Deshabilitado"}
+          </span>
+        </li>
         <button>Edit</button>
-        <button>Delete</button>
       </ul>
     </div>
   );
