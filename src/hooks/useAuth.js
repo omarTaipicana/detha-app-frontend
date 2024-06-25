@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import getConfigToken from "../services/getConfigToken";
 
 const useAuth = () => {
-  // const urlBase = "http://localhost:8080"
+  // const urlBase = "http://localhost:8080";
   const urlBase = "https://detha-app-backend.onrender.com";
   const navigate = useNavigate();
   const [err, setErr] = useState();
@@ -18,8 +18,8 @@ const useAuth = () => {
       .post(url, data, getConfigToken())
       .then((res) => {
         console.log(res.data);
+        setUsers(res.data);
         setErr(res.data);
-        setUsers(users ? [...users, res.data] : [res.data]);
       })
       .catch((err) => {
         console.log(err);
@@ -34,7 +34,7 @@ const useAuth = () => {
     axios
       .post(url, data)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("user", JSON.stringify(res.data.user));
         navigate("/");
@@ -93,6 +93,23 @@ const useAuth = () => {
       .finally(() => setIsLoading(false));
   };
 
+  const updateUser = (data, id) => {
+    setIsLoading(true);
+    const url = `${urlBase}/users/${id}`;
+    axios
+      .put(url, data, getConfigToken())
+      .then((res) => {
+        // console.log(res.data);
+        setUsers(res.data);
+        setErr();
+      })
+      .catch((err) => {
+        console.log(err);
+        setErr(err);
+      })
+      .finally(() => setIsLoading(false));
+  };
+
   return [
     registerUser,
     loginUser,
@@ -102,6 +119,7 @@ const useAuth = () => {
     isLoading,
     users,
     getUsers,
+    updateUser
   ];
 };
 

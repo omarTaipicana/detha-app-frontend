@@ -16,8 +16,8 @@ const HomePage = () => {
       password: "",
     });
   };
-  console.log(err?.response.data.mesagge);
-  console.log(isLoading);
+  // console.log(err?.response.data.mesagge);
+  // console.log(isLoading);
 
   return (
     <div>

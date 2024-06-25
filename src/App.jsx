@@ -10,6 +10,8 @@ import PageAdmin from "./pages/PageAdmin";
 import ProtectedRoutes from "./pages/ProtectedRoutes";
 import AdminRoutes from "./pages/AdminRoutes";
 import SubAdminRoutes from "./pages/SubAdminRoutes";
+import UserActiveRoutes from "./pages/UserActiveRoutes";
+import InactivePage from "./pages/InactivePage";
 
 function App() {
   return (
@@ -21,13 +23,17 @@ function App() {
         <Route path="/reset_password/:code" element={<ChangePassword />} />
 
         <Route element={<ProtectedRoutes />}>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/inactive" element={<InactivePage />} />
 
-          <Route element={<SubAdminRoutes />}>
-            <Route path="/create_users" element={<CreateUsers />} />
+          <Route element={<UserActiveRoutes />}>
+            <Route path="/" element={<HomePage />} />
 
-            <Route element={<AdminRoutes />}>
-              <Route path="/admin" element={<PageAdmin />} />
+            <Route element={<SubAdminRoutes />}>
+              <Route path="/create_users" element={<CreateUsers />} />
+
+              <Route element={<AdminRoutes />}>
+                <Route path="/admin" element={<PageAdmin />} />
+              </Route>
             </Route>
           </Route>
         </Route>

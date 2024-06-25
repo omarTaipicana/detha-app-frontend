@@ -1,0 +1,25 @@
+.inactive__content {
+  width: 50%;
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 6%;
+}
+
+.inactive__title {
+  font-size: 2.5em;
+  color: var(--blue-color);
+  text-shadow: 2px 2px 3px var(--black-color);
+  margin-bottom: 1em;
+}
+
+.inactive__message {
+  font-size: 1.8em;
+  color: var(--black-color);
+  font-weight: 700;
+  margin-bottom: 1em;
+}
+
+.inactive__mail{
+    margin-top: 1em;
+    display: block;
+}

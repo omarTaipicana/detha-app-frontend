@@ -1,47 +1,90 @@
-.card__users__content{
-    width: 100%;
-    padding: 1em;
+.card__users__content {
+  width: 100%;
+  padding: 0.5em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
 }
 
-.card__user{
+.card__user {
+  width: 98%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  border: 0.1em solid black;
+  border-radius: 0.4em;
+  padding: 0.2em;
+}
+
+.card__ul {
+  width: 100%;
+  display: flex;
+  font-size: 0.8em;
+  text-align: center;
+}
+.card__li {
+  display: flex;
+  flex-direction: column;
+}
+
+.corto {
+  width: 11%;
+}
+
+.largo {
+  width: 22%;
+}
+
+.card__label {
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: 600;
+  margin-bottom: 0.5em;
+  color: var(--blue2-color);
+  text-shadow: 1px 1px 1px var(--plomo-color);
+}
+.card__value {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--plomo2-color);
+  font-weight: 700;
+}
+
+.card__value__v {
+  width: 1em;
+  height: 1em;
+  border-radius: 100%;
+}
+
+@media (max-width: 600px) {
+  .card__users__content {
+    width: 100%;
+    padding: 0.5em;
+  }
+
+  .card__user {
     display: flex;
     margin: 1em 0;
-    border: 0.1em solid black;
+    border: none;
     border-radius: 0.5em;
     padding: 0.2em;
-}
+  }
 
-.card__ul{
-    display: flex;
+  .card__ul {
+    margin: 0.5em auto;
     font-size: 0.8em;
     display: flex;
     text-align: center;
-}
-
-
-@media (max-width: 600px) {
-
-    .card__users__content{
-        width: 100%;
-        padding: 1em;
-    }
-    
-    .card__user{
-        display: flex;
-        margin: 1em 0;
-        border:none;
-        border-radius: 0.5em;
-        padding: 0.2em;
-    }
-    
-    .card__ul{
-        margin: 0.5em auto;
-        font-size: 0.8em;
-        display: flex;
-        text-align: center;
-        flex-direction: column;
-    }
-    .card__li{
-        border: 1px solid black;
-    }
+    flex-direction: column;
+  }
+  .card__li {
+    border: 1px solid black;
+    width: 85%;
+    margin: 0 auto;
+  }
+  .card__value__v{
+    margin: 0 auto;
+  }
 }
