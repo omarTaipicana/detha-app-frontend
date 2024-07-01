@@ -18,7 +18,6 @@ const HomePage = () => {
   };
   // console.log(err?.response.data.mesagge);
   // console.log(isLoading);
-
   return (
     <div>
       {isLoading && <IsLoading />}
