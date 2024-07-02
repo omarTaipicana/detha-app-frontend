@@ -39,7 +39,10 @@ const CreateUsers = () => {
       firstName: data.firstName,
       frontBaseUrl: frontBaseUrl,
       lastName: data.lastName,
+      direccion: data.direccion,
+      unidad: data.unidad,
       nomenclature: data.nomenclature,
+      cargo: data.cargo,
       rol: data.rol,
     };
 
@@ -51,13 +54,15 @@ const CreateUsers = () => {
     }
 
     setFormIsClouse(true);
+    setSelectedDireccion("");
+    setSelectedUnidad("");
+    setSelectedSiglas("");
+    setSelectedCargo("");
     reset({
       cI: "",
       email: "",
       firstName: "",
       lastName: "",
-      password: "",
-      nomenclature: "",
     });
   };
 
@@ -66,13 +71,31 @@ const CreateUsers = () => {
       .get(`${urlBase}/organicos`, getConfigToken())
       .then((res) => setOrganicos(res.data))
       .catch((err) => console.log(err));
-    console.log(organicos);
+
     reset(userEdit);
+
+    setUnidadesOptions(obtenerUnidadesPorDireccion(userEdit?.direccion));
+    setSiglasOptions(obtenerSiglasPorUnidad(userEdit?.unidad));
+    setCargoOptions(obtenerCargosPorSigla(userEdit?.nomenclature));
+
+    setSelectedDireccion(userEdit?.direccion);
+    setSelectedUnidad(userEdit?.unidad);
+    setSelectedSiglas(userEdit?.nomenclature);
+    setSelectedCargo(userEdit?.cargo);
   }, [userEdit]);
 
   const obtenerUnidadesPorDireccion = (siglasDireccion) => {
     return organicos.filter((item) => item.siglasDireccion === siglasDireccion);
   };
+  const obtenerSiglasPorUnidad = (siglaUnidadGrupo) => {
+    return organicos.filter(
+      (item) => item.siglaUnidadGrupo === siglaUnidadGrupo
+    );
+  };
+  const obtenerCargosPorSigla = (nomenclatura) => {
+    return organicos.filter((item) => item.nomenclatura === nomenclatura);
+  };
+
   const handleDireccionChange = (selected) => {
     setSelectedDireccion(selected);
     const unidadesByDireccion = obtenerUnidadesPorDireccion(selected);
@@ -82,11 +105,6 @@ const CreateUsers = () => {
     setSelectedCargo("");
   };
 
-  const obtenerSiglasPorUnidad = (siglaUnidadGrupo) => {
-    return organicos.filter(
-      (item) => item.siglaUnidadGrupo === siglaUnidadGrupo
-    );
-  };
   const handleUnidadChange = (selected) => {
     setSelectedUnidad(selected);
     const siglasByUnidad = obtenerSiglasPorUnidad(selected);
@@ -95,9 +113,6 @@ const CreateUsers = () => {
     setSelectedCargo("");
   };
 
-  const obtenerCargosPorSigla = (nomenclatura) => {
-    return organicos.filter((item) => item.nomenclatura === nomenclatura);
-  };
   const handleSiglasChange = (selected) => {
     setSelectedSiglas(selected);
     const cargoBySigla = obtenerCargosPorSigla(selected);
@@ -212,19 +227,12 @@ const CreateUsers = () => {
                 required
               />
             </label>
-            <label className="label__create__user__card">
-              <span className="span__create__user__card">Nomenclatura:</span>
-              <input
-                className="input__create__user__card"
-                {...register("nomenclature")}
-                type="text"
-                required
-              />
-            </label>
 
             <label className="label__create__user__card">
               <span className="span__create__user__card">Dirección:</span>
               <select
+                {...register("direccion")}
+                required
                 className="input__create__user__card"
                 value={selectedDireccion}
                 onChange={(e) => handleDireccionChange(e.target.value)}
@@ -243,6 +251,8 @@ const CreateUsers = () => {
             <label className="label__create__user__card">
               <span className="span__create__user__card">Unidad:</span>
               <select
+                {...register("unidad")}
+                required
                 className="input__create__user__card"
                 value={selectedUnidad}
                 onChange={(e) => handleUnidadChange(e.target.value)}
@@ -261,6 +271,8 @@ const CreateUsers = () => {
             <label className="label__create__user__card">
               <span className="span__create__user__card">Nomenclatura:</span>
               <select
+                {...register("nomenclature")}
+                required
                 className="input__create__user__card"
                 value={selectedSiglas}
                 onChange={(e) => handleSiglasChange(e.target.value)}
@@ -279,6 +291,8 @@ const CreateUsers = () => {
             <label className="label__create__user__card">
               <span className="span__create__user__card">Cargo:</span>
               <select
+                {...register("cargo")}
+                required
                 className="input__create__user__card"
                 value={selectedCargo}
                 onChange={(e) => handleCargoChange(e.target.value)}

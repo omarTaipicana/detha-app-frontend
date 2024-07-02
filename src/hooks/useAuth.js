@@ -16,7 +16,7 @@ const useAuth = () => {
     axios
       .post(url, data, getConfigToken())
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setUsers(res.data);
         setErr(res.data);
       })
@@ -53,7 +53,7 @@ const useAuth = () => {
     axios
       .post(url, data)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         navigate("/login");
       })
       .catch((err) => {
@@ -69,7 +69,7 @@ const useAuth = () => {
     axios
       .post(url, data)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         navigate("/login");
       })
       .catch((err) => {

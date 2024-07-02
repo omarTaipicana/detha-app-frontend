@@ -48,6 +48,9 @@ const ChangePassword = () => {
             <input
               className="input__change__password__card"
               type="password"
+              required
+              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$"
+              title="La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número, un símbolo y tener al menos 8 caracteres."
               {...register("password")}
             />
           </label>
@@ -58,6 +61,7 @@ const ChangePassword = () => {
             <input
               className="input__change__password__card"
               type="password"
+              required
               {...register("confirmPassword")}
             />
           </label>
