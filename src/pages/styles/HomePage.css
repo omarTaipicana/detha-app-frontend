@@ -8,7 +8,7 @@
 }
 
 table {
-  width: 80%;
+  width: 95%;
   margin: 0 auto;
   border-collapse: collapse;
   text-align: center;
@@ -18,17 +18,33 @@ table {
 th,
 td {
   border: 1px solid #7b7777;
-  padding: 2px;
-
+  padding: 1px;
 }
 tr:hover {
-  background-color: rgb(132, 237, 132);
+  background-color: rgb(103, 191, 242);
 }
 
 .nomenclatura {
   text-align: left;
 }
+.texto__vertical {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+}
+.tv1{
+    background-color: rgb(210, 212, 212);
+}
+.tv2{
+    background-color: rgb(194, 242, 182);
+}
+.tv3{
+    background-color: rgb(240, 225, 111);
+}
 
+.total__table,
 th {
   background-color: #908d8d;
 }
+
+
