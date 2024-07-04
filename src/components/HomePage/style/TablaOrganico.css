@@ -1,0 +1,46 @@
+table {
+    width: 95%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    text-align: center;
+    font-size: 0.6em;
+  }
+  
+  th,
+  td {
+    border: 1px solid #7b7777;
+    padding: 1px;
+  }
+  tr:hover td {
+    background-color: rgb(135, 205, 246);
+  }
+  
+  .nomenclatura {
+    text-align: left;
+  }
+  .texto__vertical {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+  }
+  .tv1{
+      background-color: rgb(210, 212, 212);
+  }
+  .tv2{
+      background-color: rgb(194, 242, 182);
+  }
+  .tv3{
+      background-color: rgb(240, 225, 111);
+  }
+
+  .cn1{
+    background-color: rgb(199, 199, 199);
+  }
+  
+
+  .total__table,
+  th {
+    background-color: #908d8d;
+  }
+  
+  

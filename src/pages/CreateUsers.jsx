@@ -10,11 +10,10 @@ import getConfigToken from "../services/getConfigToken";
 const CreateUsers = () => {
   const [selectedDireccion, setSelectedDireccion] = useState("");
   const [selectedUnidad, setSelectedUnidad] = useState("");
-  const [selectedSiglas, setSelectedSiglas] = useState("");
-  const [selectedCargo, setSelectedCargo] = useState("");
+  const [selectedUnidadSubzona, setSelectedUnidadSubzona] = useState("");
+  const [tipoDesignacion, setTipoDesignacion] = useState("");
   const [unidadesOptions, setUnidadesOptions] = useState([]);
-  const [siglasOptions, setSiglasOptions] = useState([]);
-  const [cargoOptions, setCargoOptions] = useState([]);
+  const [unidadSubzonaOptions, setUnidadSubzonaOptions] = useState([]);
 
   const urlBase = import.meta.env.VITE_API_URL;
   const { register, handleSubmit, reset } = useForm();
@@ -41,8 +40,8 @@ const CreateUsers = () => {
       lastName: data.lastName,
       direccion: data.direccion,
       unidad: data.unidad,
-      nomenclature: data.nomenclature,
-      cargo: data.cargo,
+      unidadSubzona: data.unidadSubzona,
+      tipoDesignacion: tipoDesignacion,
       rol: data.rol,
     };
 
@@ -56,8 +55,8 @@ const CreateUsers = () => {
     setFormIsClouse(true);
     setSelectedDireccion("");
     setSelectedUnidad("");
-    setSelectedSiglas("");
-    setSelectedCargo("");
+    setSelectedUnidadSubzona("");
+    setTipoDesignacion("");
     reset({
       cI: "",
       email: "",
@@ -75,13 +74,12 @@ const CreateUsers = () => {
     reset(userEdit);
 
     setUnidadesOptions(obtenerUnidadesPorDireccion(userEdit?.direccion));
-    setSiglasOptions(obtenerSiglasPorUnidad(userEdit?.unidad));
-    setCargoOptions(obtenerCargosPorSigla(userEdit?.nomenclature));
+    setUnidadSubzonaOptions(obtenerSiglasPorUnidad(userEdit?.unidad));
+    setTipoDesignacion(obtenerTipoAsignacion(userEdit?.unidadSubzona));
 
     setSelectedDireccion(userEdit?.direccion);
     setSelectedUnidad(userEdit?.unidad);
-    setSelectedSiglas(userEdit?.nomenclature);
-    setSelectedCargo(userEdit?.cargo);
+    setSelectedUnidadSubzona(userEdit?.unidadSubzona);
   }, [userEdit]);
 
   const obtenerUnidadesPorDireccion = (siglasDireccion) => {
@@ -92,8 +90,10 @@ const CreateUsers = () => {
       (item) => item.siglaUnidadGrupo === siglaUnidadGrupo
     );
   };
-  const obtenerCargosPorSigla = (nomenclatura) => {
-    return organicos.filter((item) => item.nomenclatura === nomenclatura);
+
+  const obtenerTipoAsignacion = (unidadSubzona) => {
+    const item = organicos.find((item) => item.unidadSubzona === unidadSubzona);
+    return item ? item.tipoDesignacion : "";
   };
 
   const handleDireccionChange = (selected) => {
@@ -101,27 +101,21 @@ const CreateUsers = () => {
     const unidadesByDireccion = obtenerUnidadesPorDireccion(selected);
     setUnidadesOptions(unidadesByDireccion);
     setSelectedUnidad("");
-    setSelectedSiglas("");
-    setSelectedCargo("");
+    setSelectedUnidadSubzona("");
+    setTipoDesignacion("");
   };
 
   const handleUnidadChange = (selected) => {
     setSelectedUnidad(selected);
     const siglasByUnidad = obtenerSiglasPorUnidad(selected);
-    setSiglasOptions(siglasByUnidad);
-    setSelectedSiglas("");
-    setSelectedCargo("");
+    setUnidadSubzonaOptions(siglasByUnidad);
+    setSelectedUnidadSubzona("");
+    setTipoDesignacion("");
   };
 
-  const handleSiglasChange = (selected) => {
-    setSelectedSiglas(selected);
-    const cargoBySigla = obtenerCargosPorSigla(selected);
-    setCargoOptions(cargoBySigla);
-    setSelectedCargo("");
-  };
-
-  const handleCargoChange = (selected) => {
-    setSelectedCargo(selected);
+  const handleUnidadSubzona = (selected) => {
+    setSelectedUnidadSubzona(selected);
+    setTipoDesignacion(obtenerTipoAsignacion(selected));
   };
 
   return (
@@ -156,6 +150,10 @@ const CreateUsers = () => {
               onClick={() => {
                 setFormIsClouse(true);
                 setUserEdit();
+                setSelectedDireccion("");
+                setSelectedUnidad("");
+                setSelectedUnidadSubzona("");
+                setTipoDesignacion("");
                 reset({
                   cI: "",
                   email: "",
@@ -269,43 +267,43 @@ const CreateUsers = () => {
             </label>
 
             <label className="label__create__user__card">
-              <span className="span__create__user__card">Nomenclatura:</span>
+              <span className="span__create__user__card">Control:</span>
               <select
-                {...register("nomenclature")}
+                {...register("unidadSubzona")}
                 required
                 className="input__create__user__card"
-                value={selectedSiglas}
-                onChange={(e) => handleSiglasChange(e.target.value)}
+                value={selectedUnidadSubzona}
+                onChange={(e) => handleUnidadSubzona(e.target.value)}
               >
-                <option value="">Seleccione la nomenclatura de pase</option>
-                {[...new Set(siglasOptions.map((e) => e.nomenclatura))].map(
-                  (siglas) => (
-                    <option key={siglas} value={siglas}>
-                      {siglas}
-                    </option>
-                  )
-                )}
+                <option value="">Seleccione el alcance de control</option>
+                {[
+                  ...new Set(unidadSubzonaOptions.map((e) => e.unidadSubzona)),
+                ].map((siglas) => (
+                  <option key={siglas} value={siglas}>
+                    {siglas}
+                  </option>
+                ))}
               </select>
             </label>
 
-            <label className="label__create__user__card">
-              <span className="span__create__user__card">Cargo:</span>
-              <select
-                {...register("cargo")}
-                required
+            <label
+              style={{
+                display: "none",
+              }}
+              disabled
+              className="label__create__user__card"
+            >
+              <span className="span__create__user__card">
+                Tipo Designación:
+              </span>
+              <input
+                value={tipoDesignacion}
                 className="input__create__user__card"
-                value={selectedCargo}
-                onChange={(e) => handleCargoChange(e.target.value)}
-              >
-                <option value="">Seleccione el cargo</option>
-                {[...new Set(cargoOptions.map((e) => e.cargoSiipne))].map(
-                  (cargo) => (
-                    <option key={cargo} value={cargo}>
-                      {cargo}
-                    </option>
-                  )
-                )}
-              </select>
+                {...register("tipoDesignacion")}
+                type="text"
+                required
+                readOnly
+              />
             </label>
 
             <label className="label__create__user__card">

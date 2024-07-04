@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import "./style/TablaOrganico.css";
 import axios from "axios";
 import getConfigToken from "../../services/getConfigToken";
 
 const TablaOrganico = () => {
   const urlBase = import.meta.env.VITE_API_URL;
   const user = JSON.parse(localStorage.user ? localStorage.user : 0);
+  console.log(user);
 
   const [organicos, setOrganicos] = useState([]);
 
@@ -16,7 +18,11 @@ const TablaOrganico = () => {
   }, []);
 
   const filteredOrganicos = organicos.filter(
-    (org) => org.siglaUnidadGrupo === user.unidad
+    user.tipoDesignacion == "NOPERA"
+      ? (org) => org.siglaUnidadGrupo === user.unidad
+      : (org) =>
+          org.unidadSubzona === user.unidadSubzona &&
+          org.siglaUnidadGrupo === user.unidad
   );
 
   const processOrgnaicos = () => {
@@ -130,55 +136,55 @@ const TablaOrganico = () => {
           {objProcesado.map((item) => (
             <tr key={item.nomenclatura}>
               <td className="nomenclatura">{item.nomenclatura}</td>
-              <td>{item.GRAI || 0}</td>
-              <td>{0}</td>
-              <td>{0}</td>
-              <td>{item.GRAD || 0}</td>
-              <td>{0}</td>
-              <td>{0}</td>
-              <td>{item.CRNL || 0}</td>
-              <td>{0}</td>
-              <td>{0}</td>
-              <td>{item.TCNL || 0}</td>
-              <td>{0}</td>
-              <td>{0}</td>
-              <td>{item.MAYR || 0}</td>
-              <td>{0}</td>
-              <td>{0}</td>
-              <td>{item.CPTN || 0}</td>
-              <td>{0}</td>
-              <td>{0}</td>
-              <td>{item.TNTE || 0}</td>
-              <td>{0}</td>
-              <td>{0}</td>
-              <td>{item.SBTE || 0}</td>
-              <td>{0}</td>
-              <td>{0}</td>
-              <td>{item.SUBM || 0}</td>
-              <td>{0}</td>
-              <td>{0}</td>
-              <td>{item.SUBP || 0}</td>
-              <td>{0}</td>
-              <td>{0}</td>
-              <td>{item.SUBS || 0}</td>
-              <td>{0}</td>
-              <td>{0}</td>
-              <td>{item.SGOP || 0}</td>
-              <td>{0}</td>
-              <td>{0}</td>
-              <td>{item.SGOS || 0}</td>
-              <td>{0}</td>
-              <td>{0}</td>
-              <td>{item.CBOP || 0}</td>
-              <td>{0}</td>
-              <td>{0}</td>
-              <td>{item.CBOS || 0}</td>
-              <td>{0}</td>
-              <td>{0}</td>
-              <td>{item.POLI || 0}</td>
-              <td>{0}</td>
-              <td>{0}</td>
-              <td>
+              <td className="cn1">{item.GRAI || 0}</td>
+              <td className="cn1">{0}</td>
+              <td className="cn1">{0}</td>
+              <td className="cn2">{item.GRAD || 0}</td>
+              <td className="cn2">{0}</td>
+              <td className="cn2">{0}</td>
+              <td className="cn1">{item.CRNL || 0}</td>
+              <td className="cn1">{0}</td>
+              <td className="cn1">{0}</td>
+              <td className="cn2">{item.TCNL || 0}</td>
+              <td className="cn2">{0}</td>
+              <td className="cn2">{0}</td>
+              <td className="cn1">{item.MAYR || 0}</td>
+              <td className="cn1">{0}</td>
+              <td className="cn1">{0}</td>
+              <td className="cn2">{item.CPTN || 0}</td>
+              <td className="cn2">{0}</td>
+              <td className="cn2">{0}</td>
+              <td className="cn1">{item.TNTE || 0}</td>
+              <td className="cn1">{0}</td>
+              <td className="cn1">{0}</td>
+              <td className="cn2">{item.SBTE || 0}</td>
+              <td className="cn2">{0}</td>
+              <td className="cn2">{0}</td>
+              <td className="cn1">{item.SUBM || 0}</td>
+              <td className="cn1">{0}</td>
+              <td className="cn1">{0}</td>
+              <td className="cn2">{item.SUBP || 0}</td>
+              <td className="cn2">{0}</td>
+              <td className="cn2">{0}</td>
+              <td className="cn1">{item.SUBS || 0}</td>
+              <td className="cn1">{0}</td>
+              <td className="cn1">{0}</td>
+              <td className="cn2">{item.SGOP || 0}</td>
+              <td className="cn2">{0}</td>
+              <td className="cn2">{0}</td>
+              <td className="cn1">{item.SGOS || 0}</td>
+              <td className="cn1">{0}</td>
+              <td className="cn1">{0}</td>
+              <td className="cn2">{item.CBOP || 0}</td>
+              <td className="cn2">{0}</td>
+              <td className="cn2">{0}</td>
+              <td className="cn1">{item.CBOS || 0}</td>
+              <td className="cn1">{0}</td>
+              <td className="cn1">{0}</td>
+              <td className="cn2">{item.POLI || 0}</td>
+              <td className="cn2">{0}</td>
+              <td className="cn2">{0}</td>
+              <td className="cn1">
                 {(item.GRAD ? item.GRAD : 0) +
                   (item.GRAI ? item.GRAI : 0) +
                   (item.CRNL ? item.CRNL : 0) +
@@ -196,8 +202,8 @@ const TablaOrganico = () => {
                   (item.CBOS ? item.CBOS : 0) +
                   (item.POLI ? item.POLI : 0)}
               </td>
-              <td>{0}</td>
-              <td>{0}</td>
+              <td className="cn1">{0}</td>
+              <td className="cn1">{0}</td>
             </tr>
           ))}
           <tr>

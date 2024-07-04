@@ -30,11 +30,17 @@ const CardUser = ({ user, setUserEdit, setFormIsClouse }) => {
           <span className="card__value">{user.email}</span>
         </li>
         <li className="card__li largo">
-          <span className="card__label">Nomenclatura: </span>
-          <span className="card__value">{user.nomenclature}</span>
+          <span className="card__label">Dirección - Unidad: </span>
+          <span className="card__value">
+            {user.direccion}-{user.unidad}
+          </span>
+        </li>
+        <li className="card__li largo">
+          <span className="card__label">Control: </span>
+          <span className="card__value">{user.unidadSubzona}</span>
         </li>
         <li className="card__li corto">
-          <span className="card__label">Rol de usuario: </span>
+          <span className="card__label">Rol Usuario: </span>
           <span
             className="card__value"
             style={{
