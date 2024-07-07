@@ -1,7 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./style/TablaOrganico.css";
 import axios from "axios";
 import getConfigToken from "../../services/getConfigToken";
+import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import 'jspdf-autotable';
+import domtoimage from 'dom-to-image';
 
 const TablaOrganico = () => {
   const urlBase = import.meta.env.VITE_API_URL;
@@ -94,10 +100,64 @@ const TablaOrganico = () => {
     return 0;
   });
 
+  
+  // const exportToExcel = () => {
+  //   const worksheet = XLSX.utils.json_to_sheet(sortedItems);
+  //   const workbook = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(workbook, worksheet, "Organicos");
+  //   const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+  //   const data = new Blob([excelBuffer], { type: "application/octet-stream" });
+  //   saveAs(data, "TablaOrganicos.xlsx");
+  // };
+  const tableRef = useRef(null);
+  
+  const exportToPDF = () => {
+    const node = document.getElementById('tableRef');
+  
+    const scale = 2; 
+  
+    domtoimage.toPng(node, {
+      width: node.scrollWidth * scale,
+      height: node.scrollHeight * scale,
+      style: {
+        transform: `scale(${scale})`,
+        transformOrigin: 'top left',
+        width: `${node.scrollWidth}px`,
+        height: `${node.scrollHeight}px`
+      }
+    })
+    .then((dataUrl) => {
+      const img = new Image();
+      img.src = dataUrl;
+  
+      img.onload = () => {
+        const doc = new jsPDF('l', 'mm', 'a4'); 
+        const imgWidth = 280; 
+        const imgHeight = img.height * imgWidth / img.width; 
+  
+        doc.addImage(img, 'PNG', 10, 10, imgWidth, imgHeight);
+        doc.save('TablaOrganicos.pdf');
+      };
+    })
+    .catch((error) => {
+      console.error('Error al generar la imagen:', error);
+    });
+  };
+
+  const exportToExcel = () => {
+    const ws = XLSX.utils.table_to_sheet(tableRef.current);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, 'table.xlsx');
+  };
+
+
   return (
     <div>
       <h2 className="home_mesagge">TABLA DE DEFICIT O EXCESO</h2>
-      <table>
+      <button onClick={exportToExcel}>Exportar a Excel</button>
+      <button onClick={exportToPDF}>Exportar a PDF</button>
+      <table id="tableRef" ref={tableRef}>
         <thead>
           <tr>
             <th rowSpan={2}>NOMENCLATURA</th>
