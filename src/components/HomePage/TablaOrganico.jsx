@@ -112,10 +112,8 @@ const TablaOrganico = () => {
   const tableRef = useRef(null);
   
   const exportToPDF = () => {
-    const node = document.getElementById('tableRef');
-  
-    const scale = 2; 
-  
+    const node = document.getElementById('tableRef');  
+    const scale = 2;   
     domtoimage.toPng(node, {
       width: node.scrollWidth * scale,
       height: node.scrollHeight * scale,
@@ -123,7 +121,8 @@ const TablaOrganico = () => {
         transform: `scale(${scale})`,
         transformOrigin: 'top left',
         width: `${node.scrollWidth}px`,
-        height: `${node.scrollHeight}px`
+        height: `${node.scrollHeight}px`,
+        left: '-200px' 
       }
     })
     .then((dataUrl) => {
