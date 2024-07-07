@@ -53,3 +53,7 @@ button,
 select {
   font-family: inherit;
 }
+
+button{
+  cursor: pointer;
+}

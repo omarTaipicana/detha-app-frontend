@@ -6,9 +6,9 @@ import getConfigToken from "../../services/getConfigToken";
 const TablaOrganico = () => {
   const urlBase = import.meta.env.VITE_API_URL;
   const user = JSON.parse(localStorage.user ? localStorage.user : 0);
-  console.log(user);
 
   const [organicos, setOrganicos] = useState([]);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
   useEffect(() => {
     axios
@@ -52,6 +52,47 @@ const TablaOrganico = () => {
     acc[grado] += total;
     return acc;
   }, {});
+  
+  const getTotalForItem = (item) => {
+    return (
+      (item.GRAD || 0) +
+      (item.GRAI || 0) +
+      (item.CRNL || 0) +
+      (item.TCNL || 0) +
+      (item.MAYR || 0) +
+      (item.CPTN || 0) +
+      (item.TNTE || 0) +
+      (item.SBTE || 0) +
+      (item.SUBM || 0) +
+      (item.SUBP || 0) +
+      (item.SUBS || 0) +
+      (item.SGOP || 0) +
+      (item.SGOS || 0) +
+      (item.CBOP || 0) +
+      (item.CBOS || 0) +
+      (item.POLI || 0)
+    );
+  };
+
+  const handleSort = (key) => {
+    let direction = 'desc';
+    if (sortConfig.key === key && sortConfig.direction === 'desc') {
+      direction = 'asc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedItems = [...objProcesado].sort((a, b) => {
+    if (sortConfig.key) {
+      const directionMultiplier = sortConfig.direction === 'asc' ? 1 : -1;
+      if (sortConfig.key === 'total') {
+        return directionMultiplier * (getTotalForItem(a) - getTotalForItem(b));
+      } else {
+        return directionMultiplier * ((a[sortConfig.key] || 0) - (b[sortConfig.key] || 0));
+      }
+    }
+    return 0;
+  });
 
   return (
     <div>
@@ -79,128 +120,113 @@ const TablaOrganico = () => {
             <th colSpan="3">TOTAL</th>
           </tr>
           <tr>
-            <th className="texto__vertical tv1">Aprobado</th>
-            <th className="texto__vertical tv2">Actual</th>
-            <th className="texto__vertical tv3">Deficit / Exceso</th>
-            <th className="texto__vertical tv1">Aprobado</th>
-            <th className="texto__vertical tv2">Actual</th>
-            <th className="texto__vertical tv3">Deficit / Exceso</th>
-            <th className="texto__vertical tv1">Aprobado</th>
-            <th className="texto__vertical tv2">Actual</th>
-            <th className="texto__vertical tv3">Deficit / Exceso</th>
-            <th className="texto__vertical tv1">Aprobado</th>
-            <th className="texto__vertical tv2">Actual</th>
-            <th className="texto__vertical tv3">Deficit / Exceso</th>
-            <th className="texto__vertical tv1">Aprobado</th>
-            <th className="texto__vertical tv2">Actual</th>
-            <th className="texto__vertical tv3">Deficit / Exceso</th>
-            <th className="texto__vertical tv1">Aprobado</th>
-            <th className="texto__vertical tv2">Actual</th>
-            <th className="texto__vertical tv3">Deficit / Exceso</th>
-            <th className="texto__vertical tv1">Aprobado</th>
-            <th className="texto__vertical tv2">Actual</th>
-            <th className="texto__vertical tv3">Deficit / Exceso</th>
-            <th className="texto__vertical tv1">Aprobado</th>
-            <th className="texto__vertical tv2">Actual</th>
-            <th className="texto__vertical tv3">Deficit / Exceso</th>
-            <th className="texto__vertical tv1">Aprobado</th>
-            <th className="texto__vertical tv2">Actual</th>
-            <th className="texto__vertical tv3">Deficit / Exceso</th>
-            <th className="texto__vertical tv1">Aprobado</th>
-            <th className="texto__vertical tv2">Actual</th>
-            <th className="texto__vertical tv3">Deficit / Exceso</th>
-            <th className="texto__vertical tv1">Aprobado</th>
-            <th className="texto__vertical tv2">Actual</th>
-            <th className="texto__vertical tv3">Deficit / Exceso</th>
-            <th className="texto__vertical tv1">Aprobado</th>
-            <th className="texto__vertical tv2">Actual</th>
-            <th className="texto__vertical tv3">Deficit / Exceso</th>
-            <th className="texto__vertical tv1">Aprobado</th>
-            <th className="texto__vertical tv2">Actual</th>
-            <th className="texto__vertical tv3">Deficit / Exceso</th>
-            <th className="texto__vertical tv1">Aprobado</th>
-            <th className="texto__vertical tv2">Actual</th>
-            <th className="texto__vertical tv3">Deficit / Exceso</th>
-            <th className="texto__vertical tv1">Aprobado</th>
-            <th className="texto__vertical tv2">Actual</th>
-            <th className="texto__vertical tv3">Deficit / Exceso</th>
-            <th className="texto__vertical tv1">Aprobado</th>
-            <th className="texto__vertical tv2">Actual</th>
-            <th className="texto__vertical tv3">Deficit / Exceso</th>
-            <th className="texto__vertical tv1">Aprobado</th>
-            <th className="texto__vertical tv2">Actual</th>
-            <th className="texto__vertical tv3">Deficit / Exceso</th>
+            <th className="texto__vertical tv1" onClick={() => handleSort('GRAI')}>Aprobado</th>
+            <th className="texto__vertical tv2" onClick={() => handleSort('GRAI')}>Actual</th>
+            <th className="texto__vertical tv3" onClick={() => handleSort('GRAI')}>Déficit / Exceso</th>
+            <th className="texto__vertical tv1" onClick={() => handleSort('GRAD')}>Aprobado</th>
+            <th className="texto__vertical tv2" onClick={() => handleSort('GRAD')}>Actual</th>
+            <th className="texto__vertical tv3" onClick={() => handleSort('GRAD')}>Déficit / Exceso</th>
+            <th className="texto__vertical tv1" onClick={() => handleSort('CRNL')}>Aprobado</th>
+            <th className="texto__vertical tv2" onClick={() => handleSort('CRNL')}>Actual</th>
+            <th className="texto__vertical tv3" onClick={() => handleSort('CRNL')}>Déficit / Exceso</th>
+            <th className="texto__vertical tv1" onClick={() => handleSort('TCNL')}>Aprobado</th>
+            <th className="texto__vertical tv2" onClick={() => handleSort('TCNL')}>Actual</th>
+            <th className="texto__vertical tv3" onClick={() => handleSort('TCNL')}>Déficit / Exceso</th>
+            <th className="texto__vertical tv1" onClick={() => handleSort('MAYR')}>Aprobado</th>
+            <th className="texto__vertical tv2" onClick={() => handleSort('MAYR')}>Actual</th>
+            <th className="texto__vertical tv3" onClick={() => handleSort('MAYR')}>Déficit / Exceso</th>
+            <th className="texto__vertical tv1" onClick={() => handleSort('CPTN')}>Aprobado</th>
+            <th className="texto__vertical tv2" onClick={() => handleSort('CPTN')}>Actual</th>
+            <th className="texto__vertical tv3" onClick={() => handleSort('CPTN')}>Déficit / Exceso</th>
+            <th className="texto__vertical tv1" onClick={() => handleSort('TNTE')}>Aprobado</th>
+            <th className="texto__vertical tv2" onClick={() => handleSort('TNTE')}>Actual</th>
+            <th className="texto__vertical tv3" onClick={() => handleSort('TNTE')}>Déficit / Exceso</th>
+            <th className="texto__vertical tv1" onClick={() => handleSort('SBTE')}>Aprobado</th>
+            <th className="texto__vertical tv2" onClick={() => handleSort('SBTE')}>Actual</th>
+            <th className="texto__vertical tv3" onClick={() => handleSort('SBTE')}>Déficit / Exceso</th>
+            <th className="texto__vertical tv1" onClick={() => handleSort('SUBM')}>Aprobado</th>
+            <th className="texto__vertical tv2" onClick={() => handleSort('SUBM')}>Actual</th>
+            <th className="texto__vertical tv3" onClick={() => handleSort('SUBM')}>Déficit / Exceso</th>
+            <th className="texto__vertical tv1" onClick={() => handleSort('SUBP')}>Aprobado</th>
+            <th className="texto__vertical tv2" onClick={() => handleSort('SUBP')}>Actual</th>
+            <th className="texto__vertical tv3" onClick={() => handleSort('SUBP')}>Déficit / Exceso</th>
+            <th className="texto__vertical tv1" onClick={() => handleSort('SUBS')}>Aprobado</th>
+            <th className="texto__vertical tv2" onClick={() => handleSort('SUBS')}>Actual</th>
+            <th className="texto__vertical tv3" onClick={() => handleSort('SUBS')}>Déficit / Exceso</th>
+            <th className="texto__vertical tv1" onClick={() => handleSort('SGOP')}>Aprobado</th>
+            <th className="texto__vertical tv2" onClick={() => handleSort('SGOP')}>Actual</th>
+            <th className="texto__vertical tv3" onClick={() => handleSort('SGOP')}>Déficit / Exceso</th>
+            <th className="texto__vertical tv1" onClick={() => handleSort('SGOS')}>Aprobado</th>
+            <th className="texto__vertical tv2" onClick={() => handleSort('SGOS')}>Actual</th>
+            <th className="texto__vertical tv3" onClick={() => handleSort('SGOS')}>Déficit / Exceso</th>
+            <th className="texto__vertical tv1" onClick={() => handleSort('CBOP')}>Aprobado</th>
+            <th className="texto__vertical tv2" onClick={() => handleSort('CBOP')}>Actual</th>
+            <th className="texto__vertical tv3" onClick={() => handleSort('CBOP')}>Déficit / Exceso</th>
+            <th className="texto__vertical tv1" onClick={() => handleSort('CBOS')}>Aprobado</th>
+            <th className="texto__vertical tv2" onClick={() => handleSort('CBOS')}>Actual</th>
+            <th className="texto__vertical tv3" onClick={() => handleSort('CBOS')}>Déficit / Exceso</th>
+            <th className="texto__vertical tv1" onClick={() => handleSort('POLI')}>Aprobado</th>
+            <th className="texto__vertical tv2" onClick={() => handleSort('POLI')}>Actual</th>
+            <th className="texto__vertical tv3" onClick={() => handleSort('POLI')}>Déficit / Exceso</th>
+            <th className="texto__vertical tv1" onClick={() => handleSort('total')}>Aprobado</th>
+            <th className="texto__vertical tv2" onClick={() => handleSort('total')}>Actual</th>
+            <th className="texto__vertical tv3" onClick={() => handleSort('total')}>Déficit / Exceso</th>
           </tr>
         </thead>
         <tbody>
-          {objProcesado.map((item) => (
+          {sortedItems.map((item) => (
             <tr key={item.nomenclatura}>
               <td className="nomenclatura">{item.nomenclatura}</td>
-              <td className="cn1">{item.GRAI || 0}</td>
+              <td className={`cn1 ${item.GRAI > 0 && "cn_ap_color"}`}>{item.GRAI || 0}</td>
               <td className="cn1">{0}</td>
               <td className="cn1">{0}</td>
-              <td className="cn2">{item.GRAD || 0}</td>
+              <td className={`cn2 ${item.GRAD > 0 && "cn_ap_color"}`}>{item.GRAD || 0}</td>
               <td className="cn2">{0}</td>
               <td className="cn2">{0}</td>
-              <td className="cn1">{item.CRNL || 0}</td>
+              <td className={`cn1 ${item.CRNL > 0 && "cn_ap_color"}`}>{item.CRNL || 0}</td>
               <td className="cn1">{0}</td>
               <td className="cn1">{0}</td>
-              <td className="cn2">{item.TCNL || 0}</td>
+              <td className={`cn2 ${item.TCNL > 0 && "cn_ap_color"}`}>{item.TCNL || 0}</td>
               <td className="cn2">{0}</td>
               <td className="cn2">{0}</td>
-              <td className="cn1">{item.MAYR || 0}</td>
+              <td className={`cn1 ${item.MAYR > 0 && "cn_ap_color"}`}>{item.MAYR || 0}</td>
               <td className="cn1">{0}</td>
               <td className="cn1">{0}</td>
-              <td className="cn2">{item.CPTN || 0}</td>
+              <td className={`cn2 ${item.CPTN > 0 && "cn_ap_color"}`}>{item.CPTN || 0}</td>
               <td className="cn2">{0}</td>
               <td className="cn2">{0}</td>
-              <td className="cn1">{item.TNTE || 0}</td>
+              <td className={`cn1 ${item.TNTE > 0 && "cn_ap_color"}`}>{item.TNTE || 0}</td>
               <td className="cn1">{0}</td>
               <td className="cn1">{0}</td>
-              <td className="cn2">{item.SBTE || 0}</td>
+              <td className={`cn2 ${item.SBTE > 0 && "cn_ap_color"}`}>{item.SBTE || 0}</td>
               <td className="cn2">{0}</td>
               <td className="cn2">{0}</td>
-              <td className="cn1">{item.SUBM || 0}</td>
+              <td className={`cn1 ${item.SUBM > 0 && "cn_ap_color"}`}>{item.SUBM || 0}</td>
               <td className="cn1">{0}</td>
               <td className="cn1">{0}</td>
-              <td className="cn2">{item.SUBP || 0}</td>
+              <td className={`cn2 ${item.SUBP > 0 && "cn_ap_color"}`}>{item.SUBP || 0}</td>
               <td className="cn2">{0}</td>
               <td className="cn2">{0}</td>
-              <td className="cn1">{item.SUBS || 0}</td>
+              <td className={`cn1 ${item.SUBS > 0 && "cn_ap_color"}`}>{item.SUBS || 0}</td>
               <td className="cn1">{0}</td>
               <td className="cn1">{0}</td>
-              <td className="cn2">{item.SGOP || 0}</td>
+              <td className={`cn2 ${item.SGOP > 0 && "cn_ap_color"}`}>{item.SGOP || 0}</td>
               <td className="cn2">{0}</td>
               <td className="cn2">{0}</td>
-              <td className="cn1">{item.SGOS || 0}</td>
+              <td className={`cn1 ${item.SGOS > 0 && "cn_ap_color"}`}>{item.SGOS || 0}</td>
               <td className="cn1">{0}</td>
               <td className="cn1">{0}</td>
-              <td className="cn2">{item.CBOP || 0}</td>
+              <td className={`cn2 ${item.CBOP > 0 && "cn_ap_color"}`}>{item.CBOP || 0}</td>
               <td className="cn2">{0}</td>
               <td className="cn2">{0}</td>
-              <td className="cn1">{item.CBOS || 0}</td>
+              <td className={`cn1 ${item.CBOS > 0 && "cn_ap_color"}`}>{item.CBOS || 0}</td>
               <td className="cn1">{0}</td>
               <td className="cn1">{0}</td>
-              <td className="cn2">{item.POLI || 0}</td>
+              <td className={`cn2 ${item.POLI > 0 && "cn_ap_color"}`}>{item.POLI || 0}</td>
               <td className="cn2">{0}</td>
               <td className="cn2">{0}</td>
-              <td className="cn1">
-                {(item.GRAD ? item.GRAD : 0) +
-                  (item.GRAI ? item.GRAI : 0) +
-                  (item.CRNL ? item.CRNL : 0) +
-                  (item.TCNL ? item.TCNL : 0) +
-                  (item.MAYR ? item.MAYR : 0) +
-                  (item.CPTN ? item.CPTN : 0) +
-                  (item.TNTE ? item.TNTE : 0) +
-                  (item.SBTE ? item.SBTE : 0) +
-                  (item.SUBM ? item.SUBM : 0) +
-                  (item.SUBP ? item.SUBP : 0) +
-                  (item.SUBS ? item.SUBS : 0) +
-                  (item.SGOP ? item.SGOP : 0) +
-                  (item.SGOS ? item.SGOS : 0) +
-                  (item.CBOP ? item.CBOP : 0) +
-                  (item.CBOS ? item.CBOS : 0) +
-                  (item.POLI ? item.POLI : 0)}
+              <td className={`cn1 ${ "cn_ap_color"}`}>
+                {getTotalForItem(item)}
               </td>
               <td className="cn1">{0}</td>
               <td className="cn1">{0}</td>
@@ -259,22 +285,7 @@ const TablaOrganico = () => {
             <td className="tv2">{0}</td>
             <td className="tv3">{0}</td>
             <td className="tv1">
-              {(totalesPorGrado.GRAI || 0) +
-                (totalesPorGrado.GRAD || 0) +
-                (totalesPorGrado.CRNL || 0) +
-                (totalesPorGrado.TCNL || 0) +
-                (totalesPorGrado.MAYR || 0) +
-                (totalesPorGrado.CPTN || 0) +
-                (totalesPorGrado.TNTE || 0) +
-                (totalesPorGrado.SBTE || 0) +
-                (totalesPorGrado.SUBM || 0) +
-                (totalesPorGrado.SUBP || 0) +
-                (totalesPorGrado.SUBS || 0) +
-                (totalesPorGrado.SGOP || 0) +
-                (totalesPorGrado.SGOS || 0) +
-                (totalesPorGrado.CBOP || 0) +
-                (totalesPorGrado.CBOS || 0) +
-                (totalesPorGrado.POLI || 0)}
+              {getTotalForItem(totalesPorGrado)}
             </td>
             <td className="tv2">{0}</td>
             <td className="tv3">{0}</td>

@@ -25,16 +25,34 @@ table {
   }
   .tv1{
       background-color: rgb(210, 212, 212);
+      color: var(--black-color);
+      font-weight: 700;
+      font-size: 1em;
+      cursor: pointer;
   }
   .tv2{
       background-color: rgb(194, 242, 182);
+      color: var(--black-color);
+      font-weight: 700;
+      font-size: 1em;
+      cursor: pointer;
   }
   .tv3{
       background-color: rgb(240, 225, 111);
+      color: var(--black-color);
+      font-weight: 700;
+      font-size: 1em;
+      cursor: pointer;
   }
 
   .cn1{
     background-color: rgb(199, 199, 199);
+  }
+
+  .cn_ap_color{
+    color: var(--blue-color);
+    font-weight: 800;
+    font-size: 1em;
   }
   
 
