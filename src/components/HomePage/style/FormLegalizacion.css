@@ -1,6 +1,10 @@
-
+.create__users__list__users {
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+  }
   
-  .cerate__servidor__btn {
+  .cerate__user__btn {
     width: 10%;
     align-self: flex-end;
     background-color: var(--plomo-color);
@@ -13,7 +17,7 @@
     padding: 0.1em 0.8em;
     border-radius: 0.5em;
   }
-  .cerate__servidor__btn:hover {
+  .cerate__user__btn:hover {
     color: var(--white-color);
     background-color: var(--blue-color);
   }
@@ -22,7 +26,7 @@
     transform: scale(0);
   }
   
-  .form__container__servidor {
+  .form__container {
     position: fixed;
     top: 0;
     left: 0;
@@ -36,7 +40,7 @@
     transition: transform 1000ms ease;
   }
   
-  .title__create__servidor__card {
+  .title__create__user__card {
     text-align: center;
     font-size: 2em;
     margin-bottom: 0.5em;
@@ -44,13 +48,14 @@
     text-shadow: 1px 1px 3px black;
   }
   
-  .create__servidor__form {
+  .create__user__form {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 1em;
-    width: 80%;
+    width: 90%;
+    max-width: 40em;
     background-color: var(--white-color);
     padding: 2em 1em;
     border-radius: 0.8rem;
@@ -65,52 +70,30 @@
     right: 1rem;
     cursor: pointer;
   }
-
-  .form__exit:hover {
-    -webkit-transition: all 0.35s ease;
-    transition: all 0.35s ease;
-    transform: scale(1.3);
-  }
-
-  .form__create__servidor__seccion__continer{
-    display: flex;
-    width: 100%;
-  }
-
-  .form__create__servidor__seccion{
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-
-  }
-
   
-  .label__create__servidor__card {
+  .label__create__user__card {
     display: flex;
     gap: 0.1em;
-    width: 95%;
+    width: 80%;
     margin: 0 auto;
   }
   
-  .span__create__servidor__card {
-    width: 40%;
+  .span__create__user__card {
+    width: 30%;
     font-size: 1em;
     font-weight: 700;
     color: var(--blue-color);
     text-shadow: 0.5px 0.5px 2px black;
   }
   
-  .input__create__servidor__card {
-    width: 60%;
+  .input__create__user__card {
+    width: 70%;
     font-size: 0.75em;
     border-radius: 5px;
-    max-height: 2em;
-    margin: auto 0;
   }
   
-  .create__servidor__card__btn {
-    width: 15%;
+  .create__user__card__btn {
+    width: 25%;
     border: none;
     font-size: 1em;
     margin: 0 auto;
@@ -123,7 +106,7 @@
     -webkit-transition: all 0.5s ease;
     transition: all 0.5s ease;
   }
-  .create__servidor__card__btn:hover {
+  .create__user__card__btn:hover {
     background: var(--blue-color);
     color: var(--plomo-color);
     border: 3px solid var(--plomo-color);
@@ -133,38 +116,38 @@
   }
   
   @media (max-width: 600px) {
-    .create__servidors__list__servidors {
+    .create__users__list__users {
       display: flex;
       flex-direction: column;
     }
   
-    .create__servidor__card {
+    .create__user__card {
       width: 100%;
       padding: 0em;
       margin-top: 1em;
     }
   
-    .title__create__servidor__card {
+    .title__create__user__card {
       font-size: 1.5em;
     }
   
-    .create__servidor__form {
+    .create__user__form {
       gap: 0.5em;
     }
-    .cerate__servidor__btn{
+    .cerate__user__btn{
       width: 40%;
       font-size: 0.7em;
     }
   
   
-    .label__create__servidor__card {
+    .label__create__user__card {
       display: flex;
       gap: 0.1em;
       width: 95%;
       margin: 0 auto;
     }
     
-    .span__create__servidor__card {
+    .span__create__user__card {
       width: 30%;
       font-size: 0.8em;
       font-weight: 700;
@@ -172,13 +155,13 @@
       text-shadow: 0.5px 0.5px 2px black;
     }
     
-    .input__create__servidor__card {
+    .input__create__user__card {
       width: 60%;
       font-size: 1em;
       border-radius: 5px;
     }
   
-    .create__servidor__card__btn{
+    .create__user__card__btn{
       width: 50%;
     }
   }

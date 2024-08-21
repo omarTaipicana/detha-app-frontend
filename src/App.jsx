@@ -12,6 +12,8 @@ import AdminRoutes from "./pages/AdminRoutes";
 import SubAdminRoutes from "./pages/SubAdminRoutes";
 import UserActiveRoutes from "./pages/UserActiveRoutes";
 import InactivePage from "./pages/InactivePage";
+import ServidoresPoliciales from "./pages/ServidoresPoliciales";
+import ParteDiario from "./pages/ParteDiario";
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
 
           <Route element={<UserActiveRoutes />}>
             <Route path="/" element={<HomePage />} />
+            <Route path="/servidores" element={<ServidoresPoliciales />} />
+            <Route path="/partediario" element={<ParteDiario />} />
 
             <Route element={<SubAdminRoutes />}>
               <Route path="/create_users" element={<CreateUsers />} />

@@ -54,6 +54,12 @@ const PrincipalHeader = () => {
         <Link className="link__nav" to="/">
           Home
         </Link>
+        <Link className="link__nav" to="/servidores">
+          Servidores Policiales
+        </Link>
+        <Link className="link__nav" to="/partediario">
+          Parte Diario
+        </Link>
         <Link
           className="link__nav"
           to="/create_users"

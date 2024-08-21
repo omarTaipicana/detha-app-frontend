@@ -5,7 +5,7 @@ import "./styles/CardUsers.css";
 
 const UsersList = ({ userUpdated, setUserEdit, setFormIsClouse }) => {
   const [, , , , err, isLoading, users, getUsers] = useAuth();
-  const [fetched, setFetched] = useState(false);
+  // const [fetched, setFetched] = useState(false);
 
   useEffect(() => {
     getUsers();

@@ -4,121 +4,54 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
 import getConfigToken from "../../services/getConfigToken";
+import useCrud from "../../hooks/useCrud";
 
 const FromServidorP = () => {
-  const [selectedDireccion, setSelectedDireccion] = useState("");
-  const [selectedUnidad, setSelectedUnidad] = useState("");
-  const [selectedSiglas, setSelectedSiglas] = useState("");
-  const [selectedCargo, setSelectedCargo] = useState("");
-  const [unidadesOptions, setUnidadesOptions] = useState([]);
-  const [siglasOptions, setSiglasOptions] = useState([]);
-  const [cargoOptions, setCargoOptions] = useState([]);
-
-  const urlBase = import.meta.env.VITE_API_URL;
+  const userCI = JSON.parse(localStorage.user ? localStorage.user : 0).cI;
+  const PATH = "/servidores";
   const { register, handleSubmit, reset } = useForm();
-  const [registerUser, , , , err, isLoading, users, , updateUser] = useAuth();
+  const [response, getApi, postApi, deleteApi, updateApi, hasError, isLoading] =
+    useCrud();
   const [userEdit, setUserEdit] = useState();
   const [formIsClouse, setFormIsClouse] = useState(true);
-  const [organicos, setOrganicos] = useState([]);
   const userRol = JSON.parse(localStorage.user).rol;
   const useCI = JSON.parse(localStorage.user).cI;
 
   const submit = (data) => {
     const body = {
-      cI: data.cI,
-      email: data.email,
-      enabled:
-        data.enabled === "true"
-          ? true
-          : data.enabled === "false"
-          ? false
-          : undefined,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      direccion: data.direccion,
-      unidad: data.unidad,
-      nomenclature: data.nomenclature,
-      cargo: data.cargo,
-      rol: data.rol,
+      ...data,
+      usuarioRegistro: userCI,
+      usuarioEdición: userCI,
     };
 
     if (userEdit) {
       // updateUser(body, userEdit.id);
       setUserEdit();
     } else {
-      registerUser(body);
+      postApi(PATH, body);
     }
-
-    setFormIsClouse(true);
-    setSelectedDireccion("");
-    setSelectedUnidad("");
-    setSelectedSiglas("");
-    setSelectedCargo("");
     reset({
       cI: "",
-      email: "",
-      firstName: "",
-      lastName: "",
+      nombres: "",
+      apellidos: "",
+      fechaNacimiento: "",
+      fechaIngreso: "",
+      provinciaResidencia: "",
+      cantonResidencia: "",
+      direccionResidencia: "",
+      estadoCivil: "",
+      etnia: "",
+      acreditado: "",
+      alertaDiscapacidad: "",
+      tipoDiscapacidad: "",
+      porcentajeDiscapacidad: "",
+      detalleDiscapacidad: "",
+      alertaEnfermedadCatastrófica: "",
+      detalleEnfermedad: "",
     });
+    setFormIsClouse(true);
   };
 
-  useEffect(() => {
-    axios
-      .get(`${urlBase}/organicos`, getConfigToken())
-      .then((res) => setOrganicos(res.data))
-      .catch((err) => console.log(err));
-
-    reset(userEdit);
-
-    setUnidadesOptions(obtenerUnidadesPorDireccion(userEdit?.direccion));
-    setSiglasOptions(obtenerSiglasPorUnidad(userEdit?.unidad));
-    setCargoOptions(obtenerCargosPorSigla(userEdit?.nomenclature));
-
-    setSelectedDireccion(userEdit?.direccion);
-    setSelectedUnidad(userEdit?.unidad);
-    setSelectedSiglas(userEdit?.nomenclature);
-    setSelectedCargo(userEdit?.cargo);
-  }, [userEdit]);
-
-  const obtenerUnidadesPorDireccion = (siglasDireccion) => {
-    return organicos.filter((item) => item.siglasDireccion === siglasDireccion);
-  };
-  const obtenerSiglasPorUnidad = (siglaUnidadGrupo) => {
-    return organicos.filter(
-      (item) => item.siglaUnidadGrupo === siglaUnidadGrupo
-    );
-  };
-  const obtenerCargosPorSigla = (nomenclatura) => {
-    return organicos.filter((item) => item.nomenclatura === nomenclatura);
-  };
-
-  const handleDireccionChange = (selected) => {
-    setSelectedDireccion(selected);
-    const unidadesByDireccion = obtenerUnidadesPorDireccion(selected);
-    setUnidadesOptions(unidadesByDireccion);
-    setSelectedUnidad("");
-    setSelectedSiglas("");
-    setSelectedCargo("");
-  };
-
-  const handleUnidadChange = (selected) => {
-    setSelectedUnidad(selected);
-    const siglasByUnidad = obtenerSiglasPorUnidad(selected);
-    setSiglasOptions(siglasByUnidad);
-    setSelectedSiglas("");
-    setSelectedCargo("");
-  };
-
-  const handleSiglasChange = (selected) => {
-    setSelectedSiglas(selected);
-    const cargoBySigla = obtenerCargosPorSigla(selected);
-    setCargoOptions(cargoBySigla);
-    setSelectedCargo("");
-  };
-
-  const handleCargoChange = (selected) => {
-    setSelectedCargo(selected);
-  };
 
   return (
     <div>
@@ -126,15 +59,22 @@ const FromServidorP = () => {
         onClick={() => {
           setFormIsClouse(false);
         }}
-        className="cerate__user__btn"
+        className="cerate__servidor__btn"
       >
-        + Registrar Talento Humano
+        + Registrar Servidor Policial
       </button>
 
-      <div className={`form__container ${formIsClouse && "form__close"}`}>
-        <form className="create__user__form" onSubmit={handleSubmit(submit)}>
-          <h2 className="title__create__user__card">
-            {userEdit ? "Actualize el Registro del Servidor Policial" : "Registre un Servidor Policial"}
+      <div
+        className={`form__container__servidor ${formIsClouse && "form__close"}`}
+      >
+        <form
+          className="create__servidor__form"
+          onSubmit={handleSubmit(submit)}
+        >
+          <h2 className="title__create__servidor__card">
+            {userEdit
+              ? "Actualice Informacióndel Servidor Policial"
+              : "Registro de Servidor Policial"}
           </h2>
           <div
             onClick={() => {
@@ -142,197 +82,267 @@ const FromServidorP = () => {
               setUserEdit();
               reset({
                 cI: "",
-                email: "",
-                firstName: "",
-                lastName: "",
-                password: "",
-                nomenclature: "",
+                nombres: "",
+                apellidos: "",
+                fechaNacimiento: "",
+                fechaIngreso: "",
+                provinciaResidencia: "",
+                cantonResidencia: "",
+                direccionResidencia: "",
+                estadoCivil: "",
+                etnia: "",
+                acreditado: "",
+                alertaDiscapacidad: "",
+                tipoDiscapacidad: "",
+                porcentajeDiscapacidad: "",
+                detalleDiscapacidad: "",
+                alertaEnfermedadCatastrófica: "",
+                detalleEnfermedad: "",
               });
             }}
             className="form__exit"
           >
             ❌
           </div>
-          <label
-            style={{
-              display:
-                !userEdit ||
-                userRol === "Administrador" ||
-                useCI === "0503627234"
-                  ? "flex"
-                  : "none",
-            }}
-            className="label__create__user__card"
-          >
-            <span className="span__create__user__card">Cedula:</span>
-            <input
-              className="input__create__user__card"
-              {...register("cI")}
-              type="text"
-              required
-            />
-          </label>
-          <label
-            style={{
-              display:
-                !userEdit ||
-                userRol === "Administrador" ||
-                useCI === "0503627234"
-                  ? "flex"
-                  : "none",
-            }}
-            className="label__create__user__card"
-          >
-            <span className="span__create__user__card">Email:</span>
-            <input
-              {...register("email")}
-              className="input__create__user__card"
-              id="email"
-              type="email"
-              pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-              required
-            />
-          </label>
-          <label className="label__create__user__card">
-            <span className="span__create__user__card">Nombres:</span>
-            <input
-              className="input__create__user__card"
-              {...register("firstName")}
-              type="text"
-              required
-            />
-          </label>
-          <label className="label__create__user__card">
-            <span className="span__create__user__card">Apellidos:</span>
-            <input
-              className="input__create__user__card"
-              {...register("lastName")}
-              type="text"
-              required
-            />
-          </label>
 
-          <label className="label__create__user__card">
-            <span className="span__create__user__card">Dirección:</span>
-            <select
-              {...register("direccion")}
-              required
-              className="input__create__user__card"
-              value={selectedDireccion}
-              onChange={(e) => handleDireccionChange(e.target.value)}
-            >
-              <option value="">Seleccione una dirección</option>
-              {[...new Set(organicos.map((e) => e.siglasDireccion))].map(
-                (direccion) => (
-                  <option key={direccion} value={direccion}>
-                    {direccion}
-                  </option>
-                )
-              )}
-            </select>
-          </label>
-
-          <label className="label__create__user__card">
-            <span className="span__create__user__card">Unidad:</span>
-            <select
-              {...register("unidad")}
-              required
-              className="input__create__user__card"
-              value={selectedUnidad}
-              onChange={(e) => handleUnidadChange(e.target.value)}
-            >
-              <option value="">Seleccione una unidad</option>
-              {[...new Set(unidadesOptions.map((e) => e.siglaUnidadGrupo))].map(
-                (unidad) => (
-                  <option key={unidad} value={unidad}>
-                    {unidad}
-                  </option>
-                )
-              )}
-            </select>
-          </label>
-
-          <label className="label__create__user__card">
-            <span className="span__create__user__card">Nomenclatura:</span>
-            <select
-              {...register("nomenclature")}
-              required
-              className="input__create__user__card"
-              value={selectedSiglas}
-              onChange={(e) => handleSiglasChange(e.target.value)}
-            >
-              <option value="">Seleccione la nomenclatura de pase</option>
-              {[...new Set(siglasOptions.map((e) => e.nomenclatura))].map(
-                (siglas) => (
-                  <option key={siglas} value={siglas}>
-                    {siglas}
-                  </option>
-                )
-              )}
-            </select>
-          </label>
-
-          <label className="label__create__user__card">
-            <span className="span__create__user__card">Cargo:</span>
-            <select
-              {...register("cargo")}
-              required
-              className="input__create__user__card"
-              value={selectedCargo}
-              onChange={(e) => handleCargoChange(e.target.value)}
-            >
-              <option value="">Seleccione el cargo</option>
-              {[...new Set(cargoOptions.map((e) => e.cargoSiipne))].map(
-                (cargo) => (
-                  <option key={cargo} value={cargo}>
-                    {cargo}
-                  </option>
-                )
-              )}
-            </select>
-          </label>
-
-          <label className="label__create__user__card">
-            <span className="span__create__user__card">Habilitado:</span>
-            <select
-              className="input__create__user__card"
-              name="rol"
-              id="rol"
-              {...register("enabled")}
-            >
-              <option value="true">Habilitado</option>
-              <option value="false">Deshabilitado</option>
-            </select>
-          </label>
-          <label
-            className="label__create__user__card"
-            style={{
-              display:
-                userRol === "Administrador" || useCI === "0503627234"
-                  ? "flex"
-                  : "none",
-            }}
-          >
-            <span className="span__create__user__card">Rol de Usuario:</span>
-            <select
-              className="input__create__user__card"
-              name="rol"
-              id="rol"
-              {...register("rol")}
-            >
-              <option value="Asistente de TH">Asistente de TH</option>
-              <option value="Sub-Administrador">Sub-Administrador</option>
-              <option
+          <section className="form__create__servidor__seccion__continer">
+            <section className="form__create__servidor__seccion">
+              <label
                 style={{
-                  display: useCI === "0503627234" ? "flex" : "none",
+                  display:
+                    !userEdit ||
+                    userRol === "Administrador" ||
+                    useCI === "0503627234"
+                      ? "flex"
+                      : "none",
                 }}
-                value="Administrador"
+                className="label__create__servidor__card"
               >
-                Administrador
-              </option>
-            </select>
-          </label>
-          <button className="create__user__card__btn">
+                <span className="span__create__servidor__card">Cedula:</span>
+                <input
+                  className="input__create__servidor__card"
+                  {...register("cI")}
+                  type="text"
+                  placeholder="Número de Cédula"
+                  required
+                />
+              </label>
+              <label className="label__create__servidor__card">
+                <span className="span__create__servidor__card">Nombres:</span>
+                <input
+                  className="input__create__servidor__card"
+                  {...register("nombres")}
+                  type="text"
+                  placeholder="Nombres"
+                  required
+                />
+              </label>
+              <label className="label__create__servidor__card">
+                <span className="span__create__servidor__card">Apellidos:</span>
+                <input
+                  className="input__create__servidor__card"
+                  {...register("apellidos")}
+                  type="text"
+                  placeholder="Apellidos"
+                  required
+                />
+              </label>
+
+              <label className="label__create__servidor__card">
+                <span className="span__create__servidor__card">
+                  Fecha de Nacimiento:
+                </span>
+                <input
+                  className="input__create__servidor__card"
+                  {...register("fechaNacimiento")}
+                  type="date"
+                  placeholder="Registre la Fecha de Nacimiento"
+                  required
+                />
+              </label>
+
+              <label className="label__create__servidor__card">
+                <span className="span__create__servidor__card">
+                  Fecha de Ingreso a la PPNN:
+                </span>
+                <input
+                  className="input__create__servidor__card"
+                  {...register("fechaIngreso")}
+                  type="date"
+                  placeholder="Registre la Fecha de Ingreso a la Institución"
+                  required
+                />
+              </label>
+
+              <label className="label__create__servidor__card">
+                <span className="span__create__servidor__card">Provincia:</span>
+                <input
+                  className="input__create__servidor__card"
+                  {...register("provinciaResidencia")}
+                  type="text"
+                  placeholder="Provincia donde Reside"
+                  required
+                />
+              </label>
+
+              <label className="label__create__servidor__card">
+                <span className="span__create__servidor__card">Cantón:</span>
+                <input
+                  className="input__create__servidor__card"
+                  {...register("cantonResidencia")}
+                  type="text"
+                  placeholder="Cantón donde Reside"
+                  required
+                />
+              </label>
+
+              <label className="label__create__servidor__card">
+                <span className="span__create__servidor__card">Dirección:</span>
+                <input
+                  className="input__create__servidor__card"
+                  {...register("direccionResidencia")}
+                  type="text"
+                  placeholder="Dirección domiciliaria"
+                  required
+                />
+              </label>
+
+              <label className="label__create__servidor__card">
+                <span className="span__create__servidor__card">
+                  Estado Civil:
+                </span>
+                <input
+                  className="input__create__servidor__card"
+                  {...register("estadoCivil")}
+                  type="text"
+                  placeholder="Estado Civil"
+                  required
+                />
+              </label>
+            </section>
+
+            <section className="form__create__servidor__seccion">
+              <label className="label__create__servidor__card">
+                <span className="span__create__servidor__card">Etnia:</span>
+                <input
+                  className="input__create__servidor__card"
+                  {...register("etnia")}
+                  type="text"
+                  placeholder="Etnia"
+                  required
+                />
+              </label>
+
+              <label className="label__create__servidor__card">
+                <span className="span__create__servidor__card">
+                  Acreditado:
+                </span>
+                <select
+                  className="input__create__servidor__card"
+                  {...register("acreditado")}
+                  type="text"
+                  placeholder="Acreditado"
+                  required
+                >
+                  <option value="">Seleccione Si / No tiene Aceditación</option>
+                  <option value="NO">NO</option>
+                  <option value="SI">SI</option>
+                </select>
+              </label>
+
+              <label className="label__create__servidor__card">
+                <span className="span__create__servidor__card">
+                  Alerta de Discapacidad:
+                </span>
+                <select
+                  className="input__create__servidor__card"
+                  {...register("alertaDiscapacidad")}
+                  type="text"
+                  placeholder="Alerta de Discapacidad"
+                  required
+                >
+                  <option value="">
+                    Seleccione Si / No tiene alerta de Discapacidad
+                  </option>
+                  <option value="NO">NO</option>
+                  <option value="SI">SI</option>
+                </select>
+              </label>
+
+              <label className="label__create__servidor__card">
+                <span className="span__create__servidor__card">
+                  Tipo de Discapacidad:
+                </span>
+                <input
+                  className="input__create__servidor__card"
+                  {...register("tipoDiscapacidad")}
+                  type="text"
+                  placeholder="Tipo de Discapacidad"
+                  required
+                />
+              </label>
+
+              <label className="label__create__servidor__card">
+                <span className="span__create__servidor__card">
+                  Porcentaje de Discapacidad:
+                </span>
+                <input
+                  className="input__create__servidor__card"
+                  {...register("porcentajeDiscapacidad")}
+                  type="number"
+                  placeholder="Porcentaje de Discapacidad"
+                  step="0.01"
+                  required
+                />
+              </label>
+
+              <label className="label__create__servidor__card">
+                <span className="span__create__servidor__card">
+                  Detalle de Discapacidad:
+                </span>
+                <input
+                  className="input__create__servidor__card"
+                  {...register("detalleDiscapacidad")}
+                  type="text"
+                  placeholder="Detalle de Discapacidad"
+                  required
+                />
+              </label>
+
+              <label className="label__create__servidor__card">
+                <span className="span__create__servidor__card">
+                  Alerta de Enfermedad Catastrófica:
+                </span>
+                <select
+                  className="input__create__servidor__card"
+                  {...register("alertaEnfermedadCatastrófica")}
+                  type="text"
+                  placeholder="Alerta de Enfermedad Catastrófica"
+                  required
+                >
+                  <option value="">
+                    Seleccione Si / No tiene alerta de Enfermedad Catastrófica
+                  </option>
+                  <option value="NO">NO</option>
+                  <option value="SI">SI</option>
+                </select>
+              </label>
+
+              <label className="label__create__servidor__card">
+                <span className="span__create__servidor__card">
+                  Detalle de Enfermedad Catastrófica:
+                </span>
+                <input
+                  className="input__create__servidor__card"
+                  {...register("detalleEnfermedad")}
+                  type="text"
+                  placeholder="Detalle de Enfermedad Catastrófica"
+                  required
+                />
+              </label>
+            </section>
+          </section>
+          <button className="create__servidor__card__btn">
             {userEdit ? "ACTUALIZAR" : "GUARDAR"}
           </button>
         </form>

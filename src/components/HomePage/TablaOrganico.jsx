@@ -14,24 +14,32 @@ const TablaOrganico = () => {
   const user = JSON.parse(localStorage.user ? localStorage.user : 0);
 
   const [organicos, setOrganicos] = useState([]);
+  const [filteredOrganicos, setFilteredOrganicos] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
   useEffect(() => {
     axios
       .get(`${urlBase}/organicos`, getConfigToken())
-      .then((res) => setOrganicos(res.data))
+      .then((res) => {
+        setOrganicos(res.data)
+        filterOrganicos(res.data)
+      })
       .catch((err) => console.log(err));
-  }, []);
+       }, []);
 
-  const filteredOrganicos = organicos.filter(
-    user.tipoDesignacion == "NOPERA"
-      ? (org) => org.siglaUnidadGrupo === user.unidad
-      : (org) =>
-          org.unidadSubzona === user.unidadSubzona &&
-          org.siglaUnidadGrupo === user.unidad
-  );
+  const filterOrganicos = (organicos) => {
+    const filtered = organicos.filter(
+      user.tipoDesignacion === "NOPERA"
+        ? (org) => org.siglaUnidadGrupo === user.unidad
+        : (org) =>
+            org.unidadSubzona === user.unidadSubzona &&
+            org.siglaUnidadGrupo === user.unidad
+    );
+    setFilteredOrganicos(filtered);
+  };
 
-  const processOrgnaicos = () => {
+  const processOrgnaicos = () => {  
+
     const objProcesado = {};
     filteredOrganicos.forEach((item) => {
       const { nomenclatura, grado, total } = item;
@@ -150,6 +158,10 @@ const TablaOrganico = () => {
     XLSX.writeFile(wb, 'table.xlsx');
   };
 
+  const resetFilterAndSort = () => {
+    filterOrganicos(organicos);
+    setSortConfig({ key: null, direction: 'asc' });
+  };
 
   return (
     <div>
@@ -159,7 +171,7 @@ const TablaOrganico = () => {
       <table id="tableRef" ref={tableRef}>
         <thead>
           <tr>
-            <th rowSpan={2}>NOMENCLATURA</th>
+            <th rowSpan={2} onClick={resetFilterAndSort}>NOMENCLATURA</th>
             <th colSpan="3">GRAI</th>
             <th colSpan="3">GRAD</th>
             <th colSpan="3">CRNL</th>
