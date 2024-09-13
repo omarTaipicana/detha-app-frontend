@@ -2,7 +2,7 @@ import React from "react";
 import "./styles/ResetPassword.css";
 import { useForm } from "react-hook-form";
 import useAuth from "../hooks/useAuth";
-import IsLoading from "../components/HomePage/IsLoading";
+import IsLoading from "../components/shared/IsLoading";
 
 const ResetPassword = () => {
   const { register, handleSubmit, reset } = useForm();

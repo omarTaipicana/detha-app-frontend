@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./styles/CreateUsers.css";
 import { useForm } from "react-hook-form";
 import useAuth from "../hooks/useAuth";
-import IsLoading from "../components/HomePage/IsLoading";
+import IsLoading from "../components/shared/IsLoading";
 import UsersList from "../components/CreateUsers/UsersList";
 import axios from "axios";
 import getConfigToken from "../services/getConfigToken";

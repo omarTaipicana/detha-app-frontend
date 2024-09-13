@@ -1,35 +1,63 @@
 import React, { useEffect, useState } from "react";
 import "./style/FormServidorP.css";
-import axios from "axios";
 import { useForm } from "react-hook-form";
-import useAuth from "../../hooks/useAuth";
-import getConfigToken from "../../services/getConfigToken";
 import useCrud from "../../hooks/useCrud";
 
-const FromServidorP = () => {
+const FromServidorP = ({
+  formIsClouse,
+  setFormIsClouse,
+  servidorEdit,
+  setServidorEdit,
+}) => {
   const userCI = JSON.parse(localStorage.user ? localStorage.user : 0).cI;
-  const PATH = "/servidores";
-  const { register, handleSubmit, reset } = useForm();
+  const PATH_SERVIDORES = "/servidores";
+  const PATH_SENPLADES = "/senplades";
+  const PATH_VARIABLES = "/variables";
+  const { register, handleSubmit, reset, value, setValue, watch } = useForm();
   const [response, getApi, postApi, deleteApi, updateApi, hasError, isLoading] =
     useCrud();
-  const [userEdit, setUserEdit] = useState();
-  const [formIsClouse, setFormIsClouse] = useState(true);
+  const [senplades, getSenplades, , , , ,] = useCrud();
+  const [estadoCivil, getEstadoCivil, , , , ,] = useCrud();
+  const [tipoDiscapacidad, getTipoDiscapacidad, , , , ,] = useCrud();
+  const [etnia, getEtnia, , , , ,] = useCrud();
   const userRol = JSON.parse(localStorage.user).rol;
   const useCI = JSON.parse(localStorage.user).cI;
 
-  const submit = (data) => {
-    const body = {
-      ...data,
-      usuarioRegistro: userCI,
-      usuarioEdición: userCI,
-    };
+  const [cantonesOption, setCantonesOption] = useState([]);
+  const [selectedProvincia, setSelectedProvincia] = useState("");
+  const [selectedCanton, setSelectedCanton] = useState("");
+  const [selectedEstadoCivil, setSelectedEstadoCivil] = useState("");
+  const [selectedTipoDiscapacidad, setSelectedTipoDiscapacidad] = useState("");
+  const [selectedEtnia, setSelectedEtnia] = useState("");
 
-    if (userEdit) {
-      // updateUser(body, userEdit.id);
-      setUserEdit();
+  const submit = (data) => {
+    // const body = {
+    //   ...data,
+    //   usuarioRegistro: userCI,
+    //   usuarioEdición: userCI,
+    // };
+
+    if (servidorEdit) {
+      updateApi(PATH_SERVIDORES, servidorEdit.id, {
+        ...data,
+
+        usuarioEdición: userCI,
+      });
+      setServidorEdit();
     } else {
-      postApi(PATH, body);
+      postApi(PATH_SERVIDORES, {
+        ...data,
+        usuarioRegistro: userCI,
+        usuarioEdicion: userCI,
+      });
     }
+
+    setFormIsClouse(true);
+    setSelectedProvincia("");
+    setSelectedCanton("");
+    setSelectedEstadoCivil("");
+    setSelectedTipoDiscapacidad("");
+    setSelectedEtnia("");
     reset({
       cI: "",
       nombres: "",
@@ -49,9 +77,63 @@ const FromServidorP = () => {
       alertaEnfermedadCatastrófica: "",
       detalleEnfermedad: "",
     });
-    setFormIsClouse(true);
   };
 
+  useEffect(() => {
+    getSenplades(PATH_SENPLADES);
+    getEstadoCivil(PATH_VARIABLES);
+    getTipoDiscapacidad(PATH_VARIABLES);
+    getEtnia(PATH_VARIABLES);
+    reset(servidorEdit);
+
+    setSelectedProvincia(servidorEdit?.provinciaResidencia);
+    setCantonesOption(
+      obtenerCantonesPorProvincia(servidorEdit?.provinciaResidencia)
+    );
+    setSelectedCanton(servidorEdit?.cantonResidencia);
+    setSelectedEstadoCivil(servidorEdit?.estadoCivil);
+    setSelectedEtnia(servidorEdit?.etnia);
+    setSelectedTipoDiscapacidad(servidorEdit?.tipoDiscapacidad);
+  }, [servidorEdit]);
+
+  const prueba = senplades ? senplades : [];
+
+  const obtenerCantonesPorProvincia = (provincia) => {
+    return prueba.filter((item) => item.provincia === provincia);
+  };
+
+  const handleProvinciaChange = (selected) => {
+    setSelectedProvincia(selected);
+    const cantonesByProvinca = obtenerCantonesPorProvincia(selected);
+    setCantonesOption(cantonesByProvinca);
+  };
+
+  useEffect(() => {
+    if (watch("alertaDiscapacidad") === "NO") {
+      setValue("detalleDiscapacidad", "NINGUNA");
+      setValue("tipoDiscapacidad", "NINGUNA");
+      setValue("porcentajeDiscapacidad", 0);
+    } else if (watch("alertaDiscapacidad") === "SI" && servidorEdit) {
+      setValue("detalleDiscapacidad", servidorEdit?.detalleDiscapacidad);
+      setValue("tipoDiscapacidad", servidorEdit?.tipoDiscapacidad);
+      setValue("porcentajeDiscapacidad", servidorEdit?.porcentajeDiscapacidad);
+    } else {
+      setValue("detalleDiscapacidad", "");
+      setValue("tipoDiscapacidad", "");
+      setValue("porcentajeDiscapacidad", "");
+      setSelectedTipoDiscapacidad("");
+    }
+  }, [watch("alertaDiscapacidad"), setValue]);
+
+  useEffect(() => {
+    if (watch("alertaEnfermedadCatastrófica") === "NO") {
+      setValue("detalleEnfermedad", "NINGUNA");
+    } else if (watch("alertaEnfermedadCatastrófica") === "SI" && servidorEdit) {
+      setValue("detalleEnfermedad", servidorEdit?.detalleEnfermedad);
+    } else {
+      setValue("detalleEnfermedad", "");
+    }
+  }, [watch("alertaEnfermedadCatastrófica"), setValue]);
 
   return (
     <div>
@@ -72,14 +154,19 @@ const FromServidorP = () => {
           onSubmit={handleSubmit(submit)}
         >
           <h2 className="title__create__servidor__card">
-            {userEdit
+            {servidorEdit
               ? "Actualice Informacióndel Servidor Policial"
               : "Registro de Servidor Policial"}
           </h2>
           <div
             onClick={() => {
               setFormIsClouse(true);
-              setUserEdit();
+              setServidorEdit();
+              setSelectedProvincia("");
+              setSelectedCanton("");
+              setSelectedEstadoCivil("");
+              setSelectedTipoDiscapacidad("");
+              setSelectedEtnia("");
               reset({
                 cI: "",
                 nombres: "",
@@ -110,7 +197,7 @@ const FromServidorP = () => {
               <label
                 style={{
                   display:
-                    !userEdit ||
+                    !servidorEdit ||
                     userRol === "Administrador" ||
                     useCI === "0503627234"
                       ? "flex"
@@ -133,7 +220,7 @@ const FromServidorP = () => {
                   className="input__create__servidor__card"
                   {...register("nombres")}
                   type="text"
-                  placeholder="Nombres"
+                  placeholder="Nombres del Servidor Policial"
                   required
                 />
               </label>
@@ -143,7 +230,7 @@ const FromServidorP = () => {
                   className="input__create__servidor__card"
                   {...register("apellidos")}
                   type="text"
-                  placeholder="Apellidos"
+                  placeholder="Apellidos del Servidor Policial"
                   required
                 />
               </label>
@@ -176,24 +263,46 @@ const FromServidorP = () => {
 
               <label className="label__create__servidor__card">
                 <span className="span__create__servidor__card">Provincia:</span>
-                <input
-                  className="input__create__servidor__card"
+
+                <select
                   {...register("provinciaResidencia")}
-                  type="text"
-                  placeholder="Provincia donde Reside"
                   required
-                />
+                  className="input__create__servidor__card"
+                  value={selectedProvincia}
+                  onChange={(e) => handleProvinciaChange(e.target.value)}
+                >
+                  <option value="">
+                    Seleccione la Provincia de residencia
+                  </option>
+                  {[...new Set(senplades?.map((e) => e.provincia))].map(
+                    (provincia) => (
+                      <option key={provincia} value={provincia}>
+                        {provincia}
+                      </option>
+                    )
+                  )}
+                </select>
               </label>
 
               <label className="label__create__servidor__card">
                 <span className="span__create__servidor__card">Cantón:</span>
-                <input
-                  className="input__create__servidor__card"
+
+                <select
                   {...register("cantonResidencia")}
-                  type="text"
-                  placeholder="Cantón donde Reside"
                   required
-                />
+                  className="input__create__servidor__card"
+                  value={selectedCanton}
+                  onChange={(e) => setSelectedCanton(e.target.value)}
+                >
+                  <option value="">Seleccione el Cantón de residencia</option>
+                  {[...new Set(cantonesOption.map((e) => e.canton))].map(
+                    (canton) => (
+                      <option key={canton} value={canton}>
+                        {canton}
+                      </option>
+                    )
+                  )}
+                </select>
               </label>
 
               <label className="label__create__servidor__card">
@@ -211,26 +320,49 @@ const FromServidorP = () => {
                 <span className="span__create__servidor__card">
                   Estado Civil:
                 </span>
-                <input
-                  className="input__create__servidor__card"
+
+                <select
                   {...register("estadoCivil")}
-                  type="text"
-                  placeholder="Estado Civil"
                   required
-                />
+                  className="input__create__servidor__card"
+                  value={selectedEstadoCivil}
+                  onChange={(e) => setSelectedEstadoCivil(e.target.value)}
+                >
+                  <option value="">Seleccione el estado civil</option>
+                  {estadoCivil
+                    .filter((e) => e.estadoCivil)
+                    .map((estadoCivil) => (
+                      <option
+                        key={estadoCivil.id}
+                        value={estadoCivil.estadoCivil}
+                      >
+                        {estadoCivil.estadoCivil}
+                      </option>
+                    ))}
+                </select>
               </label>
             </section>
 
             <section className="form__create__servidor__seccion">
               <label className="label__create__servidor__card">
                 <span className="span__create__servidor__card">Etnia:</span>
-                <input
-                  className="input__create__servidor__card"
+
+                <select
                   {...register("etnia")}
-                  type="text"
-                  placeholder="Etnia"
                   required
-                />
+                  className="input__create__servidor__card"
+                  value={selectedEtnia}
+                  onChange={(e) => setSelectedEtnia(e.target.value)}
+                >
+                  <option value="">Seleccione la etnia del servidor</option>
+                  {etnia
+                    ?.filter((e) => e.etnia)
+                    .map((etnia) => (
+                      <option key={etnia.id} value={etnia.etnia}>
+                        {etnia.etnia}
+                      </option>
+                    ))}
+                </select>
               </label>
 
               <label className="label__create__servidor__card">
@@ -273,13 +405,30 @@ const FromServidorP = () => {
                 <span className="span__create__servidor__card">
                   Tipo de Discapacidad:
                 </span>
-                <input
-                  className="input__create__servidor__card"
+
+                <select
                   {...register("tipoDiscapacidad")}
-                  type="text"
-                  placeholder="Tipo de Discapacidad"
                   required
-                />
+                  className="input__create__servidor__card"
+                  value={
+                    watch("alertaDiscapacidad") !== "NO"
+                      ? selectedTipoDiscapacidad || ""
+                      : "NINGUNA"
+                  }
+                  onChange={(e) => setSelectedTipoDiscapacidad(e.target.value)}
+                >
+                  <option value="">Seleccione el estado civil</option>
+                  {tipoDiscapacidad
+                    ?.filter((e) => e.discapacidad)
+                    .map((discapacidad) => (
+                      <option
+                        key={discapacidad.id}
+                        value={discapacidad.discapacidad}
+                      >
+                        {discapacidad.discapacidad}
+                      </option>
+                    ))}
+                </select>
               </label>
 
               <label className="label__create__servidor__card">
@@ -290,8 +439,22 @@ const FromServidorP = () => {
                   className="input__create__servidor__card"
                   {...register("porcentajeDiscapacidad")}
                   type="number"
+                  value={
+                    watch("alertaDiscapacidad") !== "NO"
+                      ? watch("porcentajeDiscapacidad") || ""
+                      : 0
+                  }
+                  onChange={(e) => {
+                    if (watch("alertaDiscapacidad") !== "NO") {
+                      const value = e.target.value;
+                      setValue("porcentajeDiscapacidad", Math.min(value, 100));
+                    } else {
+                      setValue("porcentajeDiscapacidad", 0);
+                    }
+                  }}
                   placeholder="Porcentaje de Discapacidad"
                   step="0.01"
+                  max="100"
                   required
                 />
               </label>
@@ -304,6 +467,18 @@ const FromServidorP = () => {
                   className="input__create__servidor__card"
                   {...register("detalleDiscapacidad")}
                   type="text"
+                  value={
+                    watch("alertaDiscapacidad") !== "NO"
+                      ? watch("detalleDiscapacidad") || ""
+                      : "NINGUNA"
+                  }
+                  onChange={(e) => {
+                    if (watch("alertaDiscapacidad") !== "NO") {
+                      setValue("detalleDiscapacidad", e.target.value);
+                    } else {
+                      setValue("detalleDiscapacidad", "NINGUNA");
+                    }
+                  }}
                   placeholder="Detalle de Discapacidad"
                   required
                 />
@@ -336,6 +511,18 @@ const FromServidorP = () => {
                   className="input__create__servidor__card"
                   {...register("detalleEnfermedad")}
                   type="text"
+                  value={
+                    watch("alertaEnfermedadCatastrófica") !== "NO"
+                      ? watch("detalleEnfermedad") || ""
+                      : "NINGUNA"
+                  }
+                  onChange={(e) => {
+                    if (watch("alertaEnfermedadCatastrófica") !== "NO") {
+                      setValue("detalleEnfermedad", e.target.value);
+                    } else {
+                      setValue("detalleEnfermedad", "NINGUNA");
+                    }
+                  }}
                   placeholder="Detalle de Enfermedad Catastrófica"
                   required
                 />
@@ -343,7 +530,7 @@ const FromServidorP = () => {
             </section>
           </section>
           <button className="create__servidor__card__btn">
-            {userEdit ? "ACTUALIZAR" : "GUARDAR"}
+            {servidorEdit ? "ACTUALIZAR" : "GUARDAR"}
           </button>
         </form>
       </div>

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "./styles/Login.css";
 import { useForm } from "react-hook-form";
 import useAuth from "../hooks/useAuth";
-import IsLoading from "../components/HomePage/IsLoading";
+import IsLoading from "../components/shared/IsLoading";
 
 const HomePage = () => {
   const { register, handleSubmit, reset } = useForm();

@@ -4,11 +4,12 @@ import getConfigToken from "../services/getConfigToken";
 
 const useCrud = () => {
   const BASEURL = import.meta.env.VITE_API_URL;
-  const [response, setResponse] = useState();
+  const [response, setResponse] = useState([]);
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const getApi = (path) => {
+    setIsLoading(true);
     const url = `${BASEURL}${path}`;
     axios
       .get(url, getConfigToken())
@@ -21,12 +22,12 @@ const useCrud = () => {
   };
 
   const postApi = (path, data) => {
+    setIsLoading(true);
     const url = `${BASEURL}${path}`;
-    console.log(data);
     axios
       .post(url, data, getConfigToken())
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setResponse([...response, res.data]);
       })
       .finally(() => setIsLoading(false))
@@ -37,6 +38,7 @@ const useCrud = () => {
   };
 
   const deleteApi = (path, id) => {
+    setIsLoading(true);
     const url = `${BASEURL}${path}${id}`;
     axios
       .delete(url, getConfigToken())
@@ -52,9 +54,8 @@ const useCrud = () => {
   };
 
   const updateApi = (path, id, data) => {
-    const url = `${BASEURL}${path}${id}/`;
-    console.log(url);
-    console.log(data);
+    setIsLoading(true);
+    const url = `${BASEURL}${path}/${id}`;
     axios
       .put(url, data, getConfigToken())
       .then((res) =>

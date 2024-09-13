@@ -70,6 +70,11 @@
   right: 1rem;
   cursor: pointer;
 }
+.form__exit:hover {
+  -webkit-transition: all 0.35s ease;
+  transition: all 0.35s ease;
+  transform: scale(1.3);
+}
 
 .label__create__user__card {
   display: flex;

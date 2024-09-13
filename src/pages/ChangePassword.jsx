@@ -3,7 +3,8 @@ import "./styles/ChangePassword.css";
 import { useForm } from "react-hook-form";
 import useAuth from "../hooks/useAuth";
 import { useParams } from "react-router-dom";
-import IsLoading from "../components/HomePage/IsLoading";
+import IsLoading from "../components/shared/IsLoading";
+
 
 const ChangePassword = () => {
   const { code: code } = useParams();
