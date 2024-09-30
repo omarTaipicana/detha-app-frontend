@@ -17,6 +17,7 @@
   overflow-y: scroll;
   padding: 1rem;
 }
+
 .title__servidor__card {
   text-align: center;
   font-size: 2em;
@@ -64,4 +65,5 @@
 
 .container__servidor__form {
   width: 100%;
+  
 }

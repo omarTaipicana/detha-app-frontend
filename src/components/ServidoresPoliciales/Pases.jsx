@@ -36,7 +36,6 @@ const Pases = ({ servidor }) => {
     if (paseEdit) {
       updatePase(PATH_PASES, paseEdit.id, {
         ...data,
-        servidorPolicialId: servidor.id,
         usuarioEdicion: userCI,
       });
     } else {
@@ -139,11 +138,11 @@ const Pases = ({ servidor }) => {
       <article>
         <span>PASES</span>
         <form onSubmit={handleSubmit(submit)}>
-          <label>
+          <label className="label__form">
             <span>Número de Telegrama</span>
             <input type="text" required {...register("numeroTelegrama")} />
           </label>
-          <label>
+          <label className="label__form">
             <span>Fecha Telegrama: </span>
             <input
               required
@@ -165,7 +164,7 @@ const Pases = ({ servidor }) => {
           {errors.fechaTelegrama && (
             <p style={{ color: "red" }}>{errors.fechaTelegrama.message}</p>
           )}
-          <label htmlFor="">
+          <label className="label__form" htmlFor="">
             <span>Dirección</span>
             <select
               required
@@ -183,7 +182,7 @@ const Pases = ({ servidor }) => {
               )}
             </select>
           </label>
-          <label htmlFor="">
+          <label className="label__form" htmlFor="">
             <span>Unidad</span>
             <select
               required
@@ -201,7 +200,7 @@ const Pases = ({ servidor }) => {
               )}
             </select>
           </label>
-          <label htmlFor="">
+          <label className="label__form" htmlFor="">
             <span>Nomenclatura</span>
             <select
               required
@@ -219,7 +218,7 @@ const Pases = ({ servidor }) => {
               )}
             </select>
           </label>
-          <label htmlFor="">
+          <label className="label__form" htmlFor="">
             <span>Cargo</span>
             <select
               required
@@ -238,8 +237,8 @@ const Pases = ({ servidor }) => {
             </select>
           </label>
           {selectedDireccion === "OTROS" && (
-            <label>
-              <span>NOMENCLATURA SI ES FUERA DE LA DIGIN</span>
+            <label className="label__form">
+              <span>Nomenclatura si es fuera de la DIGIN</span>
               <input
                 type="text"
                 {...register("nomenclaturaNoDigin", {
@@ -266,7 +265,7 @@ const Pases = ({ servidor }) => {
             <tbody>
               {pase
                 ?.slice()
-                .reverse()
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                 .filter((pase) => pase.servidorPolicialId === servidor.id)
                 .map((pase) => (
                   <tr key={pase.id}>

@@ -37,12 +37,24 @@ const CardServidoresPoliciales = ({
         </li>
         <li className="card__servidorPolicial__li">
           <span className="card__servidorPolicial__label">UNIDAD: </span>
-          <span className="card__servidorPolicial__value">
-            {
-              servidorPolicial.pases.sort(
-                (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-              )[0]?.siglaUnidadGrupo
-            }
+          <span
+            style={{
+              color: servidorPolicial.pases.length === 0 ? "red" : "inherit",
+              fontWeight:
+                servidorPolicial.pases.length === 0 ? "800" : "inherit",
+            }}
+          >
+            {servidorPolicial.pases.length === 0
+              ? "SIN REGISTRO"
+              : `${
+                  servidorPolicial.pases.sort(
+                    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+                  )[0]?.unidadSubzona || ""
+                } / ${
+                  servidorPolicial.pases.sort(
+                    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+                  )[0]?.unidad || ""
+                }`}
           </span>
         </li>
         <li className="card__servidorPolicial__li">

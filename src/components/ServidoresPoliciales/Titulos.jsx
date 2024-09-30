@@ -60,7 +60,7 @@ const Titulos = ({ servidor }) => {
       <article>
         <span>TITULOS</span>
         <form onSubmit={handleSubmit(submit)}>
-          <label>
+          <label className="label__form">
             <span>Fecha: </span>
             <input
             required
@@ -85,11 +85,11 @@ const Titulos = ({ servidor }) => {
             <p style={{ color: "red" }}>{errors.fecha.message}</p>
           )}
 
-          <label>
+          <label className="label__form">
             <span>Título: </span>
             <input type="text" required {...register("titulo")} />
           </label>
-          <label>
+          <label className="label__form">
             <span>Institución: </span>
             <input type="text" required {...register("institucion")} />
           </label>

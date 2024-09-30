@@ -31,8 +31,8 @@ const ServidoresPolicialesList = ({
     getApi(PATH);
   }, [servidorEdit, formIsClouse]);
 
-  console.log(servidorPolicial[300]);
-  console.log(user);
+  // console.log(servidorPolicial[300]);
+  // console.log(user);
 
   return (
     <div>

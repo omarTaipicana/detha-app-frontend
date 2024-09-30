@@ -31,19 +31,11 @@ const FromServidorP = ({
   const [selectedEtnia, setSelectedEtnia] = useState("");
 
   const submit = (data) => {
-    // const body = {
-    //   ...data,
-    //   usuarioRegistro: userCI,
-    //   usuarioEdición: userCI,
-    // };
-
     if (servidorEdit) {
       updateApi(PATH_SERVIDORES, servidorEdit.id, {
         ...data,
-
         usuarioEdición: userCI,
       });
-      setServidorEdit();
     } else {
       postApi(PATH_SERVIDORES, {
         ...data,
@@ -74,9 +66,10 @@ const FromServidorP = ({
       tipoDiscapacidad: "",
       porcentajeDiscapacidad: "",
       detalleDiscapacidad: "",
-      alertaEnfermedadCatastrófica: "",
+      alertaEnfermedadCatastrofica: "",
       detalleEnfermedad: "",
     });
+    setServidorEdit();
   };
 
   useEffect(() => {
@@ -126,14 +119,14 @@ const FromServidorP = ({
   }, [watch("alertaDiscapacidad"), setValue]);
 
   useEffect(() => {
-    if (watch("alertaEnfermedadCatastrófica") === "NO") {
+    if (watch("alertaEnfermedadCatastrofica") === "NO") {
       setValue("detalleEnfermedad", "NINGUNA");
     } else if (watch("alertaEnfermedadCatastrófica") === "SI" && servidorEdit) {
       setValue("detalleEnfermedad", servidorEdit?.detalleEnfermedad);
     } else {
       setValue("detalleEnfermedad", "");
     }
-  }, [watch("alertaEnfermedadCatastrófica"), setValue]);
+  }, [watch("alertaEnfermedadCatastrofica"), setValue]);
 
   return (
     <div>
@@ -183,7 +176,7 @@ const FromServidorP = ({
                 tipoDiscapacidad: "",
                 porcentajeDiscapacidad: "",
                 detalleDiscapacidad: "",
-                alertaEnfermedadCatastrófica: "",
+                alertaEnfermedadCatastrofica: "",
                 detalleEnfermedad: "",
               });
             }}
@@ -490,7 +483,7 @@ const FromServidorP = ({
                 </span>
                 <select
                   className="input__create__servidor__card"
-                  {...register("alertaEnfermedadCatastrófica")}
+                  {...register("alertaEnfermedadCatastrofica")}
                   type="text"
                   placeholder="Alerta de Enfermedad Catastrófica"
                   required
@@ -512,12 +505,12 @@ const FromServidorP = ({
                   {...register("detalleEnfermedad")}
                   type="text"
                   value={
-                    watch("alertaEnfermedadCatastrófica") !== "NO"
+                    watch("alertaEnfermedadCatastrofica") !== "NO"
                       ? watch("detalleEnfermedad") || ""
                       : "NINGUNA"
                   }
                   onChange={(e) => {
-                    if (watch("alertaEnfermedadCatastrófica") !== "NO") {
+                    if (watch("alertaEnfermedadCatastrofica") !== "NO") {
                       setValue("detalleEnfermedad", e.target.value);
                     } else {
                       setValue("detalleEnfermedad", "NINGUNA");

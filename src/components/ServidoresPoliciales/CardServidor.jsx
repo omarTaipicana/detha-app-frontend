@@ -3,6 +3,11 @@ import "./style/CardServidor.css";
 import { Contactos } from "./Contactos";
 import Titulos from "./Titulos";
 import Pases from "./Pases";
+import TipoDesplazamiento from "./TipoDesplazamiento";
+import Ascenso from "./Ascenso";
+import LicenciaConducir from "./LicenciaConducir";
+import Novedades from "./Novedades";
+import Capacitaciones from "./Capacitaciones";
 
 const CardServidor = ({ servidor, hide, setHide }) => {
   const calcularTiempo = (fechaNacimiento) => {
@@ -59,7 +64,16 @@ const CardServidor = ({ servidor, hide, setHide }) => {
               <ul className="ul__servidor__info">
                 <li>
                   <span>Grado: </span>
-                  <span>grado</span>
+                  <span>
+                    {servidor.ascensos && servidor.ascensos.length > 0
+                      ? servidor.ascensos
+                          .slice()
+                          .sort(
+                            (a, b) =>
+                              new Date(b.createdAt) - new Date(a.createdAt)
+                          )[0].grado
+                      : "SIN REGISTRO"}
+                  </span>
                 </li>
                 <li>
                   <span>Nombres: </span>
@@ -71,7 +85,16 @@ const CardServidor = ({ servidor, hide, setHide }) => {
                 </li>
                 <li>
                   <span>Pase Actual: </span>
-                  <span>pase</span>
+                  <span>
+                    {servidor.pases && servidor.pases.length > 0
+                      ? servidor.pases
+                          .slice()
+                          .sort(
+                            (a, b) =>
+                              new Date(b.createdAt) - new Date(a.createdAt)
+                          )[0].nomenclatura
+                      : "SIN REGISTRO"}
+                  </span>
                 </li>
                 <li>
                   <span>Fecha de nacimiento: </span>
@@ -138,9 +161,33 @@ const CardServidor = ({ servidor, hide, setHide }) => {
             <section className="container__servidor__form">
               <Contactos servidor={servidor} />
               <hr />
+              <br />
+              <hr />
               <Titulos servidor={servidor} />
               <hr />
+              <br />
+              <hr />
               <Pases servidor={servidor} />
+              <hr />
+              <br />
+              <hr />
+              <TipoDesplazamiento servidor={servidor} />
+              <hr />
+              <br />
+              <hr />
+              <Ascenso servidor={servidor} />
+              <hr />
+              <br />
+              <hr />
+              <LicenciaConducir servidor={servidor} />
+              <hr />
+              <br />
+              <hr />
+              <Novedades servidor={servidor} />
+              <hr />
+              <br />
+              <hr />
+              <Capacitaciones servidor={servidor} />
             </section>
           </section>
         </div>

@@ -52,10 +52,13 @@ export const Contactos = ({ servidor }) => {
       <article>
         <span>CONTACTOS</span>
         <form onSubmit={handleSubmit(submit)}>
-          <label>
+          <label className="label__form">
             <span>Tipo de Contacto:</span>
-            <select required {...register("tipoContacto")}>
-              <option>Seleccione el Tipo</option>
+            <select
+              required
+              {...register("tipoContacto")}
+            >
+              <option value="">Seleccione el Tipo</option>
               {variables
                 ?.filter((e) => e.tipoContacto)
                 .map((variable) => (
@@ -65,7 +68,7 @@ export const Contactos = ({ servidor }) => {
                 ))}
             </select>
           </label>
-          <label>
+          <label className="label__form">
             <span>Contacto: </span>
             <input
               {...register("contacto")}
