@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./style/CardServidor.css";
 import { Contactos } from "./Contactos";
 import Titulos from "./Titulos";
@@ -8,8 +8,41 @@ import Ascenso from "./Ascenso";
 import LicenciaConducir from "./LicenciaConducir";
 import Novedades from "./Novedades";
 import Capacitaciones from "./Capacitaciones";
+import Tallas from "./Tallas";
+import Funcion from "./Funcion";
+import Vacaciones from "./Vacaciones";
+
+const Seccion = ({ titulo, children, isOpen, toggleSection }) => {
+  return (
+    <div className="seccion">
+      <div className="seccion-header" onClick={toggleSection}>
+        <span className="titulo__seccion">{titulo}</span>
+        <button className="toggle-button">{isOpen ? "-" : "+"}</button>
+      </div>
+      {isOpen && (
+        <div className="seccion-content">
+          <div className="table__container">{children}</div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const CardServidor = ({ servidor, hide, setHide }) => {
+  const [openSections, setOpenSections] = useState({
+    pases: false,
+    desplazamientos: false,
+    novedades: false,
+    vacaciones: false,
+    ascensos: false,
+    funcion: false,
+    contactos: false,
+    titulos: false,
+    licencias: false,
+    capacitaciones: false,
+    tallas: false,
+  });
+
   const calcularTiempo = (fechaNacimiento) => {
     const fechaNacimientoObj = new Date(fechaNacimiento);
     const fechaActual = new Date();
@@ -43,6 +76,26 @@ const CardServidor = ({ servidor, hide, setHide }) => {
   const edad = calcularTiempo(servidor.fechaNacimiento);
   const tiempoServicio = calcularTiempo(servidor.fechaIngreso);
 
+  const toggleSection = (section) => {
+    setOpenSections((estado) => ({ ...estado, [section]: !estado[section] }));
+  };
+
+  const closeAllSections = () => {
+    setOpenSections({
+      pases: false,
+      desplazamientos: false,
+      novedades: false,
+      vacaciones: false,
+      ascensos: false,
+      funcion: false,
+      contactos: false,
+      titulos: false,
+      licencias: false,
+      capacitaciones: false,
+      tallas: false,
+    });
+  };
+
   return (
     <div>
       <div className={`container__servidor ${hide && "card__close"}`}>
@@ -53,141 +106,276 @@ const CardServidor = ({ servidor, hide, setHide }) => {
           <div
             onClick={() => {
               setHide(true);
+              closeAllSections();
             }}
             className="card__exit"
           >
             ❌
           </div>
           <section className="container__servidor__info__form">
-            <section className="container__servidor__info">
-              <h3>{servidor.id}</h3>
-              <ul className="ul__servidor__info">
-                <li>
-                  <span>Grado: </span>
-                  <span>
-                    {servidor.ascensos && servidor.ascensos.length > 0
-                      ? servidor.ascensos
-                          .slice()
-                          .sort(
-                            (a, b) =>
-                              new Date(b.createdAt) - new Date(a.createdAt)
-                          )[0].grado
-                      : "SIN REGISTRO"}
-                  </span>
-                </li>
-                <li>
-                  <span>Nombres: </span>
-                  <span>{servidor.nombres}</span>
-                </li>
-                <li>
-                  <span>Apellidos: </span>
-                  <span>{servidor.apellidos}</span>
-                </li>
-                <li>
-                  <span>Pase Actual: </span>
-                  <span>
-                    {servidor.pases && servidor.pases.length > 0
-                      ? servidor.pases
-                          .slice()
-                          .sort(
-                            (a, b) =>
-                              new Date(b.createdAt) - new Date(a.createdAt)
-                          )[0].nomenclatura
-                      : "SIN REGISTRO"}
-                  </span>
-                </li>
-                <li>
-                  <span>Fecha de nacimiento: </span>
-                  <span>{servidor.fechaNacimiento}</span>
-                </li>
-                <li>
-                  <span>Edad: </span>
-                  <span>{edad}</span>
-                </li>
-                <li>
-                  <span>Fecha de ingreso a la Institución: </span>
-                  <span>{tiempoServicio}</span>
-                </li>
-                <li>
-                  <span>Provincia de Residencia: </span>
-                  <span>{servidor.provinciaResidencia}</span>
-                </li>
-                <li>
-                  <span>Cantón de Residencia: </span>
-                  <span>{servidor.cantonResidencia}</span>
-                </li>
-                <li>
-                  <span>Dirección domiciliaria: </span>
-                  <span>{servidor.direccionResidencia}</span>
-                </li>
-                <li>
-                  <span>Estado Civil: </span>
-                  <span>{servidor.estadoCivil}</span>
-                </li>
-                <li>
-                  <span>Etnia: </span>
-                  <span>{servidor.etnia}</span>
-                </li>
-                <li>
-                  <span>Es Acreditado: </span>
-                  <span>{servidor.acreditado}</span>
-                </li>
-                <li>
-                  <span>Alerta de Discapacidad: </span>
-                  <span>{servidor.alertaDiscapacidad}</span>
-                </li>
-                <li>
-                  <span>Tipo de Discapacidad: </span>
-                  <span>{servidor.tipoDiscapacidad}</span>
-                </li>
-                <li>
-                  <span>Porcentaje de Discapacidad: </span>
-                  <span>{servidor.porcentajeDiscapacidad}</span>
-                </li>
-                <li>
-                  <span>Detalle de discapacidad: </span>
-                  <span>{servidor.detalleDiscapacidad}</span>
-                </li>
-                <li>
-                  <span>Alerta de Enfermedad Catastrófica: </span>
-                  <span>{servidor.alertaEnfermedadCatastrófica}</span>
-                </li>
-                <li>
-                  <span>Detalle de Enfermedad Catastrófica: </span>
-                  <span>{servidor.detalleEnfermedad}</span>
-                </li>
-              </ul>
+            <section className="container__servidor__card">
+              <section className="container__servidor__info">
+                <ul className="ul__servidor__info">
+                  <li className="li__servidor__info">
+                    <span className="span__servidor">Nombres: </span>
+                    <span className="span__servidor__info">
+                      {servidor.nombres} {servidor.apellidos}
+                    </span>
+                  </li>
+                  <li className="li__servidor__info">
+                    <span className="span__servidor">Grado: </span>
+                    <span className="span__servidor__info">
+                      {servidor.ascensos && servidor.ascensos.length > 0
+                        ? servidor.ascensos
+                            .slice()
+                            .sort(
+                              (a, b) =>
+                                new Date(b.createdAt) - new Date(a.createdAt)
+                            )[0].grado
+                        : "SIN REGISTRO"}
+                    </span>
+                  </li>
+                  <li className="li__servidor__info">
+                    <span className="span__servidor">Cédula: </span>
+                    <span className="span__servidor__info">{servidor.cI}</span>
+                  </li>
+
+                  <li className="li__servidor__info">
+                    <span className="span__servidor">Pase Actual: </span>
+                    <span className="span__servidor__info">
+                      {servidor.pases && servidor.pases.length > 0
+                        ? servidor.pases
+                            .slice()
+                            .sort(
+                              (a, b) =>
+                                new Date(b.createdAt) - new Date(a.createdAt)
+                            )[0].nomenclatura
+                        : "SIN REGISTRO"}
+                    </span>
+                  </li>
+                  <li className="li__servidor__info">
+                    <span className="span__servidor">
+                      Fecha de nacimiento:{" "}
+                    </span>
+                    <span className="span__servidor__info">
+                      {servidor.fechaNacimiento}
+                    </span>
+                  </li>
+                  <li className="li__servidor__info">
+                    <span className="span__servidor">Edad: </span>
+                    <span className="span__servidor__info">{edad}</span>
+                  </li>
+                  <li className="li__servidor__info">
+                    <span className="span__servidor">Ingreso a la PPNN: </span>
+                    <span className="span__servidor__info">
+                      {servidor.fechaIngreso}
+                    </span>
+                  </li>
+
+                  <li className="li__servidor__info">
+                    <span className="span__servidor">
+                      Tiempo en la Institución:{" "}
+                    </span>
+                    <span className="span__servidor__info">
+                      {tiempoServicio}
+                    </span>
+                  </li>
+                  <li className="li__servidor__info">
+                    <span className="span__servidor">
+                      Provincia de Residencia:{" "}
+                    </span>
+                    <span className="span__servidor__info">
+                      {servidor.provinciaResidencia}
+                    </span>
+                  </li>
+                  <li className="li__servidor__info">
+                    <span className="span__servidor">
+                      Cantón de Residencia:{" "}
+                    </span>
+                    <span className="span__servidor__info">
+                      {servidor.cantonResidencia}
+                    </span>
+                  </li>
+                  <li className="li__servidor__info">
+                    <span className="span__servidor">
+                      Dirección domiciliaria:{" "}
+                    </span>
+                    <span className="span__servidor__info">
+                      {servidor.direccionResidencia}
+                    </span>
+                  </li>
+
+                  <li className="li__servidor__info">
+                    <span className="span__servidor">Estado Civil: </span>
+                    <span className="span__servidor__info">
+                      {servidor.estadoCivil}
+                    </span>
+                  </li>
+                  <li className="li__servidor__info">
+                    <span className="span__servidor">Etnia: </span>
+                    <span className="span__servidor__info">
+                      {servidor.etnia}
+                    </span>
+                  </li>
+                  <li className="li__servidor__info">
+                    <span className="span__servidor">Acreditado: </span>
+                    <span className="span__servidor__info">
+                      {servidor.acreditado}
+                    </span>
+                  </li>
+                  <li className="li__servidor__info">
+                    <span className="span__servidor">
+                      Alerta de Discapacidad:{" "}
+                    </span>
+                    <span className="span__servidor__info">
+                      {servidor.alertaDiscapacidad}
+                    </span>
+                  </li>
+
+                  {servidor.alertaDiscapacidad === "SI" && (
+                    <div className="div__hide">
+                      <li className="li__servidor__info">
+                        <span className="span__servidor">
+                          Tipo de Discapacidad:{" "}
+                        </span>
+                        <span className="span__servidor__info">
+                          {servidor.tipoDiscapacidad}
+                        </span>
+                      </li>
+                      <li className="li__servidor__info">
+                        <span className="span__servidor">
+                          Porcentaje de Discapacidad:{" "}
+                        </span>
+                        <span className="span__servidor__info">
+                          {servidor.porcentajeDiscapacidad}
+                        </span>
+                      </li>
+                      <li className="li__servidor__info">
+                        <span className="span__servidor">
+                          Detalle de discapacidad:{" "}
+                        </span>
+                        <span className="span__servidor__info">
+                          {servidor.detalleDiscapacidad}
+                        </span>
+                      </li>
+                    </div>
+                  )}
+
+                  <li className="li__servidor__info">
+                    <span className="span__servidor">
+                      Alerta de Enf. Catastróf:{" "}
+                    </span>
+                    <span className="span__servidor__info">
+                      {servidor.alertaEnfermedadCatastrofica}
+                    </span>
+                  </li>
+
+                  {servidor.alertaEnfermedadCatastrofica === "SI" && (
+                    <div className="div__hide">
+                  <li className="li__servidor__info">
+                    <span className="span__servidor">
+                      Detalle de Enfermedad:{" "}
+                    </span>
+                    <span className="span__servidor__info">
+                      {servidor.detalleEnfermedad}
+                    </span>
+                  </li>
+                  </div>
+                  )}
+                </ul>
+              </section>
             </section>
+
             <section className="container__servidor__form">
-              <Contactos servidor={servidor} />
-              <hr />
-              <br />
-              <hr />
-              <Titulos servidor={servidor} />
-              <hr />
-              <br />
-              <hr />
-              <Pases servidor={servidor} />
-              <hr />
-              <br />
-              <hr />
-              <TipoDesplazamiento servidor={servidor} />
-              <hr />
-              <br />
-              <hr />
-              <Ascenso servidor={servidor} />
-              <hr />
-              <br />
-              <hr />
-              <LicenciaConducir servidor={servidor} />
-              <hr />
-              <br />
-              <hr />
-              <Novedades servidor={servidor} />
-              <hr />
-              <br />
-              <hr />
-              <Capacitaciones servidor={servidor} />
+              <div className="container-secciones">
+                <Seccion
+                  titulo="PASES"
+                  isOpen={openSections.pases}
+                  toggleSection={() => toggleSection("pases")}
+                >
+                  <Pases servidor={servidor} />
+                </Seccion>
+
+                <Seccion
+                  titulo="DESPLAZAMIENTOS"
+                  isOpen={openSections.desplazamientos}
+                  toggleSection={() => toggleSection("desplazamientos")}
+                >
+                  <TipoDesplazamiento servidor={servidor} />
+                </Seccion>
+
+                <Seccion
+                  titulo="NOVEDADES"
+                  isOpen={openSections.novedades}
+                  toggleSection={() => toggleSection("novedades")}
+                >
+                  <Novedades servidor={servidor} />
+                </Seccion>
+
+                <Seccion
+                  titulo="VACACIONES"
+                  isOpen={openSections.vacaciones}
+                  toggleSection={() => toggleSection("vacaciones")}
+                >
+                  <Vacaciones servidor={servidor} />
+                </Seccion>
+
+                <Seccion
+                  titulo="ASCENSOS"
+                  isOpen={openSections.ascensos}
+                  toggleSection={() => toggleSection("ascensos")}
+                >
+                  <Ascenso servidor={servidor} />
+                </Seccion>
+
+                <Seccion
+                  titulo="FUNCIÓN ACTUAL"
+                  isOpen={openSections.funcion}
+                  toggleSection={() => toggleSection("funcion")}
+                >
+                  <Funcion servidor={servidor} />
+                </Seccion>
+
+                <Seccion
+                  titulo="CONTACTOS"
+                  isOpen={openSections.contactos}
+                  toggleSection={() => toggleSection("contactos")}
+                >
+                  <Contactos servidor={servidor} />
+                </Seccion>
+
+                <Seccion
+                  titulo="TÍTULOS"
+                  isOpen={openSections.titulos}
+                  toggleSection={() => toggleSection("titulos")}
+                >
+                  <Titulos servidor={servidor} />
+                </Seccion>
+
+                <Seccion
+                  titulo="LICENCIAS DE CONDUCIR"
+                  isOpen={openSections.licencias}
+                  toggleSection={() => toggleSection("licencias")}
+                >
+                  <LicenciaConducir servidor={servidor} />
+                </Seccion>
+
+                <Seccion
+                  titulo="CAPACITACIONES"
+                  isOpen={openSections.capacitaciones}
+                  toggleSection={() => toggleSection("capacitaciones")}
+                >
+                  <Capacitaciones servidor={servidor} />
+                </Seccion>
+
+                <Seccion
+                  titulo="TALLAS"
+                  isOpen={openSections.tallas}
+                  toggleSection={() => toggleSection("tallas")}
+                >
+                  <Tallas servidor={servidor} />
+                </Seccion>
+              </div>
             </section>
           </section>
         </div>

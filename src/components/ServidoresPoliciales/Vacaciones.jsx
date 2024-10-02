@@ -2,27 +2,29 @@ import React, { useEffect, useState } from "react";
 import useCrud from "../../hooks/useCrud";
 import { useForm } from "react-hook-form";
 
-const Capacitaciones = ({ servidor }) => {
+const Vacaciones = ({ servidor }) => {
   const [hide, setHide] = useState(true);
   const [hideDelete, setHideDelete] = useState(true);
   const [idDelete, setIdDelete] = useState("");
-  const [capacitacionEdit, setCapacitacionEdit] = useState("");
+  const [vacacionesEdit, setVacacionesEdit] = useState("");
   const superAdmin = import.meta.env.VITE_CI_SUPERADMIN;
   const diasEdicion = import.meta.env.VITE_DIAS_EDICION;
   const userCI = JSON.parse(localStorage.user ? localStorage.user : 0).cI;
   const userLoggued = JSON.parse(localStorage.user ? localStorage.user : 0);
-  const PATH_CAPACITACIONES = "/capacitaciones";
+  const PATH_VACACIONES = "/vacaciones";
+  const PATH_VARIABLES = "/variables";
 
   const [
-    capacitacion,
-    getCapacitacion,
-    postCapacitacion,
-    deleteCapacitacion,
-    updateCapacitacion,
+    vacaciones,
+    getVacaciones,
+    postVacaciones,
+    deleteVacaciones,
+    updateVacaciones,
     hasError,
     isLoading,
   ] = useCrud();
 
+  const [variables, getVariables] = useCrud();
   const {
     register,
     handleSubmit,
@@ -35,57 +37,57 @@ const Capacitaciones = ({ servidor }) => {
   } = useForm();
 
   const submit = (data) => {
-    if (capacitacionEdit) {
-      updateCapacitacion(PATH_CAPACITACIONES, capacitacionEdit.id, {
+    if (vacacionesEdit) {
+      updateVacaciones(PATH_VACACIONES, vacacionesEdit.id, {
         ...data,
         usuarioEdicion: userCI,
       });
     } else {
-      postCapacitacion(PATH_CAPACITACIONES, {
+      postVacaciones(PATH_VACACIONES, {
         ...data,
         servidorPolicialId: servidor.id,
         usuarioRegistro: userCI,
         usuarioEdicion: userCI,
       });
     }
-    setCapacitacionEdit("");
+    setVacacionesEdit("");
     setHide(true);
     reset({
-      capacitacion: "",
-      lugar: "",
+      vacaciones: "",
       fechaInicio: "",
       fechaFin: "",
     });
   };
 
-  const handleHideDelete = (capacitacion) => {
+  const handleHideDelete = (vacaciones) => {
     setHideDelete(false);
-    setIdDelete(capacitacion);
+    setIdDelete(vacaciones);
   };
 
   const handleDelete = () => {
-    deleteCapacitacion(PATH_CAPACITACIONES, idDelete.id);
+    deleteVacaciones(PATH_VACACIONES, idDelete.id);
     setHideDelete(true);
-    alert(`Se elimino el registro"  ${idDelete.capacitacion}`);
+    alert(`Se elimino el registro"  ${idDelete.vacaciones}`);
     setIdDelete("");
   };
 
-  const handleEditCapacitacion = (capacitacion) => {
-    setCapacitacionEdit(capacitacion);
+  const handleEditVacaciones = (vacaciones) => {
+    setVacacionesEdit(vacaciones);
     setHide(false);
   };
 
   useEffect(() => {
-    getCapacitacion(PATH_CAPACITACIONES);
+    getVacaciones(PATH_VACACIONES);
+    getVariables(PATH_VARIABLES);
   }, []);
 
   useEffect(() => {
-    reset(capacitacionEdit);
-  }, [capacitacionEdit]);
+    reset(vacacionesEdit);
+  }, [vacacionesEdit]);
 
   return (
     <div>
-      <article>
+      <section>
         <section
           className={`form__container__info ${
             hide && "form__container__info__close"
@@ -94,11 +96,10 @@ const Capacitaciones = ({ servidor }) => {
           <form className="form__info" onSubmit={handleSubmit(submit)}>
             <div
               onClick={() => {
-                setCapacitacionEdit("");
+                setVacacionesEdit("");
                 setHide(true);
                 reset({
-                  capacitacion: "",
-                  lugar: "",
+                  vacaciones: "",
                   fechaInicio: "",
                   fechaFin: "",
                 });
@@ -108,32 +109,29 @@ const Capacitaciones = ({ servidor }) => {
               ❌
             </div>
             <label className="label__form">
-              <span className="span__form__info">Nombre de la capacitación: </span>
-              <input className="input__form__info" type="text" required {...register("capacitacion")} />
+              <span className="span__form__info">Vacaciones: </span>
+              <select
+                className="select__form__info"
+                required
+                {...register("vacaciones")}
+              >
+                <option value="">Seleccione el Tipo</option>
+                {variables
+                  ?.filter((e) => e.vacaciones)
+                  .map((variable) => (
+                    <option key={variable.id} value={variable.vacaciones}>
+                      {variable.vacaciones}
+                    </option>
+                  ))}
+              </select>
             </label>
-
-            <label className="label__form">
-              <span className="span__form__info">Lugar de la Capacitación</span>
-              <input className="input__form__info" type="text" required {...register("lugar")} />
-            </label>
-
             <label className="label__form">
               <span className="span__form__info">Fecha de Inicio: </span>
-              <input className="input__form__info"
+              <input
+                className="input__form__info"
                 required
                 type="date"
-                {...register("fechaInicio", {
-                  required: "La fecha es obligatoria",
-                  validate: (value) => {
-                    const selectedDate = new Date(value);
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-                    return (
-                      selectedDate <= today ||
-                      "La fecha no puede ser superior a hoy"
-                    );
-                  },
-                })}
+                {...register("fechaInicio")}
               />
             </label>
             {errors.fechaInicio && (
@@ -141,11 +139,11 @@ const Capacitaciones = ({ servidor }) => {
             )}
             <label className="label__form">
               <span className="span__form__info">Fecha de Finalización: </span>
-              <input className="input__form__info"
+              <input
+                className="input__form__info"
                 required
                 type="date"
                 {...register("fechaFin", {
-                  required: "La fecha es obligatoria",
                   validate: (value) => {
                     const selectedDate = new Date(value);
                     const inicio = new Date(watch("fechaInicio"));
@@ -162,7 +160,7 @@ const Capacitaciones = ({ servidor }) => {
             {errors.fechaFin && (
               <p style={{ color: "red" }}>{errors.fechaFin.message}</p>
             )}
-            <button>{capacitacionEdit ? "Actualizar" : "Guardar"}</button>
+            <button>{vacacionesEdit ? "Actualizar" : "Guardar"}</button>
           </form>
         </section>
         <section>
@@ -176,44 +174,41 @@ const Capacitaciones = ({ servidor }) => {
                     onClick={() => setHide(false)}
                   />
                 </th>
-                <th>CAPACITACION</th>
-                <th>LUGAR</th>
+                <th>VACACIONESL</th>
                 <th>FECHA INICIO</th>
                 <th>FECHA FINALIZACIÓN</th>
               </tr>
             </thead>
             <tbody>
-              {capacitacion
+              {vacaciones
                 ?.slice()
                 .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                 .filter(
-                  (capacitacion) =>
-                    capacitacion.servidorPolicialId === servidor.id
+                  (vacaciones) => vacaciones.servidorPolicialId === servidor.id
                 )
-                .map((capacitacion) => (
-                  <tr key={capacitacion.id}>
-                    <td style={{ border: "none", backgroundColor: "white" }}>
-                      {(new Date() - new Date(capacitacion.createdAt) <
+                .map((vacaciones) => (
+                  <tr key={vacaciones.id}>
+                    <td style={{ border: "none" }}>
+                      {(new Date() - new Date(vacaciones.createdAt) <
                         diasEdicion * 24 * 60 * 60 * 1000 ||
                         userCI === superAdmin) && (
                         <img
                           src="../../../edit.png"
                           className="btn__table"
-                          onClick={() => handleEditCapacitacion(capacitacion)}
+                          onClick={() => handleEditVacaciones(vacaciones)}
                         />
                       )}
                       {userLoggued.cI === superAdmin && (
                         <img
                           src="../../../delete.png"
                           className="btn__table"
-                          onClick={() => handleHideDelete(capacitacion)}
+                          onClick={() => handleHideDelete(vacaciones)}
                         />
                       )}
                     </td>
-                    <td>{capacitacion.capacitacion}</td>
-                    <td>{capacitacion.lugar}</td>
-                    <td>{capacitacion.fechaInicio}</td>
-                    <td>{capacitacion.fechaFin}</td>
+                    <td>{vacaciones.vacaciones}</td>
+                    <td>{vacaciones.fechaInicio}</td>
+                    <td>{vacaciones.fechaFin}</td>
                   </tr>
                 ))}
             </tbody>
@@ -241,9 +236,9 @@ const Capacitaciones = ({ servidor }) => {
             </div>
           </div>
         </section>
-      </article>
+      </section>
     </div>
   );
 };
 
-export default Capacitaciones;
+export default Vacaciones;

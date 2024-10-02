@@ -6,8 +6,14 @@ import { useForm } from "react-hook-form";
 
 const Pases = ({ servidor }) => {
   const urlBase = import.meta.env.VITE_API_URL;
+  const superAdmin = import.meta.env.VITE_CI_SUPERADMIN;
+  const diasEdicion = import.meta.env.VITE_DIAS_EDICION;
   const userCI = JSON.parse(localStorage.user ? localStorage.user : 0).cI;
+  const userLoggued = JSON.parse(localStorage.user ? localStorage.user : 0);
 
+  const [hide, setHide] = useState(true);
+  const [hideDelete, setHideDelete] = useState(true);
+  const [idDelete, setIdDelete] = useState("");
   const [paseEdit, setPaseEdit] = useState("");
   const [organicos, setOrganicos] = useState([]);
   const [selectedDireccion, setSelectedDireccion] = useState("");
@@ -60,10 +66,24 @@ const Pases = ({ servidor }) => {
     });
 
     setPaseEdit("");
+    setHide(true);
+  };
+
+  const handleHideDelete = (pase) => {
+    setHideDelete(false);
+    setIdDelete(pase);
+  };
+
+  const handleDelete = () => {
+    deletePase(PATH_PASES, idDelete.id);
+    setHideDelete(true);
+    alert(`Se elimino el registro"  ${idDelete.nomenclatura}`);
+    setIdDelete("");
   };
 
   const handleEditPase = (pase) => {
     setPaseEdit(pase);
+    setHide(false);
   };
 
   useEffect(() => {
@@ -136,123 +156,167 @@ const Pases = ({ servidor }) => {
   return (
     <div>
       <article>
-        <span>PASES</span>
-        <form onSubmit={handleSubmit(submit)}>
-          <label className="label__form">
-            <span>Número de Telegrama</span>
-            <input type="text" required {...register("numeroTelegrama")} />
-          </label>
-          <label className="label__form">
-            <span>Fecha Telegrama: </span>
-            <input
-              required
-              type="date"
-              {...register("fechaTelegrama", {
-                required: "La fecha es obligatoria",
-                validate: (value) => {
-                  const selectedDate = new Date(value);
-                  const today = new Date();
-                  today.setHours(0, 0, 0, 0);
-                  return (
-                    selectedDate <= today ||
-                    "La fecha no puede ser superior a hoy"
-                  );
-                },
-              })}
-            />
-          </label>
-          {errors.fechaTelegrama && (
-            <p style={{ color: "red" }}>{errors.fechaTelegrama.message}</p>
-          )}
-          <label className="label__form" htmlFor="">
-            <span>Dirección</span>
-            <select
-              required
-              {...register("direccion")}
-              value={selectedDireccion}
-              onChange={(e) => handleDireccionChange(e.target.value)}
+        <section
+          className={`form__container__info ${
+            hide && "form__container__info__close"
+          }`}
+        >
+          <form className="form__info" onSubmit={handleSubmit(submit)}>
+            <div
+              onClick={() => {
+                setHide(true);
+                setPaseEdit();
+                reset({
+                  numeroTelegrama: "",
+                  fechaTelegrama: "",
+                  direccion: "",
+                  unidad: "",
+                  nomenclatura: "",
+                  nomenclaturaNoDigin: "",
+                });
+              }}
+              className="btn__exit__form__info"
             >
-              <option value="">Seleccione la Dirección</option>
-              {[...new Set(organicos.map((e) => e.siglasDireccion))].map(
-                (direccion) => (
-                  <option key={direccion} value={direccion}>
-                    {direccion}
-                  </option>
-                )
-              )}
-            </select>
-          </label>
-          <label className="label__form" htmlFor="">
-            <span>Unidad</span>
-            <select
-              required
-              {...register("unidad")}
-              value={selectedUnidad}
-              onChange={(e) => handleUnidadChange(e.target.value)}
-            >
-              <option value="">Seleccione la Unidad</option>
-              {[...new Set(unidadesOptions.map((e) => e.siglaUnidadGrupo))].map(
-                (unidad) => (
-                  <option key={unidad} value={unidad}>
-                    {unidad}
-                  </option>
-                )
-              )}
-            </select>
-          </label>
-          <label className="label__form" htmlFor="">
-            <span>Nomenclatura</span>
-            <select
-              required
-              {...register("nomenclatura")}
-              value={selectedSiglas}
-              onChange={(e) => handleSiglasChange(e.target.value)}
-            >
-              <option value="">Seleccione la Nomenclatura</option>
-              {[...new Set(siglasOptions.map((e) => e.nomenclatura))].map(
-                (siglas) => (
-                  <option key={siglas} value={siglas}>
-                    {siglas}
-                  </option>
-                )
-              )}
-            </select>
-          </label>
-          <label className="label__form" htmlFor="">
-            <span>Cargo</span>
-            <select
-              required
-              {...register("cargo")}
-              value={selectedCargo}
-              onChange={(e) => handleCargoChange(e.target.value)}
-            >
-              <option value="">Seleccione el Cargo</option>
-              {[...new Set(cargoOptions.map((e) => e.cargoSiipne))].map(
-                (cargo) => (
-                  <option key={cargo} value={cargo}>
-                    {cargo}
-                  </option>
-                )
-              )}
-            </select>
-          </label>
-          {selectedDireccion === "OTROS" && (
+              ❌
+            </div>
             <label className="label__form">
-              <span>Nomenclatura si es fuera de la DIGIN</span>
+              <span className="span__form__info">Número de Telegrama: </span>
               <input
+                className="input__form__info"
                 type="text"
-                {...register("nomenclaturaNoDigin", {
-                  required: selectedDireccion === "OTROS",
+                required
+                {...register("numeroTelegrama")}
+              />
+            </label>
+            <label className="label__form">
+              <span className="span__form__info">Fecha Telegrama: </span>
+              <input
+                className="input__form__info"
+                required
+                type="date"
+                {...register("fechaTelegrama", {
+                  required: "La fecha es obligatoria",
+                  validate: (value) => {
+                    const selectedDate = new Date(value);
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    return (
+                      selectedDate <= today ||
+                      "La fecha no puede ser superior a hoy"
+                    );
+                  },
                 })}
               />
             </label>
-          )}
-          <button>{paseEdit ? "Actualizar" : "Guardar"}</button>
-        </form>
+            {errors.fechaTelegrama && (
+              <p style={{ color: "red" }}>{errors.fechaTelegrama.message}</p>
+            )}
+            <label className="label__form" htmlFor="">
+              <span className="span__form__info">Dirección: </span>
+              <select
+                className="select__form__info"
+                required
+                {...register("direccion")}
+                value={selectedDireccion}
+                onChange={(e) => handleDireccionChange(e.target.value)}
+              >
+                <option value="">Seleccione la Dirección</option>
+                {[...new Set(organicos.map((e) => e.siglasDireccion))].map(
+                  (direccion) => (
+                    <option key={direccion} value={direccion}>
+                      {direccion}
+                    </option>
+                  )
+                )}
+              </select>
+            </label>
+            <label className="label__form" htmlFor="">
+              <span className="span__form__info">Unidad: </span>
+              <select
+                className="select__form__info"
+                required
+                {...register("unidad")}
+                value={selectedUnidad}
+                onChange={(e) => handleUnidadChange(e.target.value)}
+              >
+                <option value="">Seleccione la Unidad</option>
+                {[
+                  ...new Set(unidadesOptions.map((e) => e.siglaUnidadGrupo)),
+                ].map((unidad) => (
+                  <option key={unidad} value={unidad}>
+                    {unidad}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="label__form" htmlFor="">
+              <span className="span__form__info">Nomenclatura: </span>
+              <select
+                className="select__form__info"
+                required
+                {...register("nomenclatura")}
+                value={selectedSiglas}
+                onChange={(e) => handleSiglasChange(e.target.value)}
+              >
+                <option value="">Seleccione la Nomenclatura</option>
+                {[...new Set(siglasOptions.map((e) => e.nomenclatura))].map(
+                  (siglas) => (
+                    <option key={siglas} value={siglas}>
+                      {siglas}
+                    </option>
+                  )
+                )}
+              </select>
+            </label>
+            <label className="label__form" htmlFor="">
+              <span className="span__form__info">Cargo: </span>
+              <select
+                className="select__form__info"
+                required
+                {...register("cargo")}
+                value={selectedCargo}
+                onChange={(e) => handleCargoChange(e.target.value)}
+              >
+                <option value="">Seleccione el Cargo</option>
+                {[...new Set(cargoOptions.map((e) => e.cargoSiipne))].map(
+                  (cargo) => (
+                    <option key={cargo} value={cargo}>
+                      {cargo}
+                    </option>
+                  )
+                )}
+              </select>
+            </label>
+            {selectedDireccion === "OTROS" && (
+              <label className="label__form">
+                <span className="span__form__info">
+                  Nomenclatura si es fuera de la DIGIN
+                </span>
+                <input
+                  className="input__form__info"
+                  type="text"
+                  {...register("nomenclaturaNoDigin", {
+                    required: selectedDireccion === "OTROS",
+                  })}
+                />
+              </label>
+            )}
+            <button className="btn__form__info">
+              {paseEdit ? "Actualizar" : "Guardar"}
+            </button>
+          </form>
+        </section>
         <section>
-          <table>
+          <table className="table__info">
             <thead>
               <tr>
+                <th style={{ border: "none", backgroundColor: "white" }}>
+                  <img
+                    src="../../../new.png"
+                    className="btn__table"
+                    onClick={() => setHide(false)}
+                  />
+                </th>
                 <th>Nro. TELEGRAMA</th>
                 <th>FECHA TELEGRAMA</th>
                 <th>DIRECCIÓN</th>
@@ -269,6 +333,25 @@ const Pases = ({ servidor }) => {
                 .filter((pase) => pase.servidorPolicialId === servidor.id)
                 .map((pase) => (
                   <tr key={pase.id}>
+                    <td style={{ border: "none", backgroundColor: "white" }}>
+                      {(new Date() - new Date(pase.createdAt) <
+                        diasEdicion * 24 * 60 * 60 * 1000 ||
+                        userCI === superAdmin) && (
+                        <img
+                          src="../../../edit.png"
+                          className="btn__table"
+                          onClick={() => handleEditPase(pase)}
+                        />
+                      )}
+
+                      {userLoggued.cI === superAdmin && (
+                        <img
+                          src="../../../delete.png"
+                          className="btn__table"
+                          onClick={() => handleHideDelete(pase)}
+                        />
+                      )}
+                    </td>
                     <td>{pase.numeroTelegrama}</td>
                     <td>{pase.fechaTelegrama}</td>
                     <td>{pase.direccion}</td>
@@ -276,17 +359,32 @@ const Pases = ({ servidor }) => {
                     <td>{pase.nomenclatura}</td>
                     <td>{pase.cargo}</td>
                     <td>{pase.nomenclaturaNoDigin}</td>
-                    <td style={{ border: "none" }}>
-                      <img
-                        src="../../../edit.png"
-                        className="btn__expand"
-                        onClick={() => handleEditPase(pase)}
-                      />
-                    </td>
                   </tr>
                 ))}
             </tbody>
           </table>
+        </section>
+        <section
+          className={`form__container__info ${
+            hideDelete && "form__container__info__close"
+          }`}
+        >
+          <div className="form__info">
+            <span className="delete__card">
+              Esta seguro de eliminar el Registro
+            </span>
+            <div className="btn__delete__content">
+              <button onClick={handleDelete} className="btn__form__info">
+                SI
+              </button>
+              <button
+                onClick={() => setHideDelete(true)}
+                className="btn__form__info"
+              >
+                NO
+              </button>
+            </div>
+          </div>
         </section>
       </article>
     </div>

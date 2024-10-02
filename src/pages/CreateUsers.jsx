@@ -16,6 +16,8 @@ const CreateUsers = () => {
   const [unidadSubzonaOptions, setUnidadSubzonaOptions] = useState([]);
 
   const urlBase = import.meta.env.VITE_API_URL;
+  const superAdmin = import.meta.env.VITE_CI_SUPERADMIN;
+  const rolAdmin = import.meta.env.VITE_ROL_ADMIN;
   const { register, handleSubmit, reset } = useForm();
   const [registerUser, , , , err, isLoading, users, , updateUser] = useAuth();
   const [userEdit, setUserEdit] = useState();
@@ -171,8 +173,8 @@ const CreateUsers = () => {
               style={{
                 display:
                   !userEdit ||
-                  userRol === "Administrador" ||
-                  useCI === "0503627234"
+                  userRol === rolAdmin ||
+                  useCI === superAdmin
                     ? "flex"
                     : "none",
               }}
@@ -190,8 +192,8 @@ const CreateUsers = () => {
               style={{
                 display:
                   !userEdit ||
-                  userRol === "Administrador" ||
-                  useCI === "0503627234"
+                  userRol === rolAdmin ||
+                  useCI === superAdmin
                     ? "flex"
                     : "none",
               }}
@@ -203,7 +205,6 @@ const CreateUsers = () => {
                 className="input__create__user__card"
                 id="email"
                 type="email"
-                pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
                 required
               />
             </label>
@@ -322,7 +323,7 @@ const CreateUsers = () => {
               className="label__create__user__card"
               style={{
                 display:
-                  userRol === "Administrador" || useCI === "0503627234"
+                  userRol === rolAdmin || useCI === superAdmin
                     ? "flex"
                     : "none",
               }}
@@ -338,7 +339,7 @@ const CreateUsers = () => {
                 <option value="Sub-Administrador">Sub-Administrador</option>
                 <option
                   style={{
-                    display: useCI === "0503627234" ? "flex" : "none",
+                    display: useCI === superAdmin ? "flex" : "none",
                   }}
                   value="Administrador"
                 >

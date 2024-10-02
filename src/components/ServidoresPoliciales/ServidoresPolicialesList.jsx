@@ -29,10 +29,8 @@ const ServidoresPolicialesList = ({
 
   useEffect(() => {
     getApi(PATH);
-  }, [servidorEdit, formIsClouse]);
-
-  // console.log(servidorPolicial[300]);
-  // console.log(user);
+  }, [servidorEdit, formIsClouse, hide]);
+  
 
   return (
     <div>
@@ -40,7 +38,7 @@ const ServidoresPolicialesList = ({
       <div className="card__servidorPolicial__content">
         {servidorPolicial
           ?.slice()
-          .reverse()
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
           .filter((serv) =>
             serv.pases.length === 0
               ? serv.usuarioRegistro === user.cI

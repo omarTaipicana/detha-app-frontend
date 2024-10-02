@@ -10,6 +10,8 @@ const FromServidorP = ({
   setServidorEdit,
 }) => {
   const userCI = JSON.parse(localStorage.user ? localStorage.user : 0).cI;
+  const superAdmin = import.meta.env.VITE_CI_SUPERADMIN;
+  const rolAdmin = import.meta.env.VITE_ROL_ADMIN;
   const PATH_SERVIDORES = "/servidores";
   const PATH_SENPLADES = "/senplades";
   const PATH_VARIABLES = "/variables";
@@ -191,8 +193,8 @@ const FromServidorP = ({
                 style={{
                   display:
                     !servidorEdit ||
-                    userRol === "Administrador" ||
-                    useCI === "0503627234"
+                    userRol === rolAdmin ||
+                    useCI === superAdmin
                       ? "flex"
                       : "none",
                 }}

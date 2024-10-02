@@ -3,6 +3,13 @@ import useCrud from "../../hooks/useCrud";
 import { useForm } from "react-hook-form";
 
 export const Contactos = ({ servidor }) => {
+  const superAdmin = import.meta.env.VITE_CI_SUPERADMIN;
+  const diasEdicion = import.meta.env.VITE_DIAS_EDICION;
+  const userCI = JSON.parse(localStorage.user ? localStorage.user : 0).cI;
+  const userLoggued = JSON.parse(localStorage.user ? localStorage.user : 0);
+  const [hide, setHide] = useState(true);
+  const [hideDelete, setHideDelete] = useState(true);
+  const [idDelete, setIdDelete] = useState("");
   const [contactoEdit, setContactoEdit] = useState("");
   const PATH_CONTACTOS = "/contactos";
   const PATH_VARIABLES = "/variables";
@@ -34,6 +41,7 @@ export const Contactos = ({ servidor }) => {
     }
 
     setContactoEdit("");
+    setHide(true);
     reset({
       tipoContacto: "",
       contacto: "",
@@ -41,71 +49,148 @@ export const Contactos = ({ servidor }) => {
     });
   };
 
-  const handleEditContacto = (contactoEdit) => {
-    setContactoEdit(contactoEdit);
+  const handleHideDelete = (contacto) => {
+    setHideDelete(false);
+    setIdDelete(contacto);
   };
+
+  const handleDelete = () => {
+    deleteContacto(PATH_CONTACTOS, idDelete.id);
+    setHideDelete(true);
+    alert(`Se elimino el registro"  ${idDelete.contacto}`);
+    setIdDelete("");
+  };
+
+  const handleEditContacto = (contacto) => {
+    setContactoEdit(contacto);
+    setHide(false);
+  };
+
   useEffect(() => {
     reset(contactoEdit);
   }, [contactoEdit]);
   return (
     <div>
       <article>
-        <span>CONTACTOS</span>
-        <form onSubmit={handleSubmit(submit)}>
-          <label className="label__form">
-            <span>Tipo de Contacto:</span>
-            <select
-              required
-              {...register("tipoContacto")}
+        <section
+          className={`form__container__info ${
+            hide && "form__container__info__close"
+          }`}
+        >
+          <form className="form__info" onSubmit={handleSubmit(submit)}>
+            <div
+              onClick={() => {
+                setContactoEdit("");
+                setHide(true);
+                reset({
+                  tipoContacto: "",
+                  contacto: "",
+                  servidorPolicialId: "",
+                });
+              }}
+              className="btn__exit__form__info"
             >
-              <option value="">Seleccione el Tipo</option>
-              {variables
-                ?.filter((e) => e.tipoContacto)
-                .map((variable) => (
-                  <option key={variable.id} value={variable.tipoContacto}>
-                    {variable.tipoContacto}
-                  </option>
-                ))}
-            </select>
-          </label>
-          <label className="label__form">
-            <span>Contacto: </span>
-            <input
-              {...register("contacto")}
-              type={watch("tipoContacto") === "EMAIL" ? "email" : "text"}
-              required
-            />
-          </label>
-          <button>{contactoEdit ? "Actualizar" : "Guardar"}</button>
-        </form>
+              ❌
+            </div>
+            <label className="label__form">
+              <span className="span__form__info">Tipo de Contacto:</span>
+              <select
+                className="select__form__info"
+                required
+                {...register("tipoContacto")}
+              >
+                <option value="">Seleccione el Tipo</option>
+                {variables
+                  ?.filter((e) => e.tipoContacto)
+                  .map((variable) => (
+                    <option key={variable.id} value={variable.tipoContacto}>
+                      {variable.tipoContacto}
+                    </option>
+                  ))}
+              </select>
+            </label>
+            <label className="label__form">
+              <span className="span__form__info">Contacto: </span>
+              <input
+                className="input__form__info"
+                {...register("contacto")}
+                type={watch("tipoContacto") === "EMAIL" ? "email" : "text"}
+                required
+              />
+            </label>
+            <button>{contactoEdit ? "Actualizar" : "Guardar"}</button>
+          </form>
+        </section>
         <section>
           <table>
             <thead>
               <tr>
+                <th style={{ border: "none", backgroundColor: "white" }}>
+                  <img
+                    src="../../../new.png"
+                    className="btn__table"
+                    onClick={() => setHide(false)}
+                  />
+                </th>
                 <th>TIPO</th>
                 <th>CONTACTO</th>
               </tr>
             </thead>
             <tbody>
               {contacto
-                ?.filter(
+                ?.slice()
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                .filter(
                   (contacto) => contacto.servidorPolicialId === servidor.id
                 )
-                .map((contactoFiltrado) => (
-                  <tr key={contactoFiltrado.id}>
-                    <td>{contactoFiltrado?.tipoContacto}: </td>
-                    <td>{contactoFiltrado?.contacto}</td>
-                    <td style={{ border: "none" }}>
-                      <img
-                        src="../../../edit.png"
-                        className="btn__expand"
-                        onClick={() => handleEditContacto(contactoFiltrado)}
-                      />
+                .map((contacto) => (
+                  <tr key={contacto.id}>
+                    <td style={{ border: "none", backgroundColor: "white" }}>
+                      {(new Date() - new Date(contacto.createdAt) <
+                        diasEdicion * 24 * 60 * 60 * 1000 ||
+                        userCI === superAdmin) && (
+                        <img
+                          src="../../../edit.png"
+                          className="btn__table"
+                          onClick={() => handleEditContacto(contacto)}
+                        />
+                      )}
+                      {userLoggued.cI === superAdmin && (
+                        <img
+                          src="../../../delete.png"
+                          className="btn__table"
+                          onClick={() => handleHideDelete(contacto)}
+                        />
+                      )}
                     </td>
+                    <td>{contacto?.tipoContacto}: </td>
+                    <td>{contacto?.contacto}</td>
                   </tr>
                 ))}
             </tbody>
           </table>
+        </section>
+        <section
+          className={`form__container__info ${
+            hideDelete && "form__container__info__close"
+          }`}
+        >
+          <div className="form__info">
+            <span className="delete__card">
+              Esta seguro de eliminar el Registro
+            </span>
+            <div className="btn__delete__content">
+              <button onClick={handleDelete} className="btn__form__info">
+                SI
+              </button>
+              <button
+                onClick={() => setHideDelete(true)}
+                className="btn__form__info"
+              >
+                NO
+              </button>
+            </div>
+          </div>
         </section>
       </article>
     </div>

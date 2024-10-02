@@ -2,26 +2,26 @@ import React, { useEffect, useState } from "react";
 import useCrud from "../../hooks/useCrud";
 import { useForm } from "react-hook-form";
 
-const Novedades = ({ servidor }) => {
+const Funcion = ({ servidor }) => {
   const [hide, setHide] = useState(true);
   const [hideDelete, setHideDelete] = useState(true);
   const [idDelete, setIdDelete] = useState("");
-  const [novedadEdit, setNovedadEdit] = useState("");
+  const [funcionEdit, setFuncionEdit] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
   const [isDisabled2, setIsDisabled2] = useState(false);
   const superAdmin = import.meta.env.VITE_CI_SUPERADMIN;
   const diasEdicion = import.meta.env.VITE_DIAS_EDICION;
   const userCI = JSON.parse(localStorage.user ? localStorage.user : 0).cI;
   const userLoggued = JSON.parse(localStorage.user ? localStorage.user : 0);
-  const PATH_NOVEDADES = "/novedades";
+  const PATH_FUNCION = "/funcion";
   const PATH_VARIABLES = "/variables";
 
   const [
-    novedad,
-    getNovedad,
-    postNovedad,
-    deleteNovedad,
-    updateNovedad,
+    funcion,
+    getFuncion,
+    postFuncion,
+    deleteFuncion,
+    updateFuncion,
     hasError,
     isLoading,
   ] = useCrud();
@@ -39,52 +39,48 @@ const Novedades = ({ servidor }) => {
   } = useForm();
 
   const submit = (data) => {
-    if (novedadEdit) {
-      updateNovedad(PATH_NOVEDADES, novedadEdit.id, {
+    if (funcionEdit) {
+      updateFuncion(PATH_FUNCION, funcionEdit.id, {
         ...data,
         usuarioEdicion: userCI,
       });
     } else {
-      postNovedad(PATH_NOVEDADES, {
+      postFuncion(PATH_FUNCION, {
         ...data,
         servidorPolicialId: servidor.id,
         usuarioRegistro: userCI,
         usuarioEdicion: userCI,
       });
     }
-    setNovedadEdit("");
+    setFuncionEdit("");
     setHide(true);
     setIsDisabled(false);
     setIsDisabled2(false);
     reset({
-      novedad: "",
-      tipoDocumento: "",
-      numDocumento: "",
-      suscribe: "",
-      fechaDocumento: "",
+      funcion: "",
       fechaInicio: "",
       fechaFin: "",
     });
   };
 
-  const handleHideDelete = (novedad) => {
+  const handleHideDelete = (funcion) => {
     setHideDelete(false);
-    setIdDelete(novedad);
+    setIdDelete(funcion);
   };
 
   const handleDelete = () => {
-    deleteNovedad(PATH_NOVEDADES, idDelete.id);
+    deleteFuncion(PATH_FUNCION, idDelete.id);
     setHideDelete(true);
-    alert(`Se elimino el registro"  ${idDelete.novedad}`);
+    alert(`Se elimino el registro"  ${idDelete.funcion}`);
     setIdDelete("");
   };
 
-  const handleEditNovedad = (novedad) => {
-    setNovedadEdit(novedad);
+  const handleEditFuncion = (funcion) => {
+    setFuncionEdit(funcion);
     setHide(false);
     if (
       !(
-        new Date() - new Date(novedad.createdAt) <
+        new Date() - new Date(funcion.createdAt) <
           diasEdicion * 24 * 60 * 60 * 1000 || userCI === superAdmin
       )
     ) {
@@ -93,9 +89,9 @@ const Novedades = ({ servidor }) => {
 
     if (
       !(
-        new Date() - new Date(novedad.updatedAt) <
+        new Date() - new Date(funcion.updatedAt) <
           diasEdicion * 24 * 60 * 60 * 1000 ||
-        !novedad.fechaFin ||
+        !funcion.fechaFin ||
         userCI === superAdmin
       )
     ) {
@@ -104,13 +100,13 @@ const Novedades = ({ servidor }) => {
   };
 
   useEffect(() => {
-    getNovedad(PATH_NOVEDADES);
+    getFuncion(PATH_FUNCION);
     getVariables(PATH_VARIABLES);
   }, []);
 
   useEffect(() => {
-    reset(novedadEdit);
-  }, [novedadEdit]);
+    reset(funcionEdit);
+  }, [funcionEdit]);
 
   return (
     <div>
@@ -123,14 +119,10 @@ const Novedades = ({ servidor }) => {
           <form className="form__info" onSubmit={handleSubmit(submit)}>
             <div
               onClick={() => {
-                setNovedadEdit("");
+                setFuncionEdit("");
                 setHide(true);
                 reset({
-                  novedad: "",
-                  tipoDocumento: "",
-                  numDocumento: "",
-                  suscribe: "",
-                  fechaDocumento: "",
+                  funcion: "",
                   fechaInicio: "",
                   fechaFin: "",
                 });
@@ -140,87 +132,22 @@ const Novedades = ({ servidor }) => {
               ❌
             </div>
             <label className="label__form">
-              <span className="span__form__info">Novedad: </span>
+              <span className="span__form__info">Función Actual: </span>
               <select
                 disabled={isDisabled}
                 className="select__form__info"
                 required
-                {...register("novedad")}
-              >
-                <option value="">Seleccione la Novedad</option>
-                {variables
-                  ?.filter((e) => e.novedad)
-                  .map((variable) => (
-                    <option key={variable.id} value={variable.novedad}>
-                      {variable.novedad}
-                    </option>
-                  ))}
-              </select>
-            </label>
-
-            <label className="label__form">
-              <span className="span__form__info">Tipo de Documento: </span>
-              <select
-                disabled={isDisabled}
-                className="select__form__info"
-                required
-                {...register("tipoDocumento")}
+                {...register("funcion")}
               >
                 <option value="">Seleccione el Tipo</option>
                 {variables
-                  ?.filter((e) => e.tipoDeDocumento)
+                  ?.filter((e) => e.funcion)
                   .map((variable) => (
-                    <option key={variable.id} value={variable.tipoDeDocumento}>
-                      {variable.tipoDeDocumento}
+                    <option key={variable.id} value={variable.funcion}>
+                      {variable.funcion}
                     </option>
                   ))}
               </select>
-            </label>
-            <label className="label__form">
-              <span className="span__form__info">Número de Documento</span>
-              <input
-                disabled={isDisabled}
-                className="input__form__info"
-                type="text"
-                required
-                {...register("numDocumento")}
-              />
-            </label>
-            <label className="label__form">
-              <span className="span__form__info">Fecha de Documento: </span>
-              <input
-                disabled={isDisabled}
-                className="input__form__info"
-                required
-                type="date"
-                {...register("fechaDocumento", {
-                  required: "La fecha es obligatoria",
-                  validate: (value) => {
-                    const selectedDate = new Date(value);
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-                    return (
-                      selectedDate <= today ||
-                      "La fecha no puede ser superior a hoy"
-                    );
-                  },
-                })}
-              />
-            </label>
-            {errors.fechaDocumento && (
-              <p style={{ color: "red" }}>{errors.fechaDocumento.message}</p>
-            )}
-            <label className="label__form">
-              <span className="span__form__info">
-                Quién suscribe el documento
-              </span>
-              <input
-                disabled={isDisabled}
-                className="input__form__info"
-                type="text"
-                required
-                {...register("suscribe")}
-              />
             </label>
             <label className="label__form">
               <span className="span__form__info">Fecha de Inicio: </span>
@@ -248,7 +175,8 @@ const Novedades = ({ servidor }) => {
             )}
             <label className="label__form">
               <span className="span__form__info">Fecha de Finalización: </span>
-              <input disabled={isDisabled2}
+              <input
+                disabled={isDisabled2}
                 className="input__form__info"
                 type="date"
                 {...register("fechaFin", {
@@ -270,7 +198,7 @@ const Novedades = ({ servidor }) => {
             {errors.fechaFin && (
               <p style={{ color: "red" }}>{errors.fechaFin.message}</p>
             )}
-            <button>{novedadEdit ? "Actualizar" : "Guardar"}</button>
+            <button>{funcionEdit ? "Actualizar" : "Guardar"}</button>
           </form>
         </section>
         <section>
@@ -284,44 +212,36 @@ const Novedades = ({ servidor }) => {
                     onClick={() => setHide(false)}
                   />
                 </th>
-                <th>NOVEDAD</th>
-                <th>TIPO DE DOCUMENTO</th>
-                <th>NUMERO DE DOCUMENTO</th>
-                <th>FECHA DOCUMENTO</th>
-                <th>QUIEN SUSCRIBE</th>
+                <th>FUNCIÓN ACTUAL</th>
                 <th>FECHA INICIO</th>
                 <th>FECHA FINALIZACIÓN</th>
               </tr>
             </thead>
             <tbody>
-              {novedad
+              {funcion
                 ?.slice()
                 .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-                .filter((novedad) => novedad.servidorPolicialId === servidor.id)
-                .map((novedad) => (
-                  <tr key={novedad.id}>
+                .filter((funcion) => funcion.servidorPolicialId === servidor.id)
+                .map((funcion) => (
+                  <tr key={funcion.id}>
                     <td style={{ border: "none", backgroundColor: "white" }}>
                       <img
                         src="../../../edit.png"
                         className="btn__table"
-                        onClick={() => handleEditNovedad(novedad)}
+                        onClick={() => handleEditFuncion(funcion)}
                       />
 
                       {userLoggued.cI === superAdmin && (
                         <img
                           src="../../../delete.png"
                           className="btn__table"
-                          onClick={() => handleHideDelete(novedad)}
+                          onClick={() => handleHideDelete(funcion)}
                         />
                       )}
                     </td>
-                    <td>{novedad.novedad}</td>
-                    <td>{novedad.tipoDocumento}</td>
-                    <td>{novedad.numDocumento}</td>
-                    <td>{novedad.fechaDocumento}</td>
-                    <td>{novedad.suscribe}</td>
-                    <td>{novedad.fechaInicio}</td>
-                    <td>{novedad.fechaFin}</td>
+                    <td>{funcion.funcion}</td>
+                    <td>{funcion.fechaInicio}</td>
+                    <td>{funcion.fechaFin}</td>
                   </tr>
                 ))}
             </tbody>
@@ -354,4 +274,4 @@ const Novedades = ({ servidor }) => {
   );
 };
 
-export default Novedades;
+export default Funcion;

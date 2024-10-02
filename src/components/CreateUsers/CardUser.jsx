@@ -2,6 +2,8 @@ import React from "react";
 import "./styles/CardUsers.css";
 
 const CardUser = ({ user, setUserEdit, setFormIsClouse }) => {
+  const rolAdmin = import.meta.env.VITE_ROL_ADMIN;
+  const rolSubAdmin = import.meta.env.VITE_ROL_SUB_ADMIN;
   const handleEdituser = () => {
     setUserEdit(user);
     setFormIsClouse(false);
@@ -45,10 +47,10 @@ const CardUser = ({ user, setUserEdit, setFormIsClouse }) => {
             className="card__value"
             style={{
               color:
-                user.rol === "Administrador"
-                  ? "blue"
-                  : user.rol === "Sub-Administrador"
+                user.rol === rolAdmin
                   ? "red"
+                  : user.rol === rolSubAdmin
+                  ? "blue"
                   : "green",
             }}
           >

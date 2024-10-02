@@ -39,7 +39,7 @@ const useCrud = () => {
 
   const deleteApi = (path, id) => {
     setIsLoading(true);
-    const url = `${BASEURL}${path}${id}`;
+    const url = `${BASEURL}${path}/${id}`;
     axios
       .delete(url, getConfigToken())
       .then((res) => {

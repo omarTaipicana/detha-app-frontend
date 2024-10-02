@@ -6,13 +6,19 @@ table {
     font-size: 0.6em;
   }
   
+  .total__table,
+  th {
+    background-color: var(--blue-color);
+    color:var(--white-color);
+  }
+  
   th,
   td {
-    border: 1px solid #7b7777;
+    border: 1px solid var(--plomo-color);
     padding: 1px;
   }
   tr:hover td {
-    background-color: rgb(242, 255, 0);
+    background-color: rgba(255, 255, 0, 0.537);
   }
   
   .nomenclatura {
@@ -56,9 +62,6 @@ table {
   }
   
 
-  .total__table,
-  th {
-    background-color: #908d8d;
-  }
+
   
   

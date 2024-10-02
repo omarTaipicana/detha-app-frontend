@@ -8,6 +8,9 @@ const PrincipalHeader = () => {
   const user = JSON.parse(localStorage.user ? localStorage.user : 0);
   const userRol = JSON.parse(localStorage.user ? localStorage.user : 0).rol;
   const userCI = JSON.parse(localStorage.user ? localStorage.user : 0).cI;
+  const superAdmin = import.meta.env.VITE_CI_SUPERADMIN;
+  const rolAdmin = import.meta.env.VITE_ROL_ADMIN;
+  const rolSubAdmin = import.meta.env.VITE_ROL_SUB_ADMIN;
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -65,9 +68,9 @@ const PrincipalHeader = () => {
           to="/create_users"
           style={{
             display:
-              userRol === "Sub-Administrador" ||
-              userRol === "Administrador" ||
-              userCI === "0503627234"
+              userRol === rolSubAdmin ||
+              userRol === rolAdmin ||
+              userCI === superAdmin
                 ? "flex"
                 : "none",
           }}
@@ -79,7 +82,7 @@ const PrincipalHeader = () => {
           to="/admin"
           style={{
             display:
-              userRol === "Administrador" || userCI === "0503627234"
+              userRol === rolAdmin || userCI === superAdmin
                 ? "flex"
                 : "none",
           }}
