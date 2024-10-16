@@ -205,7 +205,7 @@ const Funcion = ({ servidor }) => {
           <table>
             <thead>
               <tr>
-                <th style={{ border: "none", backgroundColor: "white" }}>
+                <th style={{ border: "none", backgroundColor: "transparent" }}>
                   <img
                     src="../../../new.png"
                     className="btn__table"
@@ -224,7 +224,7 @@ const Funcion = ({ servidor }) => {
                 .filter((funcion) => funcion.servidorPolicialId === servidor.id)
                 .map((funcion) => (
                   <tr key={funcion.id}>
-                    <td style={{ border: "none", backgroundColor: "white" }}>
+                    <td style={{ border: "none", backgroundColor: "transparent" }}>
                       <img
                         src="../../../edit.png"
                         className="btn__table"
@@ -239,9 +239,9 @@ const Funcion = ({ servidor }) => {
                         />
                       )}
                     </td>
-                    <td>{funcion.funcion}</td>
-                    <td>{funcion.fechaInicio}</td>
-                    <td>{funcion.fechaFin}</td>
+                    <td className="table__td">{funcion.funcion}</td>
+                    <td className="table__td">{funcion.fechaInicio}</td>
+                    <td className="table__td">{funcion.fechaFin}</td>
                   </tr>
                 ))}
             </tbody>

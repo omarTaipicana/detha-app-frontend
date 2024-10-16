@@ -6,9 +6,10 @@ import getConfigToken from "../services/getConfigToken";
 const useAuth = () => {
   const urlBase = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
-  const [err, setErr] = useState();
+  const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState();
+  const [handleRes, setHandleRes] = useState();
 
   const registerUser = (data) => {
     setIsLoading(true);
@@ -17,12 +18,12 @@ const useAuth = () => {
       .post(url, data, getConfigToken())
       .then((res) => {
         // console.log(res.data);
-        setUsers(res.data);
-        setErr(res.data);
+        // setUsers(res.data);
+        setHandleRes(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-        setErr(err);
+      .catch((error) => {
+        // console.log(error);
+        setError(error);
       })
       .finally(() => setIsLoading(false));
   };
@@ -36,11 +37,11 @@ const useAuth = () => {
         // console.log(res.data);
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("user", JSON.stringify(res.data.user));
-        navigate("/");
+        // navigate("/");
       })
-      .catch((err) => {
-        setErr(err);
-        console.log(err);
+      .catch((error) => {
+        setError(error);
+        // console.log(err);
         localStorage.removeItem("token");
         localStorage.removeItem("user");
       })
@@ -53,12 +54,13 @@ const useAuth = () => {
     axios
       .post(url, data)
       .then((res) => {
+        setHandleRes(res.data);
         // console.log(res.data);
         navigate("/login");
       })
-      .catch((err) => {
-        console.log(err);
-        setErr(err);
+      .catch((error) => {
+        // console.log(error);
+        setError(error);
       })
       .finally(() => setIsLoading(false));
   };
@@ -70,11 +72,12 @@ const useAuth = () => {
       .post(url, data)
       .then((res) => {
         // console.log(res.data);
-        navigate("/login");
+        setHandleRes(res.data);
+        // navigate("/login");
       })
-      .catch((err) => {
-        console.log(err);
-        setErr(err);
+      .catch((error) => {
+        // console.log(error);
+        setError(error);
       })
       .finally(() => setIsLoading(false));
   };
@@ -85,9 +88,9 @@ const useAuth = () => {
     axios
       .get(url, getConfigToken())
       .then((res) => setUsers(res.data))
-      .catch((err) => {
-        setErr(err);
-        console.log(err);
+      .catch((error) => {
+        setError(error);
+        console.log(error);
       })
       .finally(() => setIsLoading(false));
   };
@@ -99,12 +102,11 @@ const useAuth = () => {
       .put(url, data, getConfigToken())
       .then((res) => {
         // console.log(res.data);
-        setUsers(res.data);
-        setErr();
+        setHandleRes(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-        setErr(err);
+      .catch((error) => {
+        console.log(error);
+        setError(error);
       })
       .finally(() => setIsLoading(false));
   };
@@ -114,11 +116,12 @@ const useAuth = () => {
     loginUser,
     verifyUser,
     sendEmail,
-    err,
+    error,
     isLoading,
     users,
     getUsers,
-    updateUser
+    updateUser,
+    handleRes,
   ];
 };
 

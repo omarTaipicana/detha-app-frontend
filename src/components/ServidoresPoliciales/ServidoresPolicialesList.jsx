@@ -30,7 +30,6 @@ const ServidoresPolicialesList = ({
   useEffect(() => {
     getApi(PATH);
   }, [servidorEdit, formIsClouse, hide]);
-  
 
   return (
     <div>
@@ -39,20 +38,32 @@ const ServidoresPolicialesList = ({
         {servidorPolicial
           ?.slice()
           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-          .filter((serv) =>
-            serv.pases.length === 0
-              ? serv.usuarioRegistro === user.cI
-              : user.tipoDesignacion === "NOPERA"
-              ? serv.pases.sort(
-                  (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-                )[0].unidad === user.unidad
-              : serv.pases.sort(
-                  (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-                )[0]?.unidadSubzona === user.unidadSubzona &&
-                serv.pases.sort(
-                  (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-                )[0]?.unidad === user.unidad
-          )
+          .filter((serv) => {
+            const ultimoPase = serv.pases
+              ?.slice()
+              .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+
+            if (serv.pases.length === 0) {
+              return serv.usuarioRegistro === user.cI;
+            }
+            
+            if (user.unidadSubzona === "Planta Administrativa DIGIN") {
+              return serv.id;
+            }
+
+            if (user.unidadSubzona.slice(0, 21) === "Planta Administrativa") {
+              return ultimoPase.direccion === user.direccion;
+            }
+
+            if (user.tipoDesignacion === "NOPERA") {
+              return ultimoPase.unidad === user.unidad;
+            }
+
+            return (
+              ultimoPase.unidadSubzona === user.unidadSubzona &&
+              ultimoPase.unidad === user.unidad
+            );
+          })
           .map((servidorPolicial) => (
             <CardServidoresPoliciales
               key={servidorPolicial.id}

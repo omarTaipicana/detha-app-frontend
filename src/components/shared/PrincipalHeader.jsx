@@ -2,9 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./styles/PrincipalHeader.css";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { showAlert } from "../../store/states/alert.slice";
+import Alert from "./Alert";
 
 const PrincipalHeader = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const user = JSON.parse(localStorage.user ? localStorage.user : 0);
   const userRol = JSON.parse(localStorage.user ? localStorage.user : 0).rol;
   const userCI = JSON.parse(localStorage.user ? localStorage.user : 0).cI;
@@ -13,6 +17,14 @@ const PrincipalHeader = () => {
   const rolSubAdmin = import.meta.env.VITE_ROL_SUB_ADMIN;
 
   const handleLogout = () => {
+    if (user) {
+      dispatch(
+        showAlert({
+          message: `⚠️ Estimado ${user?.firstName} ${user?.lastName}, no olvides registrar las novedades`,
+          alertType: 4,
+        })
+      );
+    }
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     navigate("/login");
@@ -24,7 +36,7 @@ const PrincipalHeader = () => {
         <Link className="title__principal__header" to="/">
           <img
             className="img__header"
-            src="https://res.cloudinary.com/deixskcku/image/upload/v1718293930/DIGIN-SF_z9vyuc.png"
+            src="../../../public/images/digin.png"
             alt=""
           />
           <div className="title__content">
@@ -82,14 +94,13 @@ const PrincipalHeader = () => {
           to="/admin"
           style={{
             display:
-              userRol === rolAdmin || userCI === superAdmin
-                ? "flex"
-                : "none",
+              userRol === rolAdmin || userCI === superAdmin ? "flex" : "none",
           }}
         >
           Administradior
         </Link>
       </nav>
+      <Alert />
     </header>
   );
 };

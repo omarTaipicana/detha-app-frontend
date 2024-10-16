@@ -328,12 +328,12 @@ const Tallas = ({ servidor }) => {
           <table>
             <thead>
               <tr>
-                <th style={{ border: "none", backgroundColor: "white" }}>
+                <th style={{ border: "none", backgroundColor: "transparent" }}>
                   {!(tallaEdit
-                  ? false
-                  : talla.some(
-                      (talla) => talla.servidorPolicialId === servidor.id
-                    )) && (
+                    ? false
+                    : talla.some(
+                        (talla) => talla.servidorPolicialId === servidor.id
+                      )) && (
                     <img
                       src="../../../new.png"
                       className="btn__table"
@@ -365,7 +365,9 @@ const Tallas = ({ servidor }) => {
                 .filter((talla) => talla.servidorPolicialId === servidor.id)
                 .map((talla) => (
                   <tr key={talla.id}>
-                    <td style={{ border: "none", backgroundColor: "white" }}>
+                    <td
+                      style={{ border: "none", backgroundColor: "transparent" }}
+                    >
                       <img
                         src="../../../edit.png"
                         className="btn__table"
@@ -380,21 +382,21 @@ const Tallas = ({ servidor }) => {
                         />
                       )}
                     </td>
-                    <td>{talla.calzado}</td>
-                    <td>{talla.camisaSport}</td>
-                    <td>{talla.camisaCorbata}</td>
-                    <td>{talla.camisaPolo}</td>
-                    <td>{talla.camisetaB2}</td>
-                    <td>{talla.chaleco}</td>
-                    <td>{talla.chaquetaB2}</td>
-                    <td>{talla.chompa}</td>
-                    <td>{talla.correa}</td>
-                    <td>{talla.gorra}</td>
-                    <td>{talla.kepiB2}</td>
-                    <td>{talla.pantalonB2}</td>
-                    <td>{talla.pantalonTerno}</td>
-                    <td>{talla.pantalonOperativo}</td>
-                    <td>{talla.sacoTerno}</td>
+                    <td className="table__td">{talla.calzado}</td>
+                    <td className="table__td">{talla.camisaSport}</td>
+                    <td className="table__td">{talla.camisaCorbata}</td>
+                    <td className="table__td">{talla.camisaPolo}</td>
+                    <td className="table__td">{talla.camisetaB2}</td>
+                    <td className="table__td">{talla.chaleco}</td>
+                    <td className="table__td">{talla.chaquetaB2}</td>
+                    <td className="table__td">{talla.chompa}</td>
+                    <td className="table__td">{talla.correa}</td>
+                    <td className="table__td">{talla.gorra}</td>
+                    <td className="table__td">{talla.kepiB2}</td>
+                    <td className="table__td">{talla.pantalonB2}</td>
+                    <td className="table__td">{talla.pantalonTerno}</td>
+                    <td className="table__td">{talla.pantalonOperativo}</td>
+                    <td className="table__td">{talla.sacoTerno}</td>
                   </tr>
                 ))}
             </tbody>

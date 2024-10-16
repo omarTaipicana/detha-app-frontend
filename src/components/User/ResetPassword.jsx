@@ -1,17 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./styles/ResetPassword.css";
 import { useForm } from "react-hook-form";
-import useAuth from "../hooks/useAuth";
-import IsLoading from "../components/shared/IsLoading";
+import useAuth from "../../hooks/useAuth";
+import IsLoading from "../../components/shared/IsLoading";
+import { useDispatch } from "react-redux";
+import { showAlert } from "../../store/states/alert.slice";
+import { useNavigate } from "react-router";
 
 const ResetPassword = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { register, handleSubmit, reset } = useForm();
-  const [, , , sendEmail, err, isLoading] = useAuth();
+  const [, , , sendEmail, error, isLoading, , , , userResetPasword] = useAuth();
+
+  useEffect(() => {
+    if (error) {
+      dispatch(
+        showAlert({
+          message: `⚠️ ${error.response?.data?.message}` || "Error inesperado",
+          alertType: 1,
+        })
+      );
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (userResetPasword) {
+      dispatch(
+        showAlert({
+          message: `⚠️ Estimado ${userResetPasword?.firstName} ${userResetPasword?.lastName}, revisa tu correo ${userResetPasword?.email} para resetear tu contraseña`,
+          alertType: 2,
+        })
+      );
+      navigate("/login");
+    }
+  }, [userResetPasword]);
 
   const submit = (data) => {
     const frontBaseUrl = `${location.protocol}//${location.host}/#/reset_password`;
     const body = { ...data, frontBaseUrl };
-    console.log(body);
     sendEmail(body);
     reset({
       password: "",
@@ -34,7 +61,6 @@ const ResetPassword = () => {
             />
           </label>
           <button className="send__email__card__btn">Enviar</button>
-          <span className="text__err">{err?.response.data.mesagge}</span>
         </form>
       </div>
     </div>

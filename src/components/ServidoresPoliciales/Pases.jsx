@@ -310,7 +310,7 @@ const Pases = ({ servidor }) => {
           <table className="table__info">
             <thead>
               <tr>
-                <th style={{ border: "none", backgroundColor: "white" }}>
+                <th style={{ border: "none", backgroundColor: "transparent" }}>
                   <img
                     src="../../../new.png"
                     className="btn__table"
@@ -333,7 +333,7 @@ const Pases = ({ servidor }) => {
                 .filter((pase) => pase.servidorPolicialId === servidor.id)
                 .map((pase) => (
                   <tr key={pase.id}>
-                    <td style={{ border: "none", backgroundColor: "white" }}>
+                    <td style={{ border: "none", backgroundColor: "transparent" }}>
                       {(new Date() - new Date(pase.createdAt) <
                         diasEdicion * 24 * 60 * 60 * 1000 ||
                         userCI === superAdmin) && (
@@ -352,13 +352,13 @@ const Pases = ({ servidor }) => {
                         />
                       )}
                     </td>
-                    <td>{pase.numeroTelegrama}</td>
-                    <td>{pase.fechaTelegrama}</td>
-                    <td>{pase.direccion}</td>
-                    <td>{pase.unidad}</td>
-                    <td>{pase.nomenclatura}</td>
-                    <td>{pase.cargo}</td>
-                    <td>{pase.nomenclaturaNoDigin}</td>
+                    <td className="table__td">{pase.numeroTelegrama}</td>
+                    <td className="table__td">{pase.fechaTelegrama}</td>
+                    <td className="table__td">{pase.direccion}</td>
+                    <td className="table__td">{pase.unidad}</td>
+                    <td className="table__td">{pase.nomenclatura}</td>
+                    <td className="table__td">{pase.cargo}</td>
+                    <td className="table__td">{pase.nomenclaturaNoDigin}</td>
                   </tr>
                 ))}
             </tbody>

@@ -125,7 +125,7 @@ export const Contactos = ({ servidor }) => {
           <table>
             <thead>
               <tr>
-                <th style={{ border: "none", backgroundColor: "white" }}>
+                <th style={{ border: "none", backgroundColor: "transparent" }}>
                   <img
                     src="../../../new.png"
                     className="btn__table"
@@ -145,7 +145,7 @@ export const Contactos = ({ servidor }) => {
                 )
                 .map((contacto) => (
                   <tr key={contacto.id}>
-                    <td style={{ border: "none", backgroundColor: "white" }}>
+                    <td style={{ border: "none", backgroundColor: "transparent" }}>
                       {(new Date() - new Date(contacto.createdAt) <
                         diasEdicion * 24 * 60 * 60 * 1000 ||
                         userCI === superAdmin) && (
@@ -163,8 +163,8 @@ export const Contactos = ({ servidor }) => {
                         />
                       )}
                     </td>
-                    <td>{contacto?.tipoContacto}: </td>
-                    <td>{contacto?.contacto}</td>
+                    <td className="table__td">{contacto?.tipoContacto}: </td>
+                    <td className="table__td">{contacto?.contacto}</td>
                   </tr>
                 ))}
             </tbody>

@@ -3,15 +3,12 @@ import CardUser from "./CardUser";
 import useAuth from "../../hooks/useAuth";
 import "./styles/CardUsers.css";
 
-const UsersList = ({ userUpdated, setUserEdit, setFormIsClouse }) => {
+const UsersList = ({ userEdit, setUserEdit, setFormIsClouse, newUser }) => {
   const [, , , , err, isLoading, users, getUsers] = useAuth();
-  // const [fetched, setFetched] = useState(false);
 
   useEffect(() => {
     getUsers();
-  }, [userUpdated]);
-
-  // console.log(users);
+  }, [userEdit, newUser]);
 
   return (
     <div className="card__users__content">

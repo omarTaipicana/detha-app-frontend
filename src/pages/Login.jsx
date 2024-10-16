@@ -1,13 +1,44 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./styles/Login.css";
 import { useForm } from "react-hook-form";
 import useAuth from "../hooks/useAuth";
 import IsLoading from "../components/shared/IsLoading";
+import { useDispatch } from "react-redux";
+import { showAlert } from "../store/states/alert.slice";
 
 const HomePage = () => {
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
+  const dispatch = useDispatch();
+  const [prevUser, setPrevUser] = useState(null);
   const { register, handleSubmit, reset } = useForm();
-  const [, loginUser, , , err, isLoading] = useAuth();
+  const [, loginUser, , , error, isLoading] = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (error) {
+      dispatch(
+        showAlert({
+          message: `⚠️ ${error.response?.data?.message}` || "Error inesperado",
+          alertType: 1,
+        })
+      );
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (user && prevUser === null) {
+      dispatch(
+        showAlert({
+          message: `⚠️ Bienvenido ${user?.firstName} ${user?.lastName} a al App Web DETHA`,
+          alertType: 2,
+        })
+      );
+      setPrevUser(user);
+      navigate("/");
+    }
+  }, [user, prevUser, dispatch]);
 
   const submit = (data) => {
     loginUser(data);
@@ -16,8 +47,7 @@ const HomePage = () => {
       password: "",
     });
   };
-  // console.log(err?.response.data.mesagge);
-  // console.log(isLoading);
+
   return (
     <div>
       {isLoading && <IsLoading />}
@@ -43,7 +73,6 @@ const HomePage = () => {
 
           <Link to="/reset_password">Olvido su contraseña</Link>
           <button className="login__card__btn">Ingresar</button>
-          <span className="text__err">{err?.response.data.mesagge}</span>
         </form>
       </div>
     </div>

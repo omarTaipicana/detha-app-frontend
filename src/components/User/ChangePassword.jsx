@@ -1,16 +1,29 @@
 import React, { useEffect, useState } from "react";
 import "./styles/ChangePassword.css";
 import { useForm } from "react-hook-form";
-import useAuth from "../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 import { useParams } from "react-router-dom";
-import IsLoading from "../components/shared/IsLoading";
-
+import IsLoading from "../shared/IsLoading";
+import { useDispatch } from "react-redux";
+import { showAlert } from "../../store/states/alert.slice";
 
 const ChangePassword = () => {
   const { code: code } = useParams();
+  const dispatch = useDispatch();
   const { register, handleSubmit, reset } = useForm();
-  const [, , verifyUser, , err, isLoading] = useAuth();
-  const [message, setMessage] = useState("");
+  const [, , verifyUser, , error, isLoading] =
+    useAuth();
+
+  useEffect(() => {
+    if (error) {
+      dispatch(
+        showAlert({
+          message: `⚠️ ${error.response?.data?.message}` || "Error inesperado",
+          alertType: 1,
+        })
+      );
+    }
+  }, [error]);
 
   const submit = (data) => {
     if (data.password === data.confirmPassword) {
@@ -18,9 +31,19 @@ const ChangePassword = () => {
         password: data.password,
       };
       verifyUser(body, code);
-      setMessage(err?.response.data.mesagge);
+      dispatch(
+        showAlert({
+          message: "⚠️ Su Contraseña se cambio Correctamente",
+          alertType: 2,
+        })
+      );
     } else {
-      setMessage("Las contraseñas no coinciden");
+      dispatch(
+        showAlert({
+          message: "⚠️ Sus contraseñas no Coinciden",
+          alertType: 1,
+        })
+      );
     }
     reset({
       password: "",
@@ -66,11 +89,7 @@ const ChangePassword = () => {
               {...register("confirmPassword")}
             />
           </label>
-
           <button className="change__password__card__btn">Enviar</button>
-          <span className="text__err">
-            {message ? message : err?.response.data.mesagge}
-          </span>
         </form>
       </div>
     </div>

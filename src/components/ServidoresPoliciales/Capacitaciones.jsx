@@ -169,7 +169,7 @@ const Capacitaciones = ({ servidor }) => {
           <table>
             <thead>
               <tr>
-                <th style={{ border: "none", backgroundColor: "white" }}>
+                <th style={{ border: "none", backgroundColor: "transparent" }}>
                   <img
                     src="../../../new.png"
                     className="btn__table"
@@ -192,7 +192,7 @@ const Capacitaciones = ({ servidor }) => {
                 )
                 .map((capacitacion) => (
                   <tr key={capacitacion.id}>
-                    <td style={{ border: "none", backgroundColor: "white" }}>
+                    <td style={{ border: "none", backgroundColor: "transparent" }}>
                       {(new Date() - new Date(capacitacion.createdAt) <
                         diasEdicion * 24 * 60 * 60 * 1000 ||
                         userCI === superAdmin) && (
@@ -210,10 +210,10 @@ const Capacitaciones = ({ servidor }) => {
                         />
                       )}
                     </td>
-                    <td>{capacitacion.capacitacion}</td>
-                    <td>{capacitacion.lugar}</td>
-                    <td>{capacitacion.fechaInicio}</td>
-                    <td>{capacitacion.fechaFin}</td>
+                    <td className="table__td">{capacitacion.capacitacion}</td>
+                    <td className="table__td">{capacitacion.lugar}</td>
+                    <td className="table__td">{capacitacion.fechaInicio}</td>
+                    <td className="table__td">{capacitacion.fechaFin}</td>
                   </tr>
                 ))}
             </tbody>

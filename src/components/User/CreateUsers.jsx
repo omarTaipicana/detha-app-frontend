@@ -1,13 +1,20 @@
 import { useEffect, useState } from "react";
 import "./styles/CreateUsers.css";
 import { useForm } from "react-hook-form";
-import useAuth from "../hooks/useAuth";
-import IsLoading from "../components/shared/IsLoading";
-import UsersList from "../components/CreateUsers/UsersList";
+import useAuth from "../../hooks/useAuth";
+import IsLoading from "../../components/shared/IsLoading";
+import { useDispatch } from "react-redux";
+import { showAlert } from "../../store/states/alert.slice";
 import axios from "axios";
-import getConfigToken from "../services/getConfigToken";
+import getConfigToken from "../../services/getConfigToken";
 
-const CreateUsers = () => {
+const CreateUsers = ({
+  userEdit,
+  setUserEdit,
+  formIsClouse,
+  setFormIsClouse,
+  setNewUser,
+}) => {
   const [selectedDireccion, setSelectedDireccion] = useState("");
   const [selectedUnidad, setSelectedUnidad] = useState("");
   const [selectedUnidadSubzona, setSelectedUnidadSubzona] = useState("");
@@ -19,9 +26,20 @@ const CreateUsers = () => {
   const superAdmin = import.meta.env.VITE_CI_SUPERADMIN;
   const rolAdmin = import.meta.env.VITE_ROL_ADMIN;
   const { register, handleSubmit, reset } = useForm();
-  const [registerUser, , , , err, isLoading, users, , updateUser] = useAuth();
-  const [userEdit, setUserEdit] = useState();
-  const [formIsClouse, setFormIsClouse] = useState(true);
+  const dispatch = useDispatch();
+  const [
+    registerUser,
+    ,
+    ,
+    ,
+    error,
+    isLoading,
+    users,
+    getUsers,
+    updateUser,
+    handleRes,
+  ] = useAuth();
+
   const [organicos, setOrganicos] = useState([]);
   const userRol = JSON.parse(localStorage.user).rol;
   const useCI = JSON.parse(localStorage.user).cI;
@@ -66,6 +84,38 @@ const CreateUsers = () => {
       lastName: "",
     });
   };
+
+  useEffect(() => {
+    if (error) {
+      dispatch(
+        showAlert({
+          message: `⚠️ ${error.response?.data?.message}` || "Error inesperado",
+          alertType: 1,
+        })
+      );
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (handleRes) {
+      if (userEdit) {
+        dispatch(
+          showAlert({
+            message: `⚠️ Edición de información de ${handleRes?.firstName} ${handleRes?.lastName} exitosa`,
+            alertType: 2,
+          })
+        );
+      } else {
+        dispatch(
+          showAlert({
+            message: `⚠️ Se creó el usuario ${handleRes?.firstName} ${handleRes?.lastName} con el rol de ${handleRes?.rol} exitosamente`,
+            alertType: 2,
+          })
+        );
+        setNewUser(handleRes);
+      }
+    }
+  }, [handleRes, ]);
 
   useEffect(() => {
     axios
@@ -124,17 +174,6 @@ const CreateUsers = () => {
     <div>
       {isLoading && <IsLoading />}
       <div className="create__users__list__users">
-        <span className="text__err">
-          {err?.response?.data?.message ===
-          "llave duplicada viola restricción de unicidad «users_cI_key»"
-            ? "Ya existe un usuario registrado con este número de cédula"
-            : err?.response?.data?.message ===
-              "llave duplicada viola restricción de unicidad «users_email_key»"
-            ? "Ya existe un usuario registrado con este correo electrónico"
-            : err?.cI
-            ? `Se creo el usuario para ${err?.firstName} ${err?.lastName} `
-            : err?.response.data.message}
-        </span>
         <button
           onClick={() => {
             setFormIsClouse(false);
@@ -172,9 +211,7 @@ const CreateUsers = () => {
             <label
               style={{
                 display:
-                  !userEdit ||
-                  userRol === rolAdmin ||
-                  useCI === superAdmin
+                  !userEdit || userRol === rolAdmin || useCI === superAdmin
                     ? "flex"
                     : "none",
               }}
@@ -191,9 +228,7 @@ const CreateUsers = () => {
             <label
               style={{
                 display:
-                  !userEdit ||
-                  userRol === rolAdmin ||
-                  useCI === superAdmin
+                  !userEdit || userRol === rolAdmin || useCI === superAdmin
                     ? "flex"
                     : "none",
               }}
@@ -352,13 +387,6 @@ const CreateUsers = () => {
             </button>
           </form>
         </div>
-        <section>
-          <UsersList
-            userUpdated={users}
-            setUserEdit={setUserEdit}
-            setFormIsClouse={setFormIsClouse}
-          />
-        </section>
       </div>
     </div>
   );

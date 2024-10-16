@@ -277,7 +277,7 @@ const Novedades = ({ servidor }) => {
           <table>
             <thead>
               <tr>
-                <th style={{ border: "none", backgroundColor: "white" }}>
+                <th style={{ border: "none", backgroundColor: "transparent" }}>
                   <img
                     src="../../../new.png"
                     className="btn__table"
@@ -300,7 +300,7 @@ const Novedades = ({ servidor }) => {
                 .filter((novedad) => novedad.servidorPolicialId === servidor.id)
                 .map((novedad) => (
                   <tr key={novedad.id}>
-                    <td style={{ border: "none", backgroundColor: "white" }}>
+                    <td style={{ border: "none", backgroundColor: "transparent" }}>
                       <img
                         src="../../../edit.png"
                         className="btn__table"
@@ -315,13 +315,13 @@ const Novedades = ({ servidor }) => {
                         />
                       )}
                     </td>
-                    <td>{novedad.novedad}</td>
-                    <td>{novedad.tipoDocumento}</td>
-                    <td>{novedad.numDocumento}</td>
-                    <td>{novedad.fechaDocumento}</td>
-                    <td>{novedad.suscribe}</td>
-                    <td>{novedad.fechaInicio}</td>
-                    <td>{novedad.fechaFin}</td>
+                    <td className="table__td">{novedad.novedad}</td>
+                    <td className="table__td">{novedad.tipoDocumento}</td>
+                    <td className="table__td">{novedad.numDocumento}</td>
+                    <td className="table__td">{novedad.fechaDocumento}</td>
+                    <td className="table__td">{novedad.suscribe}</td>
+                    <td className="table__td">{novedad.fechaInicio}</td>
+                    <td className="table__td">{novedad.fechaFin}</td>
                   </tr>
                 ))}
             </tbody>

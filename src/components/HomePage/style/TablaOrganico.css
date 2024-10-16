@@ -5,6 +5,13 @@ table {
     text-align: center;
     font-size: 0.6em;
   }
+
+  .thead__organico {
+    position: sticky;
+    top: 0;
+    background-color: white; 
+    z-index: 10;
+  }
   
   .total__table,
   th {
@@ -25,6 +32,7 @@ table {
     text-align: left;
   }
   .texto__vertical {
+    height: 9em;
     writing-mode: vertical-rl;
     text-orientation: mixed;
     transform: rotate(180deg);
@@ -59,6 +67,21 @@ table {
     color: var(--blue-color);
     font-weight: 800;
     font-size: 1em;
+  }
+
+  .color_green{
+    color: var(--green-color);
+  }
+  .color_red{
+    color: var(--red-color);
+  }
+  .color_yellow{
+    color: var(--orange-color);
+  }
+
+  .vacio{
+    width: 1.5em;
+    border: none;
   }
   
 

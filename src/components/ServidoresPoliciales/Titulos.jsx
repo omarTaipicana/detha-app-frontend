@@ -151,7 +151,7 @@ const Titulos = ({ servidor }) => {
           <table>
             <thead>
               <tr>
-                <th style={{ border: "none", backgroundColor: "white" }}>
+                <th style={{ border: "none", backgroundColor: "transparent" }}>
                   <img
                     src="../../../new.png"
                     className="btn__table"
@@ -170,7 +170,7 @@ const Titulos = ({ servidor }) => {
                 .filter((titulo) => titulo.servidorPolicialId === servidor.id)
                 .map((titulo) => (
                   <tr key={titulo.id}>
-                    <td style={{ border: "none", backgroundColor: "white" }}>
+                    <td style={{ border: "none", backgroundColor: "transparent" }}>
                       {(new Date() - new Date(titulo.createdAt) <
                         diasEdicion * 24 * 60 * 60 * 1000 ||
                         userCI === superAdmin) && (
@@ -188,9 +188,9 @@ const Titulos = ({ servidor }) => {
                         />
                       )}
                     </td>
-                    <td>{titulo.fecha}</td>
-                    <td>{titulo.institucion}</td>
-                    <td>{titulo.titulo}</td>
+                    <td className="table__td">{titulo.fecha}</td>
+                    <td className="table__td">{titulo.institucion}</td>
+                    <td className="table__td">{titulo.titulo}</td>
                   </tr>
                 ))}
             </tbody>

@@ -2,18 +2,19 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Login from "./pages/Login";
 import PrincipalHeader from "./components/shared/PrincipalHeader";
-import ResetPassword from "./pages/ResetPassword";
-import ChangePassword from "./pages/ChangePassword";
-import CreateUsers from "./pages/CreateUsers";
 import HomePage from "./pages/HomePage";
 import PageAdmin from "./pages/PageAdmin";
-import ProtectedRoutes from "./pages/ProtectedRoutes";
-import AdminRoutes from "./pages/AdminRoutes";
-import SubAdminRoutes from "./pages/SubAdminRoutes";
-import UserActiveRoutes from "./pages/UserActiveRoutes";
-import InactivePage from "./pages/InactivePage";
+import AdminRoutes from "./components/controlRoutes/AdminRoutes";
+import InactivePage from "./components/User/InactivePage";
 import ServidoresPoliciales from "./pages/ServidoresPoliciales";
 import ParteDiario from "./pages/ParteDiario";
+import ProtectedRoutes from "./components/controlRoutes/ProtectedRoutes";
+import UserActiveRoutes from "./components/controlRoutes/UserActiveRoutes";
+import SubAdminRoutes from "./components/controlRoutes/SubAdminRoutes";
+import ChangePassword from "./components/User/ChangePassword";
+import ResetPassword from "./components/User/ResetPassword";
+import Alert from "./components/shared/Alert";
+import { UsersContent } from "./components/User/UsersContent";
 
 function App() {
   return (
@@ -33,7 +34,7 @@ function App() {
             <Route path="/partediario" element={<ParteDiario />} />
 
             <Route element={<SubAdminRoutes />}>
-              <Route path="/create_users" element={<CreateUsers />} />
+              <Route path="/create_users" element={<UsersContent />} />
 
               <Route element={<AdminRoutes />}>
                 <Route path="/admin" element={<PageAdmin />} />
@@ -42,6 +43,7 @@ function App() {
           </Route>
         </Route>
       </Routes>
+      <Alert/>
     </div>
   );
 }

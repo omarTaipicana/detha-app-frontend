@@ -592,7 +592,7 @@ const TipoDesplazamiento = ({ servidor }) => {
           <table className="table__info__desplazamiento">
             <thead>
               <tr>
-                <th style={{ border: "none", backgroundColor: "white" }}>
+                <th style={{ border: "none", backgroundColor: "transparent" }}>
                   <img
                     src="../../../new.png"
                     className="btn__table"
@@ -628,7 +628,7 @@ const TipoDesplazamiento = ({ servidor }) => {
                 )
                 .map((desplazamiento) => (
                   <tr key={desplazamiento.id}>
-                    <td style={{ border: "none", backgroundColor: "white" }}>
+                    <td style={{ border: "none", backgroundColor: "transparent" }}>
                       <img
                         src="../../../edit.png"
                         className="btn__table"
@@ -643,23 +643,23 @@ const TipoDesplazamiento = ({ servidor }) => {
                         />
                       )}
                     </td>
-                    <td>{desplazamiento.tipoDesplazamiento}</td>
-                    <td>{desplazamiento.tipoDocumento}</td>
-                    <td>{desplazamiento.numeroDocumento}</td>
-                    <td>{desplazamiento.fechaDocumento}</td>
-                    <td>{desplazamiento.fechaInicio}</td>
-                    <td>{desplazamiento.fechaFinalizacionDoc}</td>
-                    <td>{desplazamiento.direccion}</td>
-                    <td>{desplazamiento.unidad}</td>
-                    <td>{desplazamiento.nomenclatura}</td>
-                    <td>{desplazamiento.cargo}</td>
-                    <td>{desplazamiento.nomenclaturaNoDigin}</td>
-                    <td>{desplazamiento.causaDesplazamiento}</td>
-                    <td>{desplazamiento.verificaPlanAccion}</td>
-                    <td>{desplazamiento.planAccion}</td>
-                    <td>{desplazamiento.personalRelevo}</td>
-                    <td>{desplazamiento.fechaPresentacion}</td>
-                    <td>{desplazamiento.fechaFinalización}</td>
+                    <td className="table__td">{desplazamiento.tipoDesplazamiento}</td>
+                    <td className="table__td">{desplazamiento.tipoDocumento}</td>
+                    <td className="table__td">{desplazamiento.numeroDocumento}</td>
+                    <td className="table__td">{desplazamiento.fechaDocumento}</td>
+                    <td className="table__td">{desplazamiento.fechaInicio}</td>
+                    <td className="table__td">{desplazamiento.fechaFinalizacionDoc}</td>
+                    <td className="table__td">{desplazamiento.direccion}</td>
+                    <td className="table__td">{desplazamiento.unidad}</td>
+                    <td className="table__td">{desplazamiento.nomenclatura}</td>
+                    <td className="table__td">{desplazamiento.cargo}</td>
+                    <td className="table__td">{desplazamiento.nomenclaturaNoDigin}</td>
+                    <td className="table__td">{desplazamiento.causaDesplazamiento}</td>
+                    <td className="table__td">{desplazamiento.verificaPlanAccion}</td>
+                    <td className="table__td">{desplazamiento.planAccion}</td>
+                    <td className="table__td">{desplazamiento.personalRelevo}</td>
+                    <td className="table__td">{desplazamiento.fechaPresentacion}</td>
+                    <td className="table__td">{desplazamiento.fechaFinalización}</td>
                   </tr>
                 ))}
             </tbody>

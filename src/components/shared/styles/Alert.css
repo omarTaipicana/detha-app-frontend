@@ -1,0 +1,29 @@
+.alert-message {
+  position: fixed;
+  bottom: 0; /* Aparece en la parte inferior del div padre */
+  left: 0;
+  right: 0;
+  color: white;
+  font-style: italic;
+  text-align: center;
+  padding: 10px;
+  border-radius: 5px;
+  pointer-events: none;
+  opacity: 0;
+  animation: fadeInOut 3.5s forwards;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

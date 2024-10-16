@@ -196,7 +196,7 @@ const Ascenso = ({ servidor }) => {
           <table>
             <thead>
               <tr>
-                <th style={{ border: "none", backgroundColor: "white" }}>
+                <th style={{ border: "none", backgroundColor: "transparent" }}>
                   <img
                     src="../../../new.png"
                     className="btn__table"
@@ -216,7 +216,7 @@ const Ascenso = ({ servidor }) => {
                 .filter((ascenso) => ascenso.servidorPolicialId === servidor.id)
                 .map((ascenso) => (
                   <tr key={ascenso.id}>
-                    <td style={{ border: "none", backgroundColor: "white" }}>
+                    <td style={{ border: "none", backgroundColor: "transparent" }}>
                       {(new Date() - new Date(ascenso.createdAt) <
                         diasEdicion * 24 * 60 * 60 * 1000 ||
                         userCI === superAdmin) && (
@@ -234,10 +234,10 @@ const Ascenso = ({ servidor }) => {
                         />
                       )}
                     </td>
-                    <td>{ascenso.grado}</td>
-                    <td>{ascenso.fechaAscenso}</td>
-                    <td>{ascenso.numOrden}</td>
-                    <td>{ascenso.fechaOrden}</td>
+                    <td className="table__td">{ascenso.grado}</td>
+                    <td className="table__td">{ascenso.fechaAscenso}</td>
+                    <td className="table__td">{ascenso.numOrden}</td>
+                    <td className="table__td">{ascenso.fechaOrden}</td>
                   </tr>
                 ))}
             </tbody>

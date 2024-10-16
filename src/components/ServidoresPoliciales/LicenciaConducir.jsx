@@ -182,7 +182,7 @@ const LicenciaConducir = ({ servidor }) => {
           <table>
             <thead>
               <tr>
-                <th style={{ border: "none", backgroundColor: "white" }}>
+                <th style={{ border: "none", backgroundColor: "transparent" }}>
                   <img
                     src="../../../new.png"
                     className="btn__table"
@@ -203,7 +203,7 @@ const LicenciaConducir = ({ servidor }) => {
                 )
                 .map((licencia) => (
                   <tr key={licencia.id}>
-                    <td style={{ border: "none", backgroundColor: "white" }}>
+                    <td style={{ border: "none", backgroundColor: "transparent" }}>
                       {(new Date() - new Date(licencia.createdAt) <
                         diasEdicion * 24 * 60 * 60 * 1000 ||
                         userCI === superAdmin) && (
@@ -221,9 +221,9 @@ const LicenciaConducir = ({ servidor }) => {
                         />
                       )}
                     </td>
-                    <td>{licencia.tipoLicencia}</td>
-                    <td>{licencia.fechaInicio}</td>
-                    <td>{licencia.fechaFin}</td>
+                    <td className="table__td">{licencia.tipoLicencia}</td>
+                    <td className="table__td">{licencia.fechaInicio}</td>
+                    <td className="table__td">{licencia.fechaFin}</td>
                   </tr>
                 ))}
             </tbody>

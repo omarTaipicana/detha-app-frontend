@@ -167,7 +167,7 @@ const Vacaciones = ({ servidor }) => {
           <table>
             <thead>
               <tr>
-                <th style={{ border: "none", backgroundColor: "white" }}>
+                <th style={{ border: "none", backgroundColor: "transparent" }}>
                   <img
                     src="../../../new.png"
                     className="btn__table"
@@ -206,9 +206,9 @@ const Vacaciones = ({ servidor }) => {
                         />
                       )}
                     </td>
-                    <td>{vacaciones.vacaciones}</td>
-                    <td>{vacaciones.fechaInicio}</td>
-                    <td>{vacaciones.fechaFin}</td>
+                    <td className="table__td">{vacaciones.vacaciones}</td>
+                    <td className="table__td">{vacaciones.fechaInicio}</td>
+                    <td className="table__td">{vacaciones.fechaFin}</td>
                   </tr>
                 ))}
             </tbody>
