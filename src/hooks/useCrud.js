@@ -5,7 +5,10 @@ import getConfigToken from "../services/getConfigToken";
 const useCrud = () => {
   const BASEURL = import.meta.env.VITE_API_URL;
   const [response, setResponse] = useState([]);
-  const [hasError, setHasError] = useState(false);
+  const [newReg, setNewReg] = useState("");
+  const [deleteReg, setDeleteReg] = useState("");
+  const [updateReg, setUpdateReg] = useState("");
+  const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const getApi = (path) => {
@@ -15,7 +18,7 @@ const useCrud = () => {
       .get(url, getConfigToken())
       .then((res) => setResponse(res.data))
       .catch((err) => {
-        setHasError(err);
+        setError(err);
         console.log(err);
       })
       .finally(() => setIsLoading(false));
@@ -29,11 +32,12 @@ const useCrud = () => {
       .then((res) => {
         // console.log(res.data);
         setResponse([...response, res.data]);
+        setNewReg(res.data);
       })
       .finally(() => setIsLoading(false))
       .catch((err) => {
-        setHasError(err);
-        console.log(err);
+        setError(err);
+        // console.log(err);
       });
   };
 
@@ -43,13 +47,14 @@ const useCrud = () => {
     axios
       .delete(url, getConfigToken())
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setResponse(response.filter((e) => e.id !== id));
+        setDeleteReg(res.data);
       })
       .finally(() => setIsLoading(false))
       .catch((err) => {
-        setHasError(err);
-        console.log(err);
+        setError(err);
+        // console.log(err);
       });
   };
 
@@ -58,17 +63,29 @@ const useCrud = () => {
     const url = `${BASEURL}${path}/${id}`;
     axios
       .put(url, data, getConfigToken())
-      .then((res) =>
-        setResponse(response.map((e) => (e.id === id ? res.data : e)))
-      )
+      .then((res) => {
+        setResponse(response.map((e) => (e.id === id ? res.data : e)));
+        setUpdateReg(res.data);
+      })
       .finally(() => setIsLoading(false))
       .catch((err) => {
-        setHasError(err);
-        console.log(err);
+        setError(err);
+        // console.log(err);
       });
   };
 
-  return [response, getApi, postApi, deleteApi, updateApi, hasError, isLoading];
+  return [
+    response,
+    getApi,
+    postApi,
+    deleteApi,
+    updateApi,
+    error,
+    isLoading,
+    newReg,
+    deleteReg,
+    updateReg,
+  ];
 };
 
 export default useCrud;

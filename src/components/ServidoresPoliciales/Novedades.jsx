@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import useCrud from "../../hooks/useCrud";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { showAlert } from "../../store/states/alert.slice";
+import Alert from "../shared/Alert";
+import IsLoading from "../shared/IsLoading";
 
-const Novedades = ({ servidor }) => {
+const Novedades = ({ servidor, desplazamientos }) => {
+  const dispatch = useDispatch();
   const [hide, setHide] = useState(true);
   const [hideDelete, setHideDelete] = useState(true);
   const [idDelete, setIdDelete] = useState("");
@@ -22,8 +27,11 @@ const Novedades = ({ servidor }) => {
     postNovedad,
     deleteNovedad,
     updateNovedad,
-    hasError,
+    error,
     isLoading,
+    newReg,
+    deleteReg,
+    updateReg,
   ] = useCrud();
 
   const [variables, getVariables] = useCrud();
@@ -39,16 +47,34 @@ const Novedades = ({ servidor }) => {
   } = useForm();
 
   const submit = (data) => {
-    if (novedadEdit) {
-      updateNovedad(PATH_NOVEDADES, novedadEdit.id, {
-        ...data,
-        usuarioEdicion: userCI,
-      });
-    } else {
+    const ultimaNovedad = novedad
+      ?.slice()
+      .filter((novedad) => novedad.servidorPolicialId === servidor.id)
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+
+    if (!novedadEdit) {
+      if (
+        ultimaNovedad &&
+        (!ultimaNovedad.fechaInicio || !ultimaNovedad.fechaFin)
+      ) {
+        dispatch(
+          showAlert({
+            message:
+              " ⚠️ No se puede registrar una nueva Novedad, finalice primero la ultima novedad",
+            alertType: 1,
+          })
+        );
+        return;
+      }
       postNovedad(PATH_NOVEDADES, {
         ...data,
         servidorPolicialId: servidor.id,
         usuarioRegistro: userCI,
+        usuarioEdicion: userCI,
+      });
+    } else {
+      updateNovedad(PATH_NOVEDADES, novedadEdit.id, {
+        ...data,
         usuarioEdicion: userCI,
       });
     }
@@ -75,7 +101,6 @@ const Novedades = ({ servidor }) => {
   const handleDelete = () => {
     deleteNovedad(PATH_NOVEDADES, idDelete.id);
     setHideDelete(true);
-    alert(`Se elimino el registro"  ${idDelete.novedad}`);
     setIdDelete("");
   };
 
@@ -112,8 +137,64 @@ const Novedades = ({ servidor }) => {
     reset(novedadEdit);
   }, [novedadEdit]);
 
+  useEffect(() => {
+    if (error) {
+      dispatch(
+        showAlert({
+          message:
+            ` ⚠️ ${error.response?.data?.message} ` || "Error inesperado",
+          alertType: 1,
+        })
+      );
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (newReg) {
+      dispatch(
+        showAlert({
+          message: ` ⚠️ Se creo un nuevo Registro ${newReg.novedad}`,
+          alertType: 2,
+        })
+      );
+    }
+  }, [newReg]);
+
+  useEffect(() => {
+    if (deleteReg) {
+      dispatch(
+        showAlert({
+          message: `⚠️ Se Elimino el Registro ${deleteReg.novedad} `,
+          alertType: 4,
+        })
+      );
+    }
+  }, [deleteReg]);
+
+  useEffect(() => {
+    if (updateReg) {
+      dispatch(
+        showAlert({
+          message: `⚠️ Se Edito el Registro ${updateReg.novedad}`,
+          alertType: 2,
+        })
+      );
+    }
+  }, [updateReg]);
+
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+
+  const ultimoDesplazamiento = desplazamientos
+    ?.slice()
+    .filter(
+      (desplazamiento) => desplazamiento.servidorPolicialId === servidor.id
+    )
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+
   return (
     <div>
+      {isLoading && <IsLoading />}
       <article>
         <section
           className={`form__container__info ${
@@ -210,18 +291,20 @@ const Novedades = ({ servidor }) => {
             {errors.fechaDocumento && (
               <p style={{ color: "red" }}>{errors.fechaDocumento.message}</p>
             )}
-            <label className="label__form">
-              <span className="span__form__info">
-                Quién suscribe el documento
-              </span>
-              <input
-                disabled={isDisabled}
-                className="input__form__info"
-                type="text"
-                required
-                {...register("suscribe")}
-              />
-            </label>
+            {watch("novedad") === "DESCANSO MÉDICO" && (
+              <label className="label__form">
+                <span className="span__form__info">
+                  Médico que emite Certificado:
+                </span>
+                <input
+                  disabled={isDisabled}
+                  className="input__form__info"
+                  type="text"
+                  required
+                  {...register("suscribe")}
+                />
+              </label>
+            )}
             <label className="label__form">
               <span className="span__form__info">Fecha de Inicio: </span>
               <input
@@ -248,7 +331,8 @@ const Novedades = ({ servidor }) => {
             )}
             <label className="label__form">
               <span className="span__form__info">Fecha de Finalización: </span>
-              <input disabled={isDisabled2}
+              <input
+                disabled={isDisabled2}
                 className="input__form__info"
                 type="date"
                 {...register("fechaFin", {
@@ -278,11 +362,26 @@ const Novedades = ({ servidor }) => {
             <thead>
               <tr>
                 <th style={{ border: "none", backgroundColor: "transparent" }}>
-                  <img
-                    src="../../../new.png"
-                    className="btn__table"
-                    onClick={() => setHide(false)}
-                  />
+                  {((ultimoDesplazamiento &&
+                    !ultimoDesplazamiento.fechaFinalización &&
+                    ultimoDesplazamiento.unidad === userLoggued.unidad &&
+                    ultimoDesplazamiento.unidadSubzona ===
+                      userLoggued.unidadSubzona) ||
+                    (ultimoDesplazamiento &&
+                      ultimoDesplazamiento.fechaPresentacion &&
+                      ultimoDesplazamiento.fechaFinalización &&
+                      ultimoDesplazamiento.unidadSubzona !==
+                        userLoggued.unidadSubzona) ||
+                    !ultimoDesplazamiento ||
+                    userLoggued.tipoDesignacion === "NOPERA" ||
+                    userCI === superAdmin ||
+                    ultimoDesplazamiento.direccion === "OTROS") && (
+                    <img
+                      src="../../../new.png"
+                      className="btn__table"
+                      onClick={() => setHide(false)}
+                    />
+                  )}
                 </th>
                 <th>NOVEDAD</th>
                 <th>TIPO DE DOCUMENTO</th>
@@ -300,12 +399,29 @@ const Novedades = ({ servidor }) => {
                 .filter((novedad) => novedad.servidorPolicialId === servidor.id)
                 .map((novedad) => (
                   <tr key={novedad.id}>
-                    <td style={{ border: "none", backgroundColor: "transparent" }}>
-                      <img
-                        src="../../../edit.png"
-                        className="btn__table"
-                        onClick={() => handleEditNovedad(novedad)}
-                      />
+                    <td
+                      style={{ border: "none", backgroundColor: "transparent" }}
+                    >
+                      {((ultimoDesplazamiento &&
+                        !ultimoDesplazamiento.fechaFinalización &&
+                        ultimoDesplazamiento.unidad === userLoggued.unidad &&
+                        ultimoDesplazamiento.unidadSubzona ===
+                          userLoggued.unidadSubzona) ||
+                        (ultimoDesplazamiento &&
+                          ultimoDesplazamiento.fechaPresentacion &&
+                          ultimoDesplazamiento.fechaFinalización &&
+                          ultimoDesplazamiento.unidadSubzona !==
+                            userLoggued.unidadSubzona) ||
+                        !ultimoDesplazamiento ||
+                        userLoggued.tipoDesignacion === "NOPERA" ||
+                        userCI === superAdmin ||
+                        ultimoDesplazamiento.direccion === "OTROS") && (
+                        <img
+                          src="../../../edit.png"
+                          className="btn__table"
+                          onClick={() => handleEditNovedad(novedad)}
+                        />
+                      )}
 
                       {userLoggued.cI === superAdmin && (
                         <img
@@ -350,6 +466,7 @@ const Novedades = ({ servidor }) => {
           </div>
         </section>
       </article>
+      <Alert />
     </div>
   );
 };

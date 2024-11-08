@@ -1,7 +1,5 @@
 import "./styles/HomePage.css";
 import FromServidorP from "../components/ServidoresPoliciales/FromServidorP";
-import TablaOrganico from "../components/HomePage/TablaOrganico";
-import FormLegalizacion from "../components/ServidoresPoliciales/FormLegalizacion";
 import ServidoresPolicialesList from "../components/ServidoresPoliciales/ServidoresPolicialesList";
 import { useState } from "react";
 
@@ -17,8 +15,6 @@ const ServidoresPoliciales = () => {
         servidorEdit={servidorEdit}
         setServidorEdit={setServidorEdit}
       />
-      {/* <TablaOrganico /> */}
-      {/* <FormLegalizacion/> */}
       <ServidoresPolicialesList
         setFormIsClouse={setFormIsClouse}
         formIsClouse={formIsClouse}

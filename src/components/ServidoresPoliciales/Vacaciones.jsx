@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import useCrud from "../../hooks/useCrud";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { showAlert } from "../../store/states/alert.slice";
+import Alert from "../shared/Alert";
+import IsLoading from "../shared/IsLoading";
 
-const Vacaciones = ({ servidor }) => {
+const Vacaciones = ({ servidor, desplazamientos }) => {
+  const dispatch = useDispatch();
   const [hide, setHide] = useState(true);
   const [hideDelete, setHideDelete] = useState(true);
   const [idDelete, setIdDelete] = useState("");
@@ -20,8 +25,11 @@ const Vacaciones = ({ servidor }) => {
     postVacaciones,
     deleteVacaciones,
     updateVacaciones,
-    hasError,
+    error,
     isLoading,
+    newReg,
+    deleteReg,
+    updateReg,
   ] = useCrud();
 
   const [variables, getVariables] = useCrud();
@@ -67,7 +75,6 @@ const Vacaciones = ({ servidor }) => {
   const handleDelete = () => {
     deleteVacaciones(PATH_VACACIONES, idDelete.id);
     setHideDelete(true);
-    alert(`Se elimino el registro"  ${idDelete.vacaciones}`);
     setIdDelete("");
   };
 
@@ -85,8 +92,64 @@ const Vacaciones = ({ servidor }) => {
     reset(vacacionesEdit);
   }, [vacacionesEdit]);
 
+  useEffect(() => {
+    if (error) {
+      dispatch(
+        showAlert({
+          message:
+            ` ⚠️ ${error.response?.data?.message} ` || "Error inesperado",
+          alertType: 1,
+        })
+      );
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (newReg) {
+      dispatch(
+        showAlert({
+          message: ` ⚠️ Se creo un nuevo Registro ${newReg.vacaciones}`,
+          alertType: 2,
+        })
+      );
+    }
+  }, [newReg]);
+
+  useEffect(() => {
+    if (deleteReg) {
+      dispatch(
+        showAlert({
+          message: `⚠️ Se Elimino el Registro ${deleteReg.vacaciones} `,
+          alertType: 4,
+        })
+      );
+    }
+  }, [deleteReg]);
+
+  useEffect(() => {
+    if (updateReg) {
+      dispatch(
+        showAlert({
+          message: `⚠️ Se Edito el Registro ${updateReg.vacaciones}`,
+          alertType: 2,
+        })
+      );
+    }
+  }, [updateReg]);
+
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+
+  const ultimoDesplazamiento = desplazamientos
+    ?.slice()
+    .filter(
+      (desplazamiento) => desplazamiento.servidorPolicialId === servidor.id
+    )
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+
   return (
     <div>
+      {isLoading && <IsLoading />}
       <section>
         <section
           className={`form__container__info ${
@@ -131,7 +194,19 @@ const Vacaciones = ({ servidor }) => {
                 className="input__form__info"
                 required
                 type="date"
-                {...register("fechaInicio")}
+                {...register("fechaInicio", {
+                  setValueAs: (value) => (value === "" ? null : value),
+                  validate: (value) => {
+                    if (!value) return true;
+                    const selectedDate = new Date(value);
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    if (selectedDate > today) {
+                      return "La fecha de presentación no puede ser superior a hoy";
+                    }
+                    return true;
+                  },
+                })}
               />
             </label>
             {errors.fechaInicio && (
@@ -168,11 +243,26 @@ const Vacaciones = ({ servidor }) => {
             <thead>
               <tr>
                 <th style={{ border: "none", backgroundColor: "transparent" }}>
-                  <img
-                    src="../../../new.png"
-                    className="btn__table"
-                    onClick={() => setHide(false)}
-                  />
+                  {((ultimoDesplazamiento &&
+                    !ultimoDesplazamiento.fechaFinalización &&
+                    ultimoDesplazamiento.unidad === userLoggued.unidad &&
+                    ultimoDesplazamiento.unidadSubzona ===
+                      userLoggued.unidadSubzona) ||
+                    (ultimoDesplazamiento &&
+                      ultimoDesplazamiento.fechaPresentacion &&
+                      ultimoDesplazamiento.fechaFinalización &&
+                      ultimoDesplazamiento.unidadSubzona !==
+                        userLoggued.unidadSubzona) ||
+                    !ultimoDesplazamiento ||
+                    userLoggued.tipoDesignacion === "NOPERA" ||
+                    userCI === superAdmin ||
+                    ultimoDesplazamiento.direccion === "OTROS") && (
+                    <img
+                      src="../../../new.png"
+                      className="btn__table"
+                      onClick={() => setHide(false)}
+                    />
+                  )}
                 </th>
                 <th>VACACIONESL</th>
                 <th>FECHA INICIO</th>
@@ -189,9 +279,22 @@ const Vacaciones = ({ servidor }) => {
                 .map((vacaciones) => (
                   <tr key={vacaciones.id}>
                     <td style={{ border: "none" }}>
-                      {(new Date() - new Date(vacaciones.createdAt) <
-                        diasEdicion * 24 * 60 * 60 * 1000 ||
-                        userCI === superAdmin) && (
+                      {((new Date() - new Date(vacaciones.createdAt) <
+                        diasEdicion * 24 * 60 * 60 * 1000 &&
+                        ((ultimoDesplazamiento &&
+                          !ultimoDesplazamiento.fechaFinalización &&
+                          ultimoDesplazamiento.unidad === userLoggued.unidad &&
+                          ultimoDesplazamiento.unidadSubzona ===
+                            userLoggued.unidadSubzona) ||
+                          (ultimoDesplazamiento &&
+                            ultimoDesplazamiento.fechaPresentacion &&
+                            ultimoDesplazamiento.fechaFinalización &&
+                            ultimoDesplazamiento.unidadSubzona !==
+                              userLoggued.unidadSubzona) ||
+                          !ultimoDesplazamiento ||
+                          userLoggued.tipoDesignacion === "NOPERA")) ||
+                        userCI === superAdmin ||
+                        ultimoDesplazamiento.direccion === "OTROS") && (
                         <img
                           src="../../../edit.png"
                           className="btn__table"
@@ -237,6 +340,7 @@ const Vacaciones = ({ servidor }) => {
           </div>
         </section>
       </section>
+      <Alert />
     </div>
   );
 };

@@ -5,19 +5,156 @@
   flex-wrap: wrap;
   gap: 0.5em;
 }
+
+.paginated-content {
+  width: 65%;
+  margin: 1.5em auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 0.5vw;
+}
+
+.btn-buttton-page-content {
+  border: none;
+  background: none;
+}
+
+.btn-page {
+  border-radius: 100%;
+  width: 3vw;
+  height: 2.5vw;
+  background-color: var(--plomo-color);
+  color: var(--black-color);
+  font-weight: 700;
+  font-size: 0.8em;
+}
+
+.btn-button-page:hover {
+  -webkit-transform: scale(1.2);
+  -moz-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  -o-transform: scale(1.2);
+  transform: scale(1.2);
+}
+
+.btn-page:hover {
+  -webkit-transform: scale(1.2);
+  -moz-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  -o-transform: scale(1.2);
+  transform: scale(1.2);
+}
+
+.help {
+  background-color: var(--blue-color);
+  color: var(--white-color);
+}
+
+.btn-page-card {
+  border-radius: 100%;
+  width: 2em;
+  height: 1.5em;
+  font-size: 1.5em;
+  margin: 0.2em;
+  text-align: center;
+  vertical-align: center;
+}
+
+.btn-page-card:hover {
+  -webkit-transform: scale(1.1);
+  -moz-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  -o-transform: scale(1.1);
+  transform: scale(1.1);
+}
+
+.triangulo_izq {
+  width: 0;
+  height: 0;
+  border-top: 1vw solid transparent;
+  border-right: 2vw solid var(--blue-color);
+  border-bottom: 1vw solid transparent;
+}
+
+.triangulo_der {
+  width: 0;
+  height: 0;
+  border-top: 1vw solid transparent;
+  border-left: 2vw solid var(--blue-color);
+  border-bottom: 1vw solid transparent;
+}
+
+.servidores__page {
+  font-size: 1.5em;
+  font-weight: 800;
+  color: var(--blue-color);
+  width: 100%;
+  max-width: 6em;
+  margin: 0 auto;
+  padding-bottom: 1rem;
+  text-align: center;
+}
+
+/* //-------------------------------------------------------------------------------------------- */
+
 .btn__expand:hover {
   -webkit-transition: all 0.35s ease;
   transition: all 0.35s ease;
   transform: scale(1.5);
 }
+
 .card__servidorPolicial__li__img {
   display: flex;
   flex-direction: column;
-  margin: auto 0;
+  align-items: flex-start;
+}
+
+.alert__desplazamiento {
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 100%;
+  border: solid 0.15em var(--black-color);
+  margin-bottom: 0.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 2em;
+  left: 0;
+  background-color: #333;
+  color: #fff;
+  padding: 0.5em;
+  padding-right: 1.5em;
+  border-radius: 0.5em;
+  font-size: 0.8em;
+  z-index: 10;
+  white-space: nowrap;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.ul__tooltip {
+  display: flex;
+  flex-direction: column;
+}
+.li__tooltip {
+  display: flex;
+}
+.label__tooltip {
+  width: 50%;
+}
+
+.value__tooltip {
+  width: 50%;
 }
 
 .card__servidorPolicial {
-  width: 48%;
+  width: 49%;
+  height: 5em;
   margin: 0 auto;
   display: flex;
   border: 0.1em solid black;
@@ -26,10 +163,7 @@
 }
 
 .card__servidorPolicial:hover {
-  -webkit-transition: all 0.35s ease;
-  transition: all 0.35s ease;
-  transform: scale(1.03);
-  background-color: rgba(210, 213, 213, 0.715);
+  box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.4);
 }
 
 .card__servidorPolicial__ul {
@@ -39,10 +173,18 @@
   text-align: center;
   justify-content: space-between;
 }
+
 .card__servidorPolicial__li {
   width: 100%;
   display: flex;
   flex-direction: column;
+  padding-top: 0.1em;
+}
+
+.card__servidorPolicial__li__grado {
+  display: flex;
+  flex-direction: column;
+  padding-top: 0.1em;
 }
 
 .card__servidorPolicial__label {
@@ -53,11 +195,16 @@
   color: var(--blue2-color);
   text-shadow: 1px 1px 1px var(--plomo-color);
 }
+
 .card__servidorPolicial__value {
   width: 100%;
-  white-space: nowrap;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+  word-break: break-word;
   color: var(--plomo2-color);
   font-weight: 700;
 }

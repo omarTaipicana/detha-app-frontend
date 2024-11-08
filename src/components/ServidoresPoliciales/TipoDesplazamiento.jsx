@@ -3,11 +3,19 @@ import axios from "axios";
 import getConfigToken from "../../services/getConfigToken";
 import useCrud from "../../hooks/useCrud";
 import { useForm } from "react-hook-form";
-import Select from "react-select";
 import "./style/FormInfo.css";
 import Autocompletar from "./Autocompletar";
+import { useDispatch } from "react-redux";
+import { showAlert } from "../../store/states/alert.slice";
+import Alert from "../shared/Alert";
+import IsLoading from "../shared/IsLoading";
 
-const TipoDesplazamiento = ({ servidor }) => {
+const TipoDesplazamiento = ({
+  servidor,
+  setUpdateDesplazamineto,
+  updateDesplazamineto,
+}) => {
+  const dispatch = useDispatch();
   const urlBase = import.meta.env.VITE_API_URL;
   const superAdmin = import.meta.env.VITE_CI_SUPERADMIN;
   const diasEdicion = import.meta.env.VITE_DIAS_EDICION;
@@ -39,8 +47,11 @@ const TipoDesplazamiento = ({ servidor }) => {
     postDesplazamiento,
     deleteDesplazamiento,
     updateDesplazamiento,
-    hasError,
+    error,
     isLoading,
+    newReg,
+    deleteReg,
+    updateReg,
   ] = useCrud();
 
   const [variables, getVariables] = useCrud();
@@ -56,26 +67,54 @@ const TipoDesplazamiento = ({ servidor }) => {
     formState: { errors },
   } = useForm();
 
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+
+  const ultimoDesplazamiento = desplazamiento
+    ?.slice()
+    .filter(
+      (desplazamiento) => desplazamiento.servidorPolicialId === servidor.id
+    )
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+
   const submit = (data) => {
-    if (desplazamientoEdit) {
-      updateDesplazamiento(PATH_DESPLAZAMIENTOS, desplazamientoEdit.id, {
-        ...data,
-        usuarioEdicion: userCI,
-      });
-    } else {
+    if (!desplazamientoEdit) {
+      if (
+        ultimoDesplazamiento &&
+        (!ultimoDesplazamiento.fechaPresentacion ||
+          !ultimoDesplazamiento.fechaFinalización)
+      ) {
+        dispatch(
+          showAlert({
+            message:
+              " ⚠️ No se puede registrar un nuevo Desplazamiento, finalice primero el ultimo Desplazamiento",
+            alertType: 1,
+          })
+        );
+        return;
+      }
+
       postDesplazamiento(PATH_DESPLAZAMIENTOS, {
         ...data,
         servidorPolicialId: servidor.id,
         usuarioRegistro: userCI,
         usuarioEdicion: userCI,
       });
+    } else {
+      updateDesplazamiento(PATH_DESPLAZAMIENTOS, desplazamientoEdit.id, {
+        ...data,
+        usuarioEdicion: userCI,
+      });
+      setUpdateDesplazamineto(!updateDesplazamineto);
     }
+
     setSelectedDireccion("");
     setSelectedUnidad("");
     setSelectedSiglas("");
     setSelectedCargo("");
     reset({
       tipoDesplazamiento: "",
+      lugarComision: "",
       tipoDocumento: "",
       numeroDocumento: "",
       fechaDocumento: "",
@@ -104,7 +143,6 @@ const TipoDesplazamiento = ({ servidor }) => {
   const handleDelete = () => {
     deleteDesplazamiento(PATH_DESPLAZAMIENTOS, idDelete.id);
     setHideDelete(true);
-    alert(`Se elimino el registro"  ${idDelete.nomenclatura}`);
     setIdDelete("");
   };
 
@@ -220,8 +258,54 @@ const TipoDesplazamiento = ({ servidor }) => {
     setSelectedCargo(selected);
   };
 
+  useEffect(() => {
+    if (error) {
+      dispatch(
+        showAlert({
+          message:
+            ` ⚠️ ${error.response?.data?.message} ` || "Error inesperado",
+          alertType: 1,
+        })
+      );
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (newReg) {
+      dispatch(
+        showAlert({
+          message: ` ⚠️ Se creo un nuevo Registro ${newReg.tipoDesplazamiento}`,
+          alertType: 2,
+        })
+      );
+    }
+  }, [newReg]);
+
+  useEffect(() => {
+    if (deleteReg) {
+      dispatch(
+        showAlert({
+          message: `⚠️ Se Elimino el Registro ${deleteReg.tipoDesplazamiento} `,
+          alertType: 4,
+        })
+      );
+    }
+  }, [deleteReg]);
+
+  useEffect(() => {
+    if (updateReg) {
+      dispatch(
+        showAlert({
+          message: `⚠️ Se Edito el Registro ${updateReg.tipoDesplazamiento}`,
+          alertType: 2,
+        })
+      );
+    }
+  }, [updateReg]);
+
   return (
     <div>
+      {isLoading && <IsLoading />}
       <article>
         <section
           className={`form__container__info ${
@@ -239,6 +323,7 @@ const TipoDesplazamiento = ({ servidor }) => {
                 setDesplazamientoEdit();
                 reset({
                   tipoDesplazamiento: "",
+                  lugarComision: "",
                   tipoDocumento: "",
                   numeroDocumento: "",
                   fechaDocumento: "",
@@ -278,6 +363,22 @@ const TipoDesplazamiento = ({ servidor }) => {
                   ))}
               </select>
             </label>
+
+            {watch("tipoDesplazamiento") === "COMISIÓN AL EXTERIOR" && (
+              <label className="label__form">
+                <span className="span__form__info">
+                  Lugar de Comisión al Exterior:
+                </span>
+                <input
+                  disabled={isDisabled}
+                  className="input__form__info"
+                  type="text"
+                  required
+                  {...register("lugarComision")}
+                />
+              </label>
+            )}
+
             <label className="label__form">
               <span className="span__form__info">Tipo de Documento: </span>
               <select
@@ -547,10 +648,10 @@ const TipoDesplazamiento = ({ servidor }) => {
                     const selectedDate = new Date(value);
                     const today = new Date();
                     today.setHours(0, 0, 0, 0);
-                    return (
-                      selectedDate <= today ||
-                      "La fecha no puede ser superior a hoy"
-                    );
+                    if (selectedDate > today) {
+                      return "La fecha de presentación no puede ser superior a hoy";
+                    }
+                    return true;
                   },
                 })}
               />
@@ -567,15 +668,24 @@ const TipoDesplazamiento = ({ servidor }) => {
                 type="date"
                 {...register("fechaFinalización", {
                   setValueAs: (value) => (value === "" ? null : value),
-                  validate: (value) => {
+                  validate: (value, formValues) => {
                     if (!value) return true;
+                    if (!formValues.fechaPresentacion && value) {
+                      return "Debe ingresar la fecha de presentación antes de la fecha de finalización";
+                    }
                     const selectedDate = new Date(value);
                     const today = new Date();
                     today.setHours(0, 0, 0, 0);
-                    return (
-                      selectedDate <= today ||
-                      "La fecha no puede ser superior a hoy"
+                    const fechaPresentacion = new Date(
+                      formValues.fechaPresentacion
                     );
+                    if (selectedDate < fechaPresentacion) {
+                      return "La fecha de finalización no puede ser menor a la fecha de presentación";
+                    }
+                    if (selectedDate > today) {
+                      return "La fecha de finalización no puede ser superior a hoy";
+                    }
+                    return true;
                   },
                 })}
               />
@@ -583,6 +693,7 @@ const TipoDesplazamiento = ({ servidor }) => {
             {errors.fechaFinalización && (
               <p style={{ color: "red" }}>{errors.fechaFinalización.message}</p>
             )}
+
             <button className="btn__form__info">
               {desplazamientoEdit ? "Actualizar" : "Guardar"}
             </button>
@@ -593,11 +704,26 @@ const TipoDesplazamiento = ({ servidor }) => {
             <thead>
               <tr>
                 <th style={{ border: "none", backgroundColor: "transparent" }}>
-                  <img
-                    src="../../../new.png"
-                    className="btn__table"
-                    onClick={() => setHide(false)}
-                  />
+                  {((ultimoDesplazamiento &&
+                    !ultimoDesplazamiento.fechaFinalización &&
+                    ultimoDesplazamiento.unidad === userLoggued.unidad &&
+                    ultimoDesplazamiento.unidadSubzona ===
+                      userLoggued.unidadSubzona) ||
+                    (ultimoDesplazamiento &&
+                      ultimoDesplazamiento.fechaPresentacion &&
+                      ultimoDesplazamiento.fechaFinalización &&
+                      ultimoDesplazamiento.unidadSubzona !==
+                        userLoggued.unidadSubzona) ||
+                    !ultimoDesplazamiento ||
+                    userLoggued.tipoDesignacion === "NOPERA" ||
+                    userCI === superAdmin ||
+                    ultimoDesplazamiento.direccion === "OTROS") && (
+                    <img
+                      src="../../../new.png"
+                      className="btn__table"
+                      onClick={() => setHide(false)}
+                    />
+                  )}
                 </th>
                 <th>DESPLAZAMIENTO</th>
                 <th>DOCUMENTO</th>
@@ -628,12 +754,31 @@ const TipoDesplazamiento = ({ servidor }) => {
                 )
                 .map((desplazamiento) => (
                   <tr key={desplazamiento.id}>
-                    <td style={{ border: "none", backgroundColor: "transparent" }}>
-                      <img
-                        src="../../../edit.png"
-                        className="btn__table"
-                        onClick={() => handleEditDesplazamiento(desplazamiento)}
-                      />
+                    <td
+                      style={{ border: "none", backgroundColor: "transparent" }}
+                    >
+                      {((ultimoDesplazamiento &&
+                        !ultimoDesplazamiento.fechaFinalización &&
+                        ultimoDesplazamiento.unidad === userLoggued.unidad &&
+                        ultimoDesplazamiento.unidadSubzona ===
+                          userLoggued.unidadSubzona) ||
+                        (ultimoDesplazamiento &&
+                          ultimoDesplazamiento.fechaPresentacion &&
+                          ultimoDesplazamiento.fechaFinalización &&
+                          ultimoDesplazamiento.unidadSubzona !==
+                            userLoggued.unidadSubzona) ||
+                        !ultimoDesplazamiento ||
+                        userLoggued.tipoDesignacion === "NOPERA" ||
+                        userCI === superAdmin ||
+                        ultimoDesplazamiento.direccion === "OTROS") && (
+                        <img
+                          src="../../../edit.png"
+                          className="btn__table"
+                          onClick={() =>
+                            handleEditDesplazamiento(desplazamiento)
+                          }
+                        />
+                      )}
 
                       {userLoggued.cI === superAdmin && (
                         <img
@@ -643,23 +788,45 @@ const TipoDesplazamiento = ({ servidor }) => {
                         />
                       )}
                     </td>
-                    <td className="table__td">{desplazamiento.tipoDesplazamiento}</td>
-                    <td className="table__td">{desplazamiento.tipoDocumento}</td>
-                    <td className="table__td">{desplazamiento.numeroDocumento}</td>
-                    <td className="table__td">{desplazamiento.fechaDocumento}</td>
+                    <td className="table__td">
+                      {desplazamiento.tipoDesplazamiento}
+                    </td>
+                    <td className="table__td">
+                      {desplazamiento.tipoDocumento}
+                    </td>
+                    <td className="table__td">
+                      {desplazamiento.numeroDocumento}
+                    </td>
+                    <td className="table__td">
+                      {desplazamiento.fechaDocumento}
+                    </td>
                     <td className="table__td">{desplazamiento.fechaInicio}</td>
-                    <td className="table__td">{desplazamiento.fechaFinalizacionDoc}</td>
+                    <td className="table__td">
+                      {desplazamiento.fechaFinalizacionDoc}
+                    </td>
                     <td className="table__td">{desplazamiento.direccion}</td>
                     <td className="table__td">{desplazamiento.unidad}</td>
                     <td className="table__td">{desplazamiento.nomenclatura}</td>
                     <td className="table__td">{desplazamiento.cargo}</td>
-                    <td className="table__td">{desplazamiento.nomenclaturaNoDigin}</td>
-                    <td className="table__td">{desplazamiento.causaDesplazamiento}</td>
-                    <td className="table__td">{desplazamiento.verificaPlanAccion}</td>
+                    <td className="table__td">
+                      {desplazamiento.nomenclaturaNoDigin}
+                    </td>
+                    <td className="table__td">
+                      {desplazamiento.causaDesplazamiento}
+                    </td>
+                    <td className="table__td">
+                      {desplazamiento.verificaPlanAccion}
+                    </td>
                     <td className="table__td">{desplazamiento.planAccion}</td>
-                    <td className="table__td">{desplazamiento.personalRelevo}</td>
-                    <td className="table__td">{desplazamiento.fechaPresentacion}</td>
-                    <td className="table__td">{desplazamiento.fechaFinalización}</td>
+                    <td className="table__td">
+                      {desplazamiento.personalRelevo}
+                    </td>
+                    <td className="table__td">
+                      {desplazamiento.fechaPresentacion}
+                    </td>
+                    <td className="table__td">
+                      {desplazamiento.fechaFinalización}
+                    </td>
                   </tr>
                 ))}
             </tbody>
@@ -688,6 +855,7 @@ const TipoDesplazamiento = ({ servidor }) => {
           </div>
         </section>
       </article>
+      <Alert />
     </div>
   );
 };

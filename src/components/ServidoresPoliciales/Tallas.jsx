@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import useCrud from "../../hooks/useCrud";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { showAlert } from "../../store/states/alert.slice";
+import Alert from "../shared/Alert";
+import IsLoading from "../shared/IsLoading";
 
-const Tallas = ({ servidor }) => {
+const Tallas = ({ servidor, desplazamientos }) => {
+  const dispatch = useDispatch();
   const [hide, setHide] = useState(true);
   const [hideDelete, setHideDelete] = useState(true);
   const [idDelete, setIdDelete] = useState("");
@@ -19,8 +24,11 @@ const Tallas = ({ servidor }) => {
     postTalla,
     deleteTalla,
     updateTalla,
-    hasError,
+    error,
     isLoading,
+    newReg,
+    deleteReg,
+    updateReg,
   ] = useCrud();
 
   const {
@@ -79,7 +87,6 @@ const Tallas = ({ servidor }) => {
   const handleDelete = () => {
     deleteTalla(PATH_TALLAS, idDelete.id);
     setHideDelete(true);
-    alert(`Se elimino el registro"  ${idDelete.id}`);
     setIdDelete("");
   };
 
@@ -96,8 +103,64 @@ const Tallas = ({ servidor }) => {
     reset(tallaEdit);
   }, [tallaEdit]);
 
+  useEffect(() => {
+    if (error) {
+      dispatch(
+        showAlert({
+          message:
+            ` ⚠️ ${error.response?.data?.message} ` || "Error inesperado",
+          alertType: 1,
+        })
+      );
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (newReg) {
+      dispatch(
+        showAlert({
+          message: ` ⚠️ Se creo un nuevo Registro`,
+          alertType: 2,
+        })
+      );
+    }
+  }, [newReg]);
+
+  useEffect(() => {
+    if (deleteReg) {
+      dispatch(
+        showAlert({
+          message: `⚠️ Se Elimino el Registro  `,
+          alertType: 4,
+        })
+      );
+    }
+  }, [deleteReg]);
+
+  useEffect(() => {
+    if (updateReg) {
+      dispatch(
+        showAlert({
+          message: `⚠️ Se Actualizo el Registro`,
+          alertType: 2,
+        })
+      );
+    }
+  }, [updateReg]);
+
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+
+  const ultimoDesplazamiento = desplazamientos
+    ?.slice()
+    .filter(
+      (desplazamiento) => desplazamiento.servidorPolicialId === servidor.id
+    )
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+
   return (
     <div>
+      {isLoading && <IsLoading />}
       <article>
         <section
           className={`form__container__info ${
@@ -333,13 +396,27 @@ const Tallas = ({ servidor }) => {
                     ? false
                     : talla.some(
                         (talla) => talla.servidorPolicialId === servidor.id
-                      )) && (
-                    <img
-                      src="../../../new.png"
-                      className="btn__table"
-                      onClick={() => setHide(false)}
-                    />
-                  )}
+                      )) &&
+                    ((ultimoDesplazamiento &&
+                      !ultimoDesplazamiento.fechaFinalización &&
+                      ultimoDesplazamiento.unidad === userLoggued.unidad &&
+                      ultimoDesplazamiento.unidadSubzona ===
+                        userLoggued.unidadSubzona) ||
+                      (ultimoDesplazamiento &&
+                        ultimoDesplazamiento.fechaPresentacion &&
+                        ultimoDesplazamiento.fechaFinalización &&
+                        ultimoDesplazamiento.unidadSubzona !==
+                          userLoggued.unidadSubzona) ||
+                      !ultimoDesplazamiento ||
+                      userLoggued.tipoDesignacion === "NOPERA" ||
+                      userCI === superAdmin ||
+                      ultimoDesplazamiento.direccion === "OTROS") && (
+                      <img
+                        src="../../../new.png"
+                        className="btn__table"
+                        onClick={() => setHide(false)}
+                      />
+                    )}
                 </th>
                 <th>CALZADO </th>
                 <th>CAMISA CUELLO SPORT</th>
@@ -368,11 +445,26 @@ const Tallas = ({ servidor }) => {
                     <td
                       style={{ border: "none", backgroundColor: "transparent" }}
                     >
-                      <img
-                        src="../../../edit.png"
-                        className="btn__table"
-                        onClick={() => handleEditTalla(talla)}
-                      />
+                      {((ultimoDesplazamiento &&
+                        !ultimoDesplazamiento.fechaFinalización &&
+                        ultimoDesplazamiento.unidad === userLoggued.unidad &&
+                        ultimoDesplazamiento.unidadSubzona ===
+                          userLoggued.unidadSubzona) ||
+                        (ultimoDesplazamiento &&
+                          ultimoDesplazamiento.fechaPresentacion &&
+                          ultimoDesplazamiento.fechaFinalización &&
+                          ultimoDesplazamiento.unidadSubzona !==
+                            userLoggued.unidadSubzona) ||
+                        !ultimoDesplazamiento ||
+                        userLoggued.tipoDesignacion === "NOPERA" ||
+                        userCI === superAdmin ||
+                        ultimoDesplazamiento.direccion === "OTROS") && (
+                        <img
+                          src="../../../edit.png"
+                          className="btn__table"
+                          onClick={() => handleEditTalla(talla)}
+                        />
+                      )}
 
                       {userLoggued.cI === superAdmin && (
                         <img
@@ -425,6 +517,7 @@ const Tallas = ({ servidor }) => {
           </div>
         </section>
       </article>
+      <Alert />
     </div>
   );
 };

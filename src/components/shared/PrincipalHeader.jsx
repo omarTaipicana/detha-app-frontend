@@ -34,11 +34,7 @@ const PrincipalHeader = () => {
     <header>
       <section className="principal__header">
         <Link className="title__principal__header" to="/">
-          <img
-            className="img__header"
-            src="../../../public/images/digin.png"
-            alt=""
-          />
+          <img className="img__header" src="../../../images/digin.png" alt="" />
           <div className="title__content">
             <h1 className="title__header">DIGIN</h1>
             <span className="title__span__header">
@@ -52,7 +48,11 @@ const PrincipalHeader = () => {
             {user ? `Saludos Cordiales ` : ""}
           </span>
           <span className="greeting__text">
-            {user ? `${user.firstName} ${user.lastName} ${user.rol}` : ""}
+            {user ? `${user.firstName} ${user.lastName}` : ""}
+          </span>
+          <span className="greeting__text">{user ? `${user.rol}` : ""}</span>
+          <span className="greeting__text">
+            {user ? `${user.unidad} - ${user.unidadSubzona}` : ""}
           </span>
           <button className="link__principal__header" onClick={handleLogout}>
             <img className="img__exit" src="../../../../exit.png" alt="" />

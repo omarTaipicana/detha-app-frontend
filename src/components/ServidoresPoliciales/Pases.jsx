@@ -3,8 +3,13 @@ import axios from "axios";
 import getConfigToken from "../../services/getConfigToken";
 import useCrud from "../../hooks/useCrud";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { showAlert } from "../../store/states/alert.slice";
+import Alert from "../shared/Alert";
+import IsLoading from "../shared/IsLoading";
 
-const Pases = ({ servidor }) => {
+const Pases = ({ servidor, desplazamientos }) => {
+  const dispatch = useDispatch();
   const urlBase = import.meta.env.VITE_API_URL;
   const superAdmin = import.meta.env.VITE_CI_SUPERADMIN;
   const diasEdicion = import.meta.env.VITE_DIAS_EDICION;
@@ -25,8 +30,19 @@ const Pases = ({ servidor }) => {
   const [cargoOptions, setCargoOptions] = useState([]);
 
   const PATH_PASES = "/pases";
-  const [pase, getPase, postPase, deletePase, updatePase, hasError, isLoading] =
-    useCrud();
+  const [
+    pase,
+    getPase,
+    postPase,
+    deletePase,
+    updatePase,
+    error,
+    isLoading,
+    newReg,
+    deleteReg,
+    updateReg,
+  ] = useCrud();
+
   const {
     register,
     handleSubmit,
@@ -38,17 +54,42 @@ const Pases = ({ servidor }) => {
     formState: { errors },
   } = useForm();
 
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+
+  const ultimoDesplazamiento = desplazamientos
+    ?.slice()
+    .filter(
+      (desplazamiento) => desplazamiento.servidorPolicialId === servidor.id
+    )
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+
   const submit = (data) => {
-    if (paseEdit) {
-      updatePase(PATH_PASES, paseEdit.id, {
-        ...data,
-        usuarioEdicion: userCI,
-      });
-    } else {
+    if (!paseEdit) {
+      if (
+        ultimoDesplazamiento &&
+        (!ultimoDesplazamiento.fechaPresentacion ||
+          !ultimoDesplazamiento.fechaFinalización)
+      ) {
+        dispatch(
+          showAlert({
+            message:
+              " ⚠️ No se puede registrar un nuevo Pase, finalice primero el ultimo Desplazamiento",
+            alertType: 1,
+          })
+        );
+        return;
+      }
+
       postPase(PATH_PASES, {
         ...data,
         servidorPolicialId: servidor.id,
         usuarioRegistro: userCI,
+        usuarioEdicion: userCI,
+      });
+    } else {
+      updatePase(PATH_PASES, paseEdit.id, {
+        ...data,
         usuarioEdicion: userCI,
       });
     }
@@ -77,7 +118,6 @@ const Pases = ({ servidor }) => {
   const handleDelete = () => {
     deletePase(PATH_PASES, idDelete.id);
     setHideDelete(true);
-    alert(`Se elimino el registro"  ${idDelete.nomenclatura}`);
     setIdDelete("");
   };
 
@@ -85,7 +125,6 @@ const Pases = ({ servidor }) => {
     setPaseEdit(pase);
     setHide(false);
   };
-
   useEffect(() => {
     getPase(PATH_PASES);
     axios
@@ -153,8 +192,54 @@ const Pases = ({ servidor }) => {
     setSelectedCargo(selected);
   };
 
+  useEffect(() => {
+    if (error) {
+      dispatch(
+        showAlert({
+          message:
+            ` ⚠️ ${error.response?.data?.message} ` || "Error inesperado",
+          alertType: 1,
+        })
+      );
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (newReg) {
+      dispatch(
+        showAlert({
+          message: ` ⚠️ Se creo un nuevo Registro ${newReg.nomenclatura}`,
+          alertType: 2,
+        })
+      );
+    }
+  }, [newReg]);
+
+  useEffect(() => {
+    if (deleteReg) {
+      dispatch(
+        showAlert({
+          message: `⚠️ Se Elimino el Registro ${deleteReg.nomenclatura} `,
+          alertType: 4,
+        })
+      );
+    }
+  }, [deleteReg]);
+
+  useEffect(() => {
+    if (updateReg) {
+      dispatch(
+        showAlert({
+          message: `⚠️ Se Edito el Registro ${updateReg.nomenclatura}`,
+          alertType: 2,
+        })
+      );
+    }
+  }, [updateReg]);
+
   return (
     <div>
+      {isLoading && <IsLoading />}
       <article>
         <section
           className={`form__container__info ${
@@ -311,11 +396,26 @@ const Pases = ({ servidor }) => {
             <thead>
               <tr>
                 <th style={{ border: "none", backgroundColor: "transparent" }}>
-                  <img
-                    src="../../../new.png"
-                    className="btn__table"
-                    onClick={() => setHide(false)}
-                  />
+                  {((ultimoDesplazamiento &&
+                    !ultimoDesplazamiento.fechaFinalización &&
+                    ultimoDesplazamiento.unidad === userLoggued.unidad &&
+                    ultimoDesplazamiento.unidadSubzona ===
+                      userLoggued.unidadSubzona) ||
+                    (ultimoDesplazamiento &&
+                      ultimoDesplazamiento.fechaPresentacion &&
+                      ultimoDesplazamiento.fechaFinalización &&
+                      ultimoDesplazamiento.unidadSubzona !==
+                        userLoggued.unidadSubzona) ||
+                    !ultimoDesplazamiento ||
+                    userLoggued.tipoDesignacion === "NOPERA" ||
+                    userCI === superAdmin ||
+                    ultimoDesplazamiento.direccion === "OTROS") && (
+                    <img
+                      src="../../../new.png"
+                      className="btn__table"
+                      onClick={() => setHide(false)}
+                    />
+                  )}
                 </th>
                 <th>Nro. TELEGRAMA</th>
                 <th>FECHA TELEGRAMA</th>
@@ -333,10 +433,25 @@ const Pases = ({ servidor }) => {
                 .filter((pase) => pase.servidorPolicialId === servidor.id)
                 .map((pase) => (
                   <tr key={pase.id}>
-                    <td style={{ border: "none", backgroundColor: "transparent" }}>
-                      {(new Date() - new Date(pase.createdAt) <
-                        diasEdicion * 24 * 60 * 60 * 1000 ||
-                        userCI === superAdmin) && (
+                    <td
+                      style={{ border: "none", backgroundColor: "transparent" }}
+                    >
+                      {((new Date() - new Date(pase.createdAt) <
+                        diasEdicion * 24 * 60 * 60 * 1000 &&
+                        ((ultimoDesplazamiento &&
+                          !ultimoDesplazamiento.fechaFinalización &&
+                          ultimoDesplazamiento.unidad === userLoggued.unidad &&
+                          ultimoDesplazamiento.unidadSubzona ===
+                            userLoggued.unidadSubzona) ||
+                          (ultimoDesplazamiento &&
+                            ultimoDesplazamiento.fechaPresentacion &&
+                            ultimoDesplazamiento.fechaFinalización &&
+                            ultimoDesplazamiento.unidadSubzona !==
+                              userLoggued.unidadSubzona) ||
+                          !ultimoDesplazamiento ||
+                          userLoggued.tipoDesignacion === "NOPERA")) ||
+                        userCI === superAdmin ||
+                        ultimoDesplazamiento.direccion === "OTROS") && (
                         <img
                           src="../../../edit.png"
                           className="btn__table"
@@ -387,6 +502,7 @@ const Pases = ({ servidor }) => {
           </div>
         </section>
       </article>
+      <Alert />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 .alert-message {
   position: fixed;
-  bottom: 0; /* Aparece en la parte inferior del div padre */
+  bottom: 0;
   left: 0;
   right: 0;
   color: white;

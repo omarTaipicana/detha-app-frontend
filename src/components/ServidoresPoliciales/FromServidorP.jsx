@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import "./style/FormServidorP.css";
 import { useForm } from "react-hook-form";
 import useCrud from "../../hooks/useCrud";
+import { useDispatch } from "react-redux";
+import { showAlert } from "../../store/states/alert.slice";
 
 const FromServidorP = ({
   formIsClouse,
@@ -15,9 +17,20 @@ const FromServidorP = ({
   const PATH_SERVIDORES = "/servidores";
   const PATH_SENPLADES = "/senplades";
   const PATH_VARIABLES = "/variables";
+  const dispatch = useDispatch();
   const { register, handleSubmit, reset, value, setValue, watch } = useForm();
-  const [response, getApi, postApi, deleteApi, updateApi, hasError, isLoading] =
-    useCrud();
+  const [
+    response,
+    getApi,
+    postApi,
+    deleteApi,
+    updateApi,
+    hasError,
+    isLoading,
+    newReg,
+    deleteReg,
+    updateReg,
+  ] = useCrud();
   const [senplades, getSenplades, , , , ,] = useCrud();
   const [estadoCivil, getEstadoCivil, , , , ,] = useCrud();
   const [tipoDiscapacidad, getTipoDiscapacidad, , , , ,] = useCrud();
@@ -130,17 +143,31 @@ const FromServidorP = ({
     }
   }, [watch("alertaEnfermedadCatastrofica"), setValue]);
 
+  useEffect(() => {
+    if (newReg) {
+      dispatch(
+        showAlert({
+          message: `⚠️ Se creó el Registro del Servidor Policial ${newReg?.nombres} ${newReg?.apellidos} exitosamente`,
+          alertType: 2,
+        })
+      );
+    }
+  }, [newReg]);
+
+  
+  useEffect(() => {
+    if (updateReg) {
+      dispatch(
+        showAlert({
+          message: `⚠️ Se actualizo la información del Servidor Policial ${updateReg?.nombres} ${updateReg?.apellidos} exitosamente`,
+          alertType: 2,
+        })
+      );
+    }
+  }, [updateReg]);
+
   return (
     <div>
-      <button
-        onClick={() => {
-          setFormIsClouse(false);
-        }}
-        className="cerate__servidor__btn"
-      >
-        + Registrar Servidor Policial
-      </button>
-
       <div
         className={`form__container__servidor ${formIsClouse && "form__close"}`}
       >

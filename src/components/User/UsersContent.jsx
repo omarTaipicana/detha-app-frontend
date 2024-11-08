@@ -6,8 +6,11 @@ export const UsersContent = () => {
   const [userEdit, setUserEdit] = useState();
   const [formIsClouse, setFormIsClouse] = useState(true);
   const [newUser, setNewUser] = useState();
+
+
   return (
     <div>
+      
       <CreateUsers
         userEdit={userEdit}
         setUserEdit={setUserEdit}

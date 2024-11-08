@@ -111,6 +111,22 @@ const useAuth = () => {
       .finally(() => setIsLoading(false));
   };
 
+  const deleteUser = ( id) => {
+    setIsLoading(true);
+    const url = `${urlBase}/users/${id}`;
+    axios
+      .delete(url,  getConfigToken())
+      .then((res) => {
+        // console.log(res.data);
+        setHandleRes(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        setError(error);
+      })
+      .finally(() => setIsLoading(false));
+  };
+
   return [
     registerUser,
     loginUser,
@@ -122,6 +138,7 @@ const useAuth = () => {
     getUsers,
     updateUser,
     handleRes,
+    deleteUser,
   ];
 };
 

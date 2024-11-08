@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import useCrud from "../../hooks/useCrud";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { showAlert } from "../../store/states/alert.slice";
+import Alert from "../shared/Alert";
+import IsLoading from "../shared/IsLoading";
 
-const Capacitaciones = ({ servidor }) => {
+const Capacitaciones = ({ servidor, desplazamientos }) => {
+  const dispatch = useDispatch();
   const [hide, setHide] = useState(true);
   const [hideDelete, setHideDelete] = useState(true);
   const [idDelete, setIdDelete] = useState("");
@@ -19,8 +24,11 @@ const Capacitaciones = ({ servidor }) => {
     postCapacitacion,
     deleteCapacitacion,
     updateCapacitacion,
-    hasError,
+    error,
     isLoading,
+    newReg,
+    deleteReg,
+    updateReg,
   ] = useCrud();
 
   const {
@@ -66,7 +74,6 @@ const Capacitaciones = ({ servidor }) => {
   const handleDelete = () => {
     deleteCapacitacion(PATH_CAPACITACIONES, idDelete.id);
     setHideDelete(true);
-    alert(`Se elimino el registro"  ${idDelete.capacitacion}`);
     setIdDelete("");
   };
 
@@ -83,8 +90,64 @@ const Capacitaciones = ({ servidor }) => {
     reset(capacitacionEdit);
   }, [capacitacionEdit]);
 
+  useEffect(() => {
+    if (error) {
+      dispatch(
+        showAlert({
+          message:
+            ` ⚠️ ${error.response?.data?.message} ` || "Error inesperado",
+          alertType: 1,
+        })
+      );
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (newReg) {
+      dispatch(
+        showAlert({
+          message: ` ⚠️ Se creo un nuevo Registro ${newReg.capacitacion}`,
+          alertType: 2,
+        })
+      );
+    }
+  }, [newReg]);
+
+  useEffect(() => {
+    if (deleteReg) {
+      dispatch(
+        showAlert({
+          message: `⚠️ Se Elimino el Registro ${deleteReg.capacitacion} `,
+          alertType: 4,
+        })
+      );
+    }
+  }, [deleteReg]);
+
+  useEffect(() => {
+    if (updateReg) {
+      dispatch(
+        showAlert({
+          message: `⚠️ Se Edito el Registro ${updateReg.capacitacion}`,
+          alertType: 2,
+        })
+      );
+    }
+  }, [updateReg]);
+
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+
+  const ultimoDesplazamiento = desplazamientos
+    ?.slice()
+    .filter(
+      (desplazamiento) => desplazamiento.servidorPolicialId === servidor.id
+    )
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+
   return (
     <div>
+      {isLoading && <IsLoading />}
       <article>
         <section
           className={`form__container__info ${
@@ -108,18 +171,31 @@ const Capacitaciones = ({ servidor }) => {
               ❌
             </div>
             <label className="label__form">
-              <span className="span__form__info">Nombre de la capacitación: </span>
-              <input className="input__form__info" type="text" required {...register("capacitacion")} />
+              <span className="span__form__info">
+                Nombre de la capacitación:{" "}
+              </span>
+              <input
+                className="input__form__info"
+                type="text"
+                required
+                {...register("capacitacion")}
+              />
             </label>
 
             <label className="label__form">
               <span className="span__form__info">Lugar de la Capacitación</span>
-              <input className="input__form__info" type="text" required {...register("lugar")} />
+              <input
+                className="input__form__info"
+                type="text"
+                required
+                {...register("lugar")}
+              />
             </label>
 
             <label className="label__form">
               <span className="span__form__info">Fecha de Inicio: </span>
-              <input className="input__form__info"
+              <input
+                className="input__form__info"
                 required
                 type="date"
                 {...register("fechaInicio", {
@@ -141,7 +217,8 @@ const Capacitaciones = ({ servidor }) => {
             )}
             <label className="label__form">
               <span className="span__form__info">Fecha de Finalización: </span>
-              <input className="input__form__info"
+              <input
+                className="input__form__info"
                 required
                 type="date"
                 {...register("fechaFin", {
@@ -170,11 +247,26 @@ const Capacitaciones = ({ servidor }) => {
             <thead>
               <tr>
                 <th style={{ border: "none", backgroundColor: "transparent" }}>
-                  <img
-                    src="../../../new.png"
-                    className="btn__table"
-                    onClick={() => setHide(false)}
-                  />
+                  {((ultimoDesplazamiento &&
+                    !ultimoDesplazamiento.fechaFinalización &&
+                    ultimoDesplazamiento.unidad === userLoggued.unidad &&
+                    ultimoDesplazamiento.unidadSubzona ===
+                      userLoggued.unidadSubzona) ||
+                    (ultimoDesplazamiento &&
+                      ultimoDesplazamiento.fechaPresentacion &&
+                      ultimoDesplazamiento.fechaFinalización &&
+                      ultimoDesplazamiento.unidadSubzona !==
+                        userLoggued.unidadSubzona) ||
+                    !ultimoDesplazamiento ||
+                    userLoggued.tipoDesignacion === "NOPERA" ||
+                    userCI === superAdmin ||
+                    ultimoDesplazamiento.direccion === "OTROS") && (
+                    <img
+                      src="../../../new.png"
+                      className="btn__table"
+                      onClick={() => setHide(false)}
+                    />
+                  )}
                 </th>
                 <th>CAPACITACION</th>
                 <th>LUGAR</th>
@@ -192,10 +284,25 @@ const Capacitaciones = ({ servidor }) => {
                 )
                 .map((capacitacion) => (
                   <tr key={capacitacion.id}>
-                    <td style={{ border: "none", backgroundColor: "transparent" }}>
-                      {(new Date() - new Date(capacitacion.createdAt) <
-                        diasEdicion * 24 * 60 * 60 * 1000 ||
-                        userCI === superAdmin) && (
+                    <td
+                      style={{ border: "none", backgroundColor: "transparent" }}
+                    >
+                      {((new Date() - new Date(capacitacion.createdAt) <
+                        diasEdicion * 24 * 60 * 60 * 1000 &&
+                        ((ultimoDesplazamiento &&
+                          !ultimoDesplazamiento.fechaFinalización &&
+                          ultimoDesplazamiento.unidad === userLoggued.unidad &&
+                          ultimoDesplazamiento.unidadSubzona ===
+                            userLoggued.unidadSubzona) ||
+                          (ultimoDesplazamiento &&
+                            ultimoDesplazamiento.fechaPresentacion &&
+                            ultimoDesplazamiento.fechaFinalización &&
+                            ultimoDesplazamiento.unidadSubzona !==
+                              userLoggued.unidadSubzona) ||
+                          !ultimoDesplazamiento ||
+                          userLoggued.tipoDesignacion === "NOPERA")) ||
+                        userCI === superAdmin ||
+                        ultimoDesplazamiento.direccion === "OTROS") && (
                         <img
                           src="../../../edit.png"
                           className="btn__table"
@@ -242,6 +349,7 @@ const Capacitaciones = ({ servidor }) => {
           </div>
         </section>
       </article>
+      <Alert />
     </div>
   );
 };

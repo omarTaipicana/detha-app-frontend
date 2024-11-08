@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import useCrud from "../../hooks/useCrud";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { showAlert } from "../../store/states/alert.slice";
+import Alert from "../shared/Alert";
+import IsLoading from "../shared/IsLoading";
 
-const Ascenso = ({ servidor }) => {
+const Ascenso = ({ servidor, desplazamientos }) => {
+  const dispatch = useDispatch();
   const [hide, setHide] = useState(true);
   const [hideDelete, setHideDelete] = useState(true);
   const [idDelete, setIdDelete] = useState("");
@@ -20,8 +25,11 @@ const Ascenso = ({ servidor }) => {
     postAscenso,
     deleteAscenso,
     updateAscenso,
-    hasError,
+    error,
     isLoading,
+    newReg,
+    deleteReg,
+    updateReg,
   ] = useCrud();
 
   const {
@@ -69,7 +77,6 @@ const Ascenso = ({ servidor }) => {
   const handleDelete = () => {
     deleteAscenso(PATH_ASCENSOS, idDelete.id);
     setHideDelete(true);
-    alert(`Se elimino el registro"  ${idDelete.grado}`);
     setIdDelete("");
   };
 
@@ -87,8 +94,64 @@ const Ascenso = ({ servidor }) => {
     reset(ascensoEdit);
   }, [ascensoEdit]);
 
+  useEffect(() => {
+    if (error) {
+      dispatch(
+        showAlert({
+          message:
+            ` ⚠️ ${error.response?.data?.message} ` || "Error inesperado",
+          alertType: 1,
+        })
+      );
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (newReg) {
+      dispatch(
+        showAlert({
+          message: ` ⚠️ Se creo un nuevo Registro ${newReg.grado}`,
+          alertType: 2,
+        })
+      );
+    }
+  }, [newReg]);
+
+  useEffect(() => {
+    if (deleteReg) {
+      dispatch(
+        showAlert({
+          message: `⚠️ Se Elimino el Registro ${deleteReg.grado} `,
+          alertType: 4,
+        })
+      );
+    }
+  }, [deleteReg]);
+
+  useEffect(() => {
+    if (updateReg) {
+      dispatch(
+        showAlert({
+          message: `⚠️ Se Edito el Registro ${updateReg.grado}`,
+          alertType: 2,
+        })
+      );
+    }
+  }, [updateReg]);
+
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+
+  const ultimoDesplazamiento = desplazamientos
+    ?.slice()
+    .filter(
+      (desplazamiento) => desplazamiento.servidorPolicialId === servidor.id
+    )
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+
   return (
     <div>
+      {isLoading && <IsLoading />}
       <article>
         <section
           className={`form__container__info ${
@@ -197,11 +260,26 @@ const Ascenso = ({ servidor }) => {
             <thead>
               <tr>
                 <th style={{ border: "none", backgroundColor: "transparent" }}>
-                  <img
-                    src="../../../new.png"
-                    className="btn__table"
-                    onClick={() => setHide(false)}
-                  />
+                  {((ultimoDesplazamiento &&
+                    !ultimoDesplazamiento.fechaFinalización &&
+                    ultimoDesplazamiento.unidad === userLoggued.unidad &&
+                    ultimoDesplazamiento.unidadSubzona ===
+                      userLoggued.unidadSubzona) ||
+                    (ultimoDesplazamiento &&
+                      ultimoDesplazamiento.fechaPresentacion &&
+                      ultimoDesplazamiento.fechaFinalización &&
+                      ultimoDesplazamiento.unidadSubzona !==
+                        userLoggued.unidadSubzona) ||
+                    !ultimoDesplazamiento ||
+                    userLoggued.tipoDesignacion === "NOPERA" ||
+                    userCI === superAdmin ||
+                    ultimoDesplazamiento.direccion === "OTROS") && (
+                    <img
+                      src="../../../new.png"
+                      className="btn__table"
+                      onClick={() => setHide(false)}
+                    />
+                  )}
                 </th>
                 <th>GRADO</th>
                 <th>FECHA DE ASCENSO</th>
@@ -216,10 +294,25 @@ const Ascenso = ({ servidor }) => {
                 .filter((ascenso) => ascenso.servidorPolicialId === servidor.id)
                 .map((ascenso) => (
                   <tr key={ascenso.id}>
-                    <td style={{ border: "none", backgroundColor: "transparent" }}>
-                      {(new Date() - new Date(ascenso.createdAt) <
-                        diasEdicion * 24 * 60 * 60 * 1000 ||
-                        userCI === superAdmin) && (
+                    <td
+                      style={{ border: "none", backgroundColor: "transparent" }}
+                    >
+                      {((new Date() - new Date(ascenso.createdAt) <
+                        diasEdicion * 24 * 60 * 60 * 1000 &&
+                        ((ultimoDesplazamiento &&
+                          !ultimoDesplazamiento.fechaFinalización &&
+                          ultimoDesplazamiento.unidad === userLoggued.unidad &&
+                          ultimoDesplazamiento.unidadSubzona ===
+                            userLoggued.unidadSubzona) ||
+                          (ultimoDesplazamiento &&
+                            ultimoDesplazamiento.fechaPresentacion &&
+                            ultimoDesplazamiento.fechaFinalización &&
+                            ultimoDesplazamiento.unidadSubzona !==
+                              userLoggued.unidadSubzona) ||
+                          !ultimoDesplazamiento ||
+                          userLoggued.tipoDesignacion === "NOPERA")) ||
+                        userCI === superAdmin ||
+                        ultimoDesplazamiento.direccion === "OTROS") && (
                         <img
                           src="../../../edit.png"
                           className="btn__table"
@@ -266,6 +359,7 @@ const Ascenso = ({ servidor }) => {
           </div>
         </section>
       </article>
+      <Alert />
     </div>
   );
 };

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./style/CardServidor.css";
+import axios from "axios";
+import getConfigToken from "../../services/getConfigToken";
 import { Contactos } from "./Contactos";
 import Titulos from "./Titulos";
 import Pases from "./Pases";
@@ -12,13 +14,21 @@ import Tallas from "./Tallas";
 import Funcion from "./Funcion";
 import Vacaciones from "./Vacaciones";
 
-import image from "../../../public/images/fondo.jpg";
-
 const Seccion = ({ titulo, children, isOpen, toggleSection }) => {
+  const prueba =
+    !children.props.servidor.contactos?.length && titulo === "CONTACTOS";
+
   return (
     <div className="seccion">
       <div className="seccion-header" onClick={toggleSection}>
-        <span className="titulo__seccion">{titulo}</span>
+        <span
+          style={{
+            color: prueba ? "red" : "black",
+          }}
+          className="titulo__seccion"
+        >
+          {titulo}
+        </span>
         <button className="toggle-button">{isOpen ? "-" : "+"}</button>
       </div>
       {isOpen && (
@@ -31,6 +41,9 @@ const Seccion = ({ titulo, children, isOpen, toggleSection }) => {
 };
 
 const CardServidor = ({ servidor, hide, setHide }) => {
+  const [desplazamientos, setDesplazamientos] = useState([]);
+  const [updateDesplazamineto, setUpdateDesplazamineto] = useState(false);
+  const urlBase = import.meta.env.VITE_API_URL;
   const [openSections, setOpenSections] = useState({
     pases: false,
     desplazamientos: false,
@@ -97,6 +110,13 @@ const CardServidor = ({ servidor, hide, setHide }) => {
       tallas: false,
     });
   };
+
+  useEffect(() => {
+    axios
+      .get(`${urlBase}/desplazamientos`, getConfigToken())
+      .then((res) => setDesplazamientos(res.data))
+      .catch((err) => console.log(err));
+  }, [updateDesplazamineto]);
 
   return (
     <div>
@@ -300,7 +320,10 @@ const CardServidor = ({ servidor, hide, setHide }) => {
                     isOpen={openSections.pases}
                     toggleSection={() => toggleSection("pases")}
                   >
-                    <Pases servidor={servidor} />
+                    <Pases
+                      servidor={servidor}
+                      desplazamientos={desplazamientos}
+                    />
                   </Seccion>
 
                   <Seccion
@@ -308,7 +331,11 @@ const CardServidor = ({ servidor, hide, setHide }) => {
                     isOpen={openSections.desplazamientos}
                     toggleSection={() => toggleSection("desplazamientos")}
                   >
-                    <TipoDesplazamiento servidor={servidor} />
+                    <TipoDesplazamiento
+                      servidor={servidor}
+                      setUpdateDesplazamineto={setUpdateDesplazamineto}
+                      updateDesplazamineto={updateDesplazamineto}
+                    />
                   </Seccion>
 
                   <Seccion
@@ -316,7 +343,10 @@ const CardServidor = ({ servidor, hide, setHide }) => {
                     isOpen={openSections.novedades}
                     toggleSection={() => toggleSection("novedades")}
                   >
-                    <Novedades servidor={servidor} />
+                    <Novedades
+                      servidor={servidor}
+                      desplazamientos={desplazamientos}
+                    />
                   </Seccion>
 
                   <Seccion
@@ -324,7 +354,10 @@ const CardServidor = ({ servidor, hide, setHide }) => {
                     isOpen={openSections.vacaciones}
                     toggleSection={() => toggleSection("vacaciones")}
                   >
-                    <Vacaciones servidor={servidor} />
+                    <Vacaciones
+                      servidor={servidor}
+                      desplazamientos={desplazamientos}
+                    />
                   </Seccion>
 
                   <Seccion
@@ -332,7 +365,10 @@ const CardServidor = ({ servidor, hide, setHide }) => {
                     isOpen={openSections.ascensos}
                     toggleSection={() => toggleSection("ascensos")}
                   >
-                    <Ascenso servidor={servidor} />
+                    <Ascenso
+                      servidor={servidor}
+                      desplazamientos={desplazamientos}
+                    />
                   </Seccion>
 
                   <Seccion
@@ -340,7 +376,10 @@ const CardServidor = ({ servidor, hide, setHide }) => {
                     isOpen={openSections.funcion}
                     toggleSection={() => toggleSection("funcion")}
                   >
-                    <Funcion servidor={servidor} />
+                    <Funcion
+                      servidor={servidor}
+                      desplazamientos={desplazamientos}
+                    />
                   </Seccion>
 
                   <Seccion
@@ -348,7 +387,10 @@ const CardServidor = ({ servidor, hide, setHide }) => {
                     isOpen={openSections.contactos}
                     toggleSection={() => toggleSection("contactos")}
                   >
-                    <Contactos servidor={servidor} />
+                    <Contactos
+                      servidor={servidor}
+                      desplazamientos={desplazamientos}
+                    />
                   </Seccion>
 
                   <Seccion
@@ -356,7 +398,10 @@ const CardServidor = ({ servidor, hide, setHide }) => {
                     isOpen={openSections.titulos}
                     toggleSection={() => toggleSection("titulos")}
                   >
-                    <Titulos servidor={servidor} />
+                    <Titulos
+                      servidor={servidor}
+                      desplazamientos={desplazamientos}
+                    />
                   </Seccion>
 
                   <Seccion
@@ -364,7 +409,10 @@ const CardServidor = ({ servidor, hide, setHide }) => {
                     isOpen={openSections.licencias}
                     toggleSection={() => toggleSection("licencias")}
                   >
-                    <LicenciaConducir servidor={servidor} />
+                    <LicenciaConducir
+                      servidor={servidor}
+                      desplazamientos={desplazamientos}
+                    />
                   </Seccion>
 
                   <Seccion
@@ -372,7 +420,10 @@ const CardServidor = ({ servidor, hide, setHide }) => {
                     isOpen={openSections.capacitaciones}
                     toggleSection={() => toggleSection("capacitaciones")}
                   >
-                    <Capacitaciones servidor={servidor} />
+                    <Capacitaciones
+                      servidor={servidor}
+                      desplazamientos={desplazamientos}
+                    />
                   </Seccion>
 
                   <Seccion
@@ -380,7 +431,10 @@ const CardServidor = ({ servidor, hide, setHide }) => {
                     isOpen={openSections.tallas}
                     toggleSection={() => toggleSection("tallas")}
                   >
-                    <Tallas servidor={servidor} />
+                    <Tallas
+                      servidor={servidor}
+                      desplazamientos={desplazamientos}
+                    />
                   </Seccion>
                 </div>
               </section>

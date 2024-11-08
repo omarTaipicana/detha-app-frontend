@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Downshift from "downshift";
-import { useForm } from "react-hook-form";
 
-// Función para obtener el último ascenso basado en la fecha de creación
 const getLatestAscenso = (ascensos) => {
   if (!ascensos || ascensos.length === 0) return null;
   return ascensos.reduce((latest, current) =>

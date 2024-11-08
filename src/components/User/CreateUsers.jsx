@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { showAlert } from "../../store/states/alert.slice";
 import axios from "axios";
 import getConfigToken from "../../services/getConfigToken";
+import AutocompletarUser from "./AutocompletarUser";
 
 const CreateUsers = ({
   userEdit,
@@ -19,13 +20,24 @@ const CreateUsers = ({
   const [selectedUnidad, setSelectedUnidad] = useState("");
   const [selectedUnidadSubzona, setSelectedUnidadSubzona] = useState("");
   const [tipoDesignacion, setTipoDesignacion] = useState("");
+  const [showUserControl, setShowUserControl] = useState(true);
   const [unidadesOptions, setUnidadesOptions] = useState([]);
   const [unidadSubzonaOptions, setUnidadSubzonaOptions] = useState([]);
 
   const urlBase = import.meta.env.VITE_API_URL;
   const superAdmin = import.meta.env.VITE_CI_SUPERADMIN;
   const rolAdmin = import.meta.env.VITE_ROL_ADMIN;
-  const { register, handleSubmit, reset } = useForm();
+  const rolSubAdmin = import.meta.env.VITE_ROL_SUB_ADMIN;
+  const {
+    register,
+    handleSubmit,
+    reset,
+    value,
+    setValue,
+    watch,
+    setError,
+    formState: { errors },
+  } = useForm();
   const dispatch = useDispatch();
   const [
     registerUser,
@@ -40,36 +52,87 @@ const CreateUsers = ({
     handleRes,
   ] = useAuth();
 
+  useEffect(() => {
+    getUsers();
+  }, []);
+
   const [organicos, setOrganicos] = useState([]);
   const userRol = JSON.parse(localStorage.user).rol;
-  const useCI = JSON.parse(localStorage.user).cI;
+  const userCI = JSON.parse(localStorage.user ? localStorage.user : 0).cI;
 
   const submit = (data) => {
     const frontBaseUrl = `${location.protocol}//${location.host}/#/reset_password`;
-    const body = {
-      cI: data.cI,
-      email: data.email,
-      enabled:
-        data.enabled === "true"
-          ? true
-          : data.enabled === "false"
-          ? false
-          : undefined,
-      firstName: data.firstName,
-      frontBaseUrl: frontBaseUrl,
-      lastName: data.lastName,
-      direccion: data.direccion,
-      unidad: data.unidad,
-      unidadSubzona: data.unidadSubzona,
-      tipoDesignacion: tipoDesignacion,
-      rol: data.rol,
-    };
-
     if (userEdit) {
-      updateUser(body, userEdit.id);
-      setUserEdit();
+      updateUser(
+        {
+          cI: data.cI,
+          email: data.email,
+          enabled:
+            data.enabled === "true"
+              ? true
+              : data.enabled === "false"
+              ? false
+              : undefined,
+          firstName: data.firstName,
+          frontBaseUrl: frontBaseUrl,
+          lastName: data.lastName,
+          direccion: data.direccion,
+          unidad: data.unidad,
+          unidadSubzona: data.unidadSubzona,
+          tipoDesignacion: tipoDesignacion,
+          rol: data.rol,
+          usuarioControl: data.usuarioControl,
+          usuarioEdicion: userCI,
+        },
+        userEdit.id
+      );
+      if (userCI === userEdit.cI) {
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            cI: data.cI,
+            email: data.email,
+            enabled:
+              data.enabled === "true"
+                ? true
+                : data.enabled === "false"
+                ? false
+                : undefined,
+            firstName: data.firstName,
+            frontBaseUrl: frontBaseUrl,
+            lastName: data.lastName,
+            direccion: data.direccion,
+            unidad: data.unidad,
+            unidadSubzona: data.unidadSubzona,
+            tipoDesignacion: tipoDesignacion,
+            rol: data.rol,
+            usuarioControl: data.usuarioControl,
+            usuarioEdicion: userCI,
+          })
+        );
+      }
     } else {
-      registerUser(body);
+      registerUser({
+        cI: data.cI,
+        email: data.email,
+        enabled:
+          data.enabled === "true"
+            ? true
+            : data.enabled === "false"
+            ? false
+            : undefined,
+        firstName: data.firstName,
+        frontBaseUrl: frontBaseUrl,
+        lastName: data.lastName,
+        direccion: data.direccion,
+        unidad: data.unidad,
+        unidadSubzona: data.unidadSubzona,
+        tipoDesignacion: tipoDesignacion,
+        rol: data.rol,
+        usuarioControl: userCI,
+        usuarioRegistro: userCI,
+        usuarioEdicion: userCI,
+      });
     }
 
     setFormIsClouse(true);
@@ -77,6 +140,8 @@ const CreateUsers = ({
     setSelectedUnidad("");
     setSelectedUnidadSubzona("");
     setTipoDesignacion("");
+    setShowUserControl(true);
+
     reset({
       cI: "",
       email: "",
@@ -99,9 +164,10 @@ const CreateUsers = ({
   useEffect(() => {
     if (handleRes) {
       if (userEdit) {
+        setUserEdit();
         dispatch(
           showAlert({
-            message: `⚠️ Edición de información de ${handleRes?.firstName} ${handleRes?.lastName} exitosa`,
+            message: `⚠️ Edición de la información de ${handleRes?.firstName} ${handleRes?.lastName} exitosa`,
             alertType: 2,
           })
         );
@@ -115,7 +181,7 @@ const CreateUsers = ({
         setNewUser(handleRes);
       }
     }
-  }, [handleRes, ]);
+  }, [handleRes]);
 
   useEffect(() => {
     axios
@@ -174,18 +240,10 @@ const CreateUsers = ({
     <div>
       {isLoading && <IsLoading />}
       <div className="create__users__list__users">
-        <button
-          onClick={() => {
-            setFormIsClouse(false);
-          }}
-          className="cerate__user__btn"
-        >
-          + Crear Nuevo Usuario
-        </button>
         <div className={`form__container ${formIsClouse && "form__close"}`}>
           <form className="create__user__form" onSubmit={handleSubmit(submit)}>
             <h2 className="title__create__user__card">
-              {userEdit ? "Actualize el Usuario" : "Crear nuevo Usuario"}
+              {userEdit ? "Actualizar el Usuario" : "Crear nuevo Usuario"}
             </h2>
             <div
               onClick={() => {
@@ -195,6 +253,7 @@ const CreateUsers = ({
                 setSelectedUnidad("");
                 setSelectedUnidadSubzona("");
                 setTipoDesignacion("");
+                setShowUserControl(true);
                 reset({
                   cI: "",
                   email: "",
@@ -208,10 +267,21 @@ const CreateUsers = ({
             >
               ❌
             </div>
+            {userEdit && (
+              <div
+                onClick={() => setShowUserControl(!showUserControl)}
+                className="show__change__control"
+              >
+                control
+                <div className="tooltip-text">
+                  Click para cambiar el Subadministrador de control de usuario
+                </div>
+              </div>
+            )}
             <label
               style={{
                 display:
-                  !userEdit || userRol === rolAdmin || useCI === superAdmin
+                  !userEdit || userRol === rolAdmin || userCI === superAdmin
                     ? "flex"
                     : "none",
               }}
@@ -228,7 +298,7 @@ const CreateUsers = ({
             <label
               style={{
                 display:
-                  !userEdit || userRol === rolAdmin || useCI === superAdmin
+                  !userEdit || userRol === rolAdmin || userCI === superAdmin
                     ? "flex"
                     : "none",
               }}
@@ -358,7 +428,7 @@ const CreateUsers = ({
               className="label__create__user__card"
               style={{
                 display:
-                  userRol === rolAdmin || useCI === superAdmin
+                  userRol === rolAdmin || userCI === superAdmin
                     ? "flex"
                     : "none",
               }}
@@ -374,7 +444,7 @@ const CreateUsers = ({
                 <option value="Sub-Administrador">Sub-Administrador</option>
                 <option
                   style={{
-                    display: useCI === superAdmin ? "flex" : "none",
+                    display: userCI === superAdmin ? "flex" : "none",
                   }}
                   value="Administrador"
                 >
@@ -382,6 +452,14 @@ const CreateUsers = ({
                 </option>
               </select>
             </label>
+
+            <AutocompletarUser
+              users={users}
+              setValue={setValue}
+              isDisabled={showUserControl}
+              userEdit={userEdit}
+            />
+
             <button className="create__user__card__btn">
               {userEdit ? "ACTUALIZAR" : "GUARDAR"}
             </button>

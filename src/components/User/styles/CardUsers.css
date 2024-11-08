@@ -1,3 +1,104 @@
+.filters__users__content {
+  margin: 0.5em 1em;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.img__buscar {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.filters__users__search__container {
+  display: flex;
+  align-items: center;
+  background-color: #f9f9f9;
+  border: 2px solid #ccc;
+  border-radius: 25px;
+  padding: 5px 10px;
+}
+
+.filters__users__search {
+  padding: 10px 15px;
+  border: 2px solid #ccc;
+  border-radius: 25px;
+  outline: none;
+  font-size: 1em;
+  transition: border-color 0.3s ease;
+  background-color: #f9f9f9;
+}
+
+.filters__users__search:focus {
+  border-color: #4a90e2;
+}
+
+.filters__users__search::placeholder {
+  color: #999;
+}
+
+.img__buscar:hover {
+  cursor: pointer;
+}
+
+.filters__users {
+  width: 12%;
+  height: 2.5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--plomo-color);
+  font-size: 0.9em;
+  color: var(--blue-color);
+  font-weight: 700;
+  border: solid 0.15rem black;
+  padding: 0.1em 0.8em;
+  border-radius: 0.5em;
+  cursor: pointer;
+  text-align: center;
+}
+
+.change__color {
+  background-color: var(--yellow-color);
+}
+
+.btn__users__users {
+  background-color: var(--blue-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn__users__users:hover {
+  background-color: #357ab7;
+  transform: translateY(-2px);
+}
+
+.btn__users__users:active {
+  background-color: #2e6a9e;
+  transform: translateY(0);
+}
+
+.btn__users__users:focus {
+  outline: none;
+  box-shadow: 0px 0px 0px 3px rgba(74, 144, 226, 0.5);
+}
+
+.filters__users:hover {
+  color: var(--white-color);
+  background-color: var(--blue-color);
+  -webkit-transition: all 0.35s ease;
+  transition: all 0.35s ease;
+  transform: scale(1.1);
+}
+
 .card__users__content {
   width: 100%;
   padding: 0.5em;
@@ -14,6 +115,10 @@
   border: 0.1em solid black;
   border-radius: 0.4em;
   padding: 0.2em;
+}
+
+.card__user:hover {
+  box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.4);
 }
 
 .card__ul {
@@ -58,6 +163,74 @@
   border-radius: 100%;
 }
 
+.container__delete__user {
+  position: fixed;
+  top: 1em;
+  right: 0;
+  z-index: 9999;
+  width: 100%;
+  height: 95vh;
+  background-color: rgba(0, 0, 0, 0.309);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 1000ms ease;
+  align-items: flex-start;
+  overflow-y: scroll;
+}
+
+.container__delete__user__close {
+  transform: scale(0);
+}
+
+.form__delete {
+  display: flex;
+  margin: auto 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  width: 90%;
+  max-width: 30em;
+  background-color: var(--white-color);
+  padding: 2em 1em;
+  border-radius: 0.8rem;
+  position: relative;
+}
+.delete__serv {
+  color: var(--red-color);
+  font-weight: 600;
+}
+
+.btn__delete__serv__content {
+  margin-top: 1em;
+  width: 50%;
+  display: flex;
+}
+
+.btn__delete {
+  width: 20%;
+  border: none;
+  font-size: 1em;
+  margin: 0 auto;
+  padding: 0.2em;
+  font-weight: 600;
+  color: var(--blue-color);
+  background: transparent;
+  border: 3px solid var(--plomo-color);
+  border-radius: 5px;
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+.btn__delete:hover {
+  background: var(--blue-color);
+  color: var(--plomo-color);
+  border: 3px solid var(--plomo-color);
+  -webkit-transition: all 0.35s ease;
+  transition: all 0.35s ease;
+  transform: translateY(-0.25em);
+}
+
 @media (max-width: 600px) {
   .card__users__content {
     width: 100%;
@@ -84,7 +257,7 @@
     width: 85%;
     margin: 0 auto;
   }
-  .card__value__v{
+  .card__value__v {
     margin: 0 auto;
   }
 }
