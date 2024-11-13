@@ -290,26 +290,35 @@
 }
 
 .table__info {
-  width: 100%;
-  max-width: 100%;
   overflow-x: auto;
-  word-wrap: break-word;
   border-collapse: collapse;
+  margin: 0 auto;
+  table-layout: auto;
 }
+
+.table__info th {
+  white-space: nowrap;
+  padding: 8px;
+}
+
 .table__container {
   overflow-x: auto;
   width: 100%;
+  margin: 0 auto;
 }
 
 .table__info__desplazamiento {
   width: 100%;
   max-width: 100%;
-  border-collapse: collapse;
-  word-wrap: break-word;
+}
+
+.table__info__desplazamiento th {
+  padding: 0.1em;
 }
 
 .table__td {
   background-color: rgba(255, 255, 255, 0.509);
+  padding: 1em;
 }
 
 .delete__card {

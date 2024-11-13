@@ -170,6 +170,10 @@ const Funcion = ({ servidor, desplazamientos }) => {
     )
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
 
+  const ultimoPase = servidor.pases.sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  )[0];
+
   return (
     <div>
       {isLoading && <IsLoading />}
@@ -265,7 +269,7 @@ const Funcion = ({ servidor, desplazamientos }) => {
           </form>
         </section>
         <section>
-          <table>
+          <table className="table__info">
             <thead>
               <tr>
                 <th style={{ border: "none", backgroundColor: "transparent" }}>
@@ -279,6 +283,12 @@ const Funcion = ({ servidor, desplazamientos }) => {
                       ultimoDesplazamiento.fechaFinalización &&
                       ultimoDesplazamiento.unidadSubzona !==
                         userLoggued.unidadSubzona) ||
+                    (ultimoDesplazamiento &&
+                      ultimoDesplazamiento.fechaPresentacion &&
+                      ultimoDesplazamiento.fechaFinalización &&
+                      ultimoDesplazamiento.unidadSubzona ===
+                        userLoggued.unidadSubzona &&
+                      ultimoPase.unidadSubzona === userLoggued.unidadSubzona) ||
                     !ultimoDesplazamiento ||
                     userLoggued.tipoDesignacion === "NOPERA" ||
                     userCI === superAdmin ||
@@ -314,6 +324,13 @@ const Funcion = ({ servidor, desplazamientos }) => {
                           ultimoDesplazamiento.fechaPresentacion &&
                           ultimoDesplazamiento.fechaFinalización &&
                           ultimoDesplazamiento.unidadSubzona !==
+                            userLoggued.unidadSubzona) ||
+                        (ultimoDesplazamiento &&
+                          ultimoDesplazamiento.fechaPresentacion &&
+                          ultimoDesplazamiento.fechaFinalización &&
+                          ultimoDesplazamiento.unidadSubzona ===
+                            userLoggued.unidadSubzona &&
+                          ultimoPase.unidadSubzona ===
                             userLoggued.unidadSubzona) ||
                         !ultimoDesplazamiento ||
                         userLoggued.tipoDesignacion === "NOPERA" ||

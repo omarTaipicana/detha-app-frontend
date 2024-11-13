@@ -2,10 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import "./style/TablaOrganico.css";
 import axios from "axios";
 import getConfigToken from "../../services/getConfigToken";
-import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
 import "jspdf-autotable";
 import domtoimage from "dom-to-image";
 

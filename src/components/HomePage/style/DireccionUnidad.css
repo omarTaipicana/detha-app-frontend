@@ -1,0 +1,21 @@
+.direcciones__list__content{
+    margin: 1em;
+}
+
+.direcciones__list__title{
+    text-align: center;
+}
+
+.direcciones__list{
+    display: flex;
+   flex-wrap: wrap;
+   margin: 1em;
+}
+
+.direccion__content{
+width: 30%;
+}
+
+.imag__logo{
+    width: 5em;
+}

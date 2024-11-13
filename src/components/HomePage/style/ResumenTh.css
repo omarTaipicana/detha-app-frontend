@@ -1,0 +1,21 @@
+
+table th:first-child,
+table td:first-child {
+  width: 200px; 
+}
+
+.direccion {
+  background-color: #f0f0f0; /* Color para dirección */
+}
+
+.unidad {
+  background-color: #e0e0e0; /* Color para unidad */
+}
+
+.unidadSubzona {
+  background-color: #d0d0d0; /* Color para unidadSubzona */
+}
+
+.nomenclatura {
+  background-color: #c0c0c0; /* Color para nomenclatura */
+}

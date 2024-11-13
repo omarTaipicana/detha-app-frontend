@@ -22,7 +22,16 @@ const ServidoresPolicialesList = ({
   const [selectedDireccion, setSelectedDireccion] = useState("");
   const [selectedUnidad, setSelectedUnidad] = useState("");
   const [selectedUnidadSubzona, setSelectedUnidadSubzona] = useState("");
+  const [desplazamiento, setDesplazamiento] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+
+  const desplazamientos = Array.from(
+    new Set(
+      servidorPolicial.flatMap((item) =>
+        item.desplazamientos.map((d) => d.tipoDesplazamiento)
+      )
+    )
+  );
 
   const servidorPolicialFiltered = servidorPolicial
     ?.slice()
@@ -40,10 +49,17 @@ const ServidoresPolicialesList = ({
       hoy.setHours(0, 0, 0, 0);
 
       if (user.cI === superAdmin) {
-        return serv.id
+        return serv.id;
       }
 
       if (serv.pases.length === 0) {
+        return serv.usuarioRegistro === user.cI;
+      }
+
+      if (
+        ultimoPase.direccion === "OTROS" &&
+        serv.desplazamientos.length === 0
+      ) {
         return serv.usuarioRegistro === user.cI;
       }
 
@@ -155,6 +171,23 @@ const ServidoresPolicialesList = ({
         (serv.nombres && serv.nombres.toLowerCase().includes(searchLower)) ||
         (serv.apellidos && serv.apellidos.toLowerCase().includes(searchLower))
       );
+    })
+    .filter((serv) => {
+      const ultimoDesplazamiento = serv?.desplazamientos
+        ?.slice()
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+
+      if (!desplazamiento) {
+        return true;
+      }
+      if (desplazamiento === "TODOS") {
+        return ultimoDesplazamiento && !ultimoDesplazamiento.fechaFinalización;
+      }
+      return (
+        ultimoDesplazamiento &&
+        ultimoDesplazamiento.tipoDesplazamiento === desplazamiento &&
+        !ultimoDesplazamiento.fechaFinalización
+      );
     });
 
   useEffect(() => {
@@ -241,6 +274,21 @@ const ServidoresPolicialesList = ({
           ))}
         </select>
 
+        <select
+          className={`filters__users ${desplazamiento && "change__color"}`}
+          value={desplazamiento}
+          onChange={(e) => setDesplazamiento(e.target.value)}
+          disabled={!unidades.length}
+        >
+          <option value="">DESPLAZAMIENTOS</option>
+          <option value="TODOS">TODOS</option>
+          {desplazamientos.map((desplazamientos) => (
+            <option key={desplazamientos} value={desplazamientos}>
+              {desplazamientos}
+            </option>
+          ))}
+        </select>
+
         <button
           className="btn__users__users"
           onClick={() => {
@@ -248,6 +296,7 @@ const ServidoresPolicialesList = ({
             setSelectedUnidad("");
             setSelectedUnidadSubzona("");
             setSearchTerm("");
+            setDesplazamiento("");
           }}
         >
           Resetear Filtros

@@ -77,6 +77,10 @@ const TipoDesplazamiento = ({
     )
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
 
+  const ultimoPase = servidor.pases.sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  )[0];
+
   const submit = (data) => {
     if (!desplazamientoEdit) {
       if (
@@ -714,10 +718,16 @@ const TipoDesplazamiento = ({
                       ultimoDesplazamiento.fechaFinalización &&
                       ultimoDesplazamiento.unidadSubzona !==
                         userLoggued.unidadSubzona) ||
+                    (ultimoDesplazamiento &&
+                      ultimoDesplazamiento.fechaPresentacion &&
+                      ultimoDesplazamiento.fechaFinalización &&
+                      ultimoDesplazamiento.unidadSubzona ===
+                        userLoggued.unidadSubzona &&
+                      ultimoPase.unidadSubzona === userLoggued.unidadSubzona) ||
                     !ultimoDesplazamiento ||
                     userLoggued.tipoDesignacion === "NOPERA" ||
                     userCI === superAdmin ||
-                    ultimoDesplazamiento.direccion === "OTROS") && (
+                    ultimoDesplazamiento?.direccion === "OTROS") && (
                     <img
                       src="../../../new.png"
                       className="btn__table"
@@ -767,10 +777,17 @@ const TipoDesplazamiento = ({
                           ultimoDesplazamiento.fechaFinalización &&
                           ultimoDesplazamiento.unidadSubzona !==
                             userLoggued.unidadSubzona) ||
+                        (ultimoDesplazamiento &&
+                          ultimoDesplazamiento.fechaPresentacion &&
+                          ultimoDesplazamiento.fechaFinalización &&
+                          ultimoDesplazamiento.unidadSubzona ===
+                            userLoggued.unidadSubzona &&
+                          ultimoPase.unidadSubzona ===
+                            userLoggued.unidadSubzona) ||
                         !ultimoDesplazamiento ||
                         userLoggued.tipoDesignacion === "NOPERA" ||
                         userCI === superAdmin ||
-                        ultimoDesplazamiento.direccion === "OTROS") && (
+                        ultimoDesplazamiento?.direccion === "OTROS") && (
                         <img
                           src="../../../edit.png"
                           className="btn__table"

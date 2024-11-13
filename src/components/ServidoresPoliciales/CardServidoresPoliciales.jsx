@@ -155,7 +155,7 @@ const CardServidoresPoliciales = ({
   return (
     <div
       style={{
-        backgroundColor: ultimoPase.direccion === "OTROS" ? "#bbff99" : "transparent",
+        backgroundColor: ultimoPase?.direccion === "OTROS" ? "#c2fec7" : "transparent",
       }}
       className="card__servidorPolicial"
     >
@@ -258,7 +258,7 @@ const CardServidoresPoliciales = ({
           <span
             className="card__servidorPolicial__value"
             style={{
-              color: servidorPolicial.pases.length === 0 ? "red" : "inherit",
+              color: servidorPolicial?.pases.length === 0 ? "red" : "inherit",
               fontWeight:
                 servidorPolicial.pases.length === 0 ? "800" : "inherit",
               fontSize:
