@@ -1,21 +1,130 @@
-.direcciones__list__content{
-    margin: 1em;
+.direcciones__list__content {
+  margin: 1em;
+  padding: 1em;
 }
 
-.direcciones__list__title{
-    text-align: center;
+.direcciones__list__title {
+  text-align: center;
+  font-style: italic;
+  font-size: 2em;
+  color: var(--plomo2-color);
+  text-shadow: 0.1em 0.15em 0.1em var(--plomo-color);
 }
 
-.direcciones__list{
-    display: flex;
-   flex-wrap: wrap;
-   margin: 1em;
+.direcciones__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  justify-content: space-around;
 }
 
-.direccion__content{
-width: 30%;
+.direccion__content {
+  width: 30%;
+  background-color: var(--plomoT-color);
+  border: solid 0.1em var(--plomo-color);
+  border-radius: 1em;
+  margin: 1em 0 auto;
+  height: 12em;
+  padding: 0.7em;
+  box-shadow: 0px 8px 16px var(--black-color);
+  opacity: 0;
+  transform: translateY(5em);
+  animation: fadeInUp 0.5s forwards;
+  animation-fill-mode: forwards;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
 }
 
-.imag__logo{
-    width: 5em;
+.direccion__content:hover {
+  transform: translateY(-5px);
+  box-shadow: 0.1em 0.1em 1em var(--black-color);
 }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(5em);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.direccion__title {
+  text-align: center;
+  width: 100%;
+  display: block;
+  font-size: 1.5em;
+  font-weight: 700;
+  color: var(--blue2-color);
+  margin-bottom: 0.3em;
+}
+
+.direccion__info__content {
+  display: flex;
+}
+
+.imag__logo {
+  width: 8em;
+}
+
+.card__direccion__info {
+  width: 65%;
+}
+
+.card__direccion__ul {
+  width: 100%;
+}
+
+.card__direccion__li {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.card__direccion__li2 {
+  display: flex;
+  width: 60%;
+  justify-content: space-around;
+  margin: 0 auto;
+  margin-top: 0.3em;
+}
+.card__direccion__span {
+  font-size: 0.8em;
+  font-weight: 800;
+  font-style: italic;
+}
+
+.blue__color {
+  color: var(--blue-color);
+}
+
+.plomo__color {
+  color: var(--plomo2-color);
+}
+
+.green__color {
+  color: var(--green2-color);
+}
+
+.valor {
+  font-size: 1.5em;
+}
+.valor2 {
+  font-size: 1em;
+}
+
+.card__direccion__span__grupo {
+  margin-top: 0.5em;
+  font-size: 0.7em;
+  font-style: italic;
+  font-weight: 800;
+  text-align: center;
+  display: block;
+  color: var(--blue2-color);
+}
+
+
+
+

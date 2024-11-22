@@ -1,0 +1,364 @@
+.direccion__unidad__content {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 1;
+  background-color: white;
+}
+
+.fondo__DIGIN::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/DIGIN.png");
+}
+
+.fondo__DINAF::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/DINAF.png");
+}
+
+.fondo__DNPJ::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/DNPJ.png");
+}
+
+.fondo__DNA::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/DNA.png");
+}
+
+.fondo__DINASED::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/DINASED.png");
+}
+
+.fondo__DINITEC::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/DINITEC.png");
+}
+
+.fondo__DINIC::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/DINIC.png");
+}
+
+.fondo__UDT::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/UDT.png");
+}
+
+.fondo__AMERIPOL::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/AMERIPOL.png");
+}
+
+.fondo__UIAD::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/UIAD.png");
+}
+
+.fondo__UNDP::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/UNDP.png");
+}
+
+.fondo__REGPOL::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/REGPOL.png");
+}
+
+.fondo__UNRED::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/UNRED.png");
+}
+
+.fondo__INTERPOL::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/INTERPOL.png");
+}
+
+.fondo__ULCO::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/ULCO.png");
+}
+
+.fondo__CIBERPOL::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/CIBERPOL.png");
+}
+
+.fondo__UNIT::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/UNIT.png");
+}
+
+.fondo__UNPROV::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/UNPROV.png");
+}
+
+.fondo__UNAI::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/UNAI.png");
+}
+
+.direccion__unidad__content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: overlay;
+  transform: skewY(-5deg);
+  transform-origin: top left;
+  opacity: 0.15;
+  z-index: -1;
+}
+
+.direccion__unidad__title__content {
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+  padding: 1em;
+  background: linear-gradient(
+    to bottom right,
+    var(--blue-color) 10%,
+    var(--white-color) 20%,
+    var(--white-color) 80%,
+    var(--blue-color) 90%
+  );
+  color: var(--blue-color);
+}
+
+.direccion__unidad__title {
+  display: block;
+  font-size: 2em;
+  font-style: italic;
+  font-weight: 700;
+  text-align: center;
+  margin: 0.5em 5em;
+}
+
+.cerrar__content {
+  position: fixed;
+  top: 0.5em;
+  right: 0.5em;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.cerrar__content:hover {
+  transform: scale(1.4);
+}
+
+.direccion__unidad__resumen__content {
+  width: 100%;
+  margin: 1em;
+  padding: 0 4em;
+}
+.direccion__unidad__ul__resumen {
+  width: 100%;
+  display: flex;
+  padding: 0 2em;
+}
+
+.img__logo {
+  width: 20em;
+}
+
+.direccion__unidad__li__resumen__logo {
+  width: 40%;
+  padding: 1em;
+}
+
+.direccion__unidad__li__resumen__deficit {
+  width: 70%;
+  padding: 1em 4em;
+  border: solid 0.2em rgba(85, 84, 84, 0.282);
+  border-radius: 1em;
+}
+
+.direccion__unidad__li__resumen {
+  width: 50%;
+  padding: 1em;
+}
+
+.direccion__unidad__resumen__title {
+  color: var(--blue2-color);
+  display: block;
+  font-size: 1.5em;
+  font-weight: 700;
+  text-align: center;
+  width: 90%;
+  margin: 0 auto 1em auto;
+  text-shadow: 0.1em 0.1em 1em var(--plomo2-color);
+}
+
+.direccion__unidad__content__deficit {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.direccion__unidad__resumen__ul__deficit {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+}
+
+.direccion__unidad__resumen__li__deficit {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.direccion__unidad__resumen__deficit__span__label {
+  width: 60%;
+  display: inline-block;
+  padding: 0.2em 0.2em;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--white-color);
+  text-transform: uppercase;
+  text-align: center;
+  background: linear-gradient(90deg, var(--plomo-color), var(--blue2-color));
+  border-radius: 1em;
+  box-shadow: 0 0.2em 0.4em var(--plomo2-color);
+  text-shadow: 0.1em 0.1em 0.5em var(--plomo-color);
+}
+
+.direccion__unidad__deficit__span__img {
+  width: 20%;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+.direccion__unidad__img__flecha {
+  width: 3em;
+}
+
+.direccion__unidad__resumen__deficit__span__value {
+  width: 10%;
+  text-align: center;
+  color: var(--plomo2-color);
+  font-size: 2.5em;
+  font-weight: 800;
+  text-shadow: 0.3em 0.2em 0.2em var(--plomo-color);
+}
+
+.direccion__unidad__btn__vermas {
+  width: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ver-mas-button {
+  margin-top: 1em;
+  background: linear-gradient(135deg, var(--plomo-color), var(--black-color));
+  color: white;
+  font-size: 1.2em;
+  font-weight: bold;
+  padding: 0.3em 1.5em;
+  border: none;
+  border-radius: 1em;
+  cursor: pointer;
+  box-shadow: 0 0.2em 0.4em rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.ver-mas-button:hover {
+  background: linear-gradient(135deg, var(--blue2-color), var(--blue2-color));
+  transform: scale(1.05);
+  box-shadow: 0 0.3em 0.5em rgba(0, 0, 0, 0.8);
+}
+
+.ver-mas-button:active {
+  transform: scale(0.99);
+  box-shadow: 0 0.4em 0.7em rgba(0, 0, 0, 0.2);
+}

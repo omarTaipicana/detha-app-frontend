@@ -104,10 +104,10 @@ const FromServidorP = ({
     setSelectedTipoDiscapacidad(servidorEdit?.tipoDiscapacidad);
   }, [servidorEdit]);
 
-  const prueba = senplades ? senplades : [];
+  const senpladesVal = senplades ? senplades : [];
 
   const obtenerCantonesPorProvincia = (provincia) => {
-    return prueba.filter((item) => item.provincia === provincia);
+    return senpladesVal.filter((item) => item.provincia === provincia);
   };
 
   const handleProvinciaChange = (selected) => {

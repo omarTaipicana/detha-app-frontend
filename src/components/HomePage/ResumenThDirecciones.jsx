@@ -1,15 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./style/ResumenTh.css";
-import IsLoading from "../shared/IsLoading";
-import useCrud from "../../hooks/useCrud";
 
-const ResumenTh = () => {
-  const PATH = "/servidores";
-  const [data, getApi, , , , , isLoading] = useCrud();
-
-  useEffect(() => {
-    getApi(PATH);
-  }, []);
+const ResumenThDirecciones = ({ serv, org, desp }) => {
+  const data = [...serv, ...desp];
 
   const [expandedDireccion, setExpandedDireccion] = useState({});
   const [expandedUnidad, setExpandedUnidad] = useState({});
@@ -499,7 +492,6 @@ const ResumenTh = () => {
 
   return (
     <div>
-      {isLoading && <IsLoading />}
       <table border="1">
         <thead>
           <tr>
@@ -541,8 +533,6 @@ const ResumenTh = () => {
             .sort((a, b) => {
               if (a === "OTROS") return 1;
               if (b === "OTROS") return -1;
-              if (a === "DIGIN") return -1;
-              if (b === "DIGIN") return 1;
               return groupedData[b].count - groupedData[a].count;
             })
             .map((direccion) => (
@@ -1261,7 +1251,7 @@ const ResumenTh = () => {
               </React.Fragment>
             ))}
 
-          <tr>
+          {/* <tr>
             <td>Total</td>
             <td>{totals.count}</td>
             {tipoDesplazamientoColumns.map(
@@ -1282,11 +1272,11 @@ const ResumenTh = () => {
                 )
             )}
             <td>0</td>
-          </tr>
+          </tr> */}
         </tbody>
       </table>
     </div>
   );
 };
 
-export default ResumenTh;
+export default ResumenThDirecciones;

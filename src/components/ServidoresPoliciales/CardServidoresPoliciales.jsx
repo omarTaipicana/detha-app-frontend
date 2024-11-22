@@ -145,17 +145,18 @@ const CardServidoresPoliciales = ({
       : userLoggued.tipoDesignacion === "NOPERA" &&
         userLoggued.unidad === desplazamientoVigente?.unidad
       ? "izq"
+      : userLoggued.unidadSubzona === desplazamientoVigente?.unidadSubzona &&
+        userLoggued.unidad !== desplazamientoVigente?.unidad
+      ? "der"
       : userLoggued.unidadSubzona !== desplazamientoVigente?.unidadSubzona
       ? "der"
       : "izq");
 
-      
-      
-
   return (
     <div
       style={{
-        backgroundColor: ultimoPase?.direccion === "OTROS" ? "#c2fec7" : "transparent",
+        backgroundColor:
+          ultimoPase?.direccion === "OTROS" ? "#c2fec7" : "transparent",
       }}
       className="card__servidorPolicial"
     >
@@ -200,6 +201,18 @@ const CardServidoresPoliciales = ({
                     <span className="label__tooltip">SUBZONA: </span>
                     <span className="value__tooltip">
                       {desplazamientoVigente.unidadSubzona}
+                    </span>
+                  </li>
+                  <li className="li__tooltip">
+                    <span className="label__tooltip">PROVINCIA DESP: </span>
+                    <span className="value__tooltip">
+                      {desplazamientoVigente.provinciaDesplazamiento}
+                    </span>
+                  </li>
+                  <li className="li__tooltip">
+                    <span className="label__tooltip">CANTON DESP: </span>
+                    <span className="value__tooltip">
+                      {desplazamientoVigente.cantonDesplazamiento}
                     </span>
                   </li>
                 </ul>
@@ -302,19 +315,19 @@ const CardServidoresPoliciales = ({
         </li>
 
         <li className="card__servidorPolicial__li">
-          <span className="card__servidorPolicial__label">Cedula: </span>
+          <span className="card__servidorPolicial__label">CEDULA: </span>
           <span className="card__servidorPolicial__value">
             {servidorPolicial.cI}
           </span>
         </li>
         <li className="card__servidorPolicial__li">
-          <span className="card__servidorPolicial__label">Nombres: </span>
+          <span className="card__servidorPolicial__label">NOMBRES: </span>
           <span className="card__servidorPolicial__value">
             {servidorPolicial.nombres}
           </span>
         </li>
         <li className="card__servidorPolicial__li">
-          <span className="card__servidorPolicial__label">Apellidios: </span>
+          <span className="card__servidorPolicial__label">APELLIDOS: </span>
           <span className="card__servidorPolicial__value">
             {servidorPolicial.apellidos}
           </span>

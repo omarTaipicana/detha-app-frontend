@@ -1,21 +1,57 @@
-
 table th:first-child,
 table td:first-child {
-  width: 200px; 
+  width: 30em;
 }
 
 .direccion {
-  background-color: #f0f0f0; /* Color para dirección */
+  background-color: #ffffff;
+  text-align: center;
+}
+.flecha {
+  display: flex;
+  justify-content: space-between;
+}
+.img__flecha__direccion {
+  width: 1em;
 }
 
 .unidad {
-  background-color: #e0e0e0; /* Color para unidad */
+  background-color: #ddddde;
+  text-align: center;
+}
+.img__flecha__unidad {
+  width: 1em;
+  margin-right: 1.5em;
 }
 
 .unidadSubzona {
-  background-color: #d0d0d0; /* Color para unidadSubzona */
+  background-color: #bbbbbc;
+  text-align: center;
+}
+.img__flecha__unidadSubzona {
+  width: 1em;
+  margin-right: 3em;
 }
 
 .nomenclatura {
-  background-color: #c0c0c0; /* Color para nomenclatura */
+  background-color: #9a9a9b;
+  text-align: center;
+}
+.img__flecha__nomenclatura {
+  width: 1em;
+  margin-right: 4.5em;
+}
+
+.cargo {
+  background-color: #848485;
+  text-align: center;
+}
+.img__flecha__cargo {
+  width: 1em;
+  margin-right: 6em;
+}
+
+.grado {
+  background-color: #ffffff;
+  text-align: center;
 }

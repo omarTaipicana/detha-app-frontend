@@ -27,11 +27,16 @@ const ServidoresPolicialesList = ({
 
   const desplazamientos = Array.from(
     new Set(
-      servidorPolicial.flatMap((item) =>
-        item.desplazamientos.map((d) => d.tipoDesplazamiento)
-      )
+      servidorPolicial.flatMap((item) => {
+        const ultimoDesplazamiento = item.desplazamientos
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))   
+        const filtrado = ultimoDesplazamiento
+          .filter((d) => !d.fechaFinalización)  
+        return filtrado.length > 0 ? filtrado[0].tipoDesplazamiento : [];  
+      })
     )
   );
+  
 
   const servidorPolicialFiltered = servidorPolicial
     ?.slice()

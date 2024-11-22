@@ -22,6 +22,9 @@ const TipoDesplazamiento = ({
   const userCI = JSON.parse(localStorage.user ? localStorage.user : 0).cI;
   const userLoggued = JSON.parse(localStorage.user ? localStorage.user : 0);
 
+  const [selectedProvincia, setSelectedProvincia] = useState("");
+  const [selectedCanton, setSelectedCanton] = useState("");
+  const [cantonesOption, setCantonesOption] = useState([]);
   const [hide, setHide] = useState(true);
   const [hideDelete, setHideDelete] = useState(true);
   const [idDelete, setIdDelete] = useState("");
@@ -40,6 +43,7 @@ const TipoDesplazamiento = ({
 
   const PATH_DESPLAZAMIENTOS = "/desplazamientos";
   const PATH_VARIABLES = "/variables";
+  const PATH_SENPLADES = "/senplades";
   const PATH_SERVIDORES = "/servidores";
   const [
     desplazamiento,
@@ -56,6 +60,7 @@ const TipoDesplazamiento = ({
 
   const [variables, getVariables] = useCrud();
   const [servidores, getServidores] = useCrud();
+  const [senplades, getSenplades] = useCrud();
   const {
     register,
     handleSubmit,
@@ -85,6 +90,24 @@ const TipoDesplazamiento = ({
     if (!desplazamientoEdit) {
       if (
         ultimoDesplazamiento &&
+        ultimoDesplazamiento.tipoDesplazamiento !== "TRASLADO EVENTUAL" &&
+        ultimoDesplazamiento.tipoDesplazamiento !== "TRASLADO TEMPORAL" &&
+        (!ultimoDesplazamiento.fechaPresentacion ||
+          !ultimoDesplazamiento.fechaFinalización)
+      ) {
+        dispatch(
+          showAlert({
+            message:
+              " ⚠️ No se puede registrar un nuevo Desplazamiento, finalice primero el ultimo Desplazamiento",
+            alertType: 1,
+          })
+        );
+        return;
+      }
+
+      if (
+        ultimoDesplazamiento &&
+        ultimoDesplazamiento.tipoDesplazamiento === data.tipoDesplazamiento &&
         (!ultimoDesplazamiento.fechaPresentacion ||
           !ultimoDesplazamiento.fechaFinalización)
       ) {
@@ -116,6 +139,8 @@ const TipoDesplazamiento = ({
     setSelectedUnidad("");
     setSelectedSiglas("");
     setSelectedCargo("");
+    setSelectedProvincia("");
+    setSelectedCanton("");
     reset({
       tipoDesplazamiento: "",
       lugarComision: "",
@@ -196,6 +221,7 @@ const TipoDesplazamiento = ({
     getDesplazamiento(PATH_DESPLAZAMIENTOS);
     getVariables(PATH_VARIABLES);
     getServidores(PATH_SERVIDORES);
+    getSenplades(PATH_SENPLADES);
     axios
       .get(`${urlBase}/organicos`, getConfigToken())
       .then((res) => setOrganicos(res.data))
@@ -207,11 +233,16 @@ const TipoDesplazamiento = ({
     );
     setSiglasOptions(obtenerSiglasPorUnidad(desplazamientoEdit?.unidad));
     setCargoOptions(obtenerCargosPorSigla(desplazamientoEdit?.nomenclatura));
+    setCantonesOption(
+      obtenerCantonesPorProvincia(desplazamientoEdit?.provinciaDesplazamiento)
+    );
 
     setSelectedDireccion(desplazamientoEdit?.direccion);
     setSelectedUnidad(desplazamientoEdit?.unidad);
     setSelectedSiglas(desplazamientoEdit?.nomenclatura);
     setSelectedCargo(desplazamientoEdit?.cargo);
+    setSelectedProvincia(desplazamientoEdit?.provinciaDesplazamiento);
+    setSelectedCanton(desplazamientoEdit?.cantonDesplazamiento);
   }, [desplazamientoEdit]);
 
   useEffect(() => {
@@ -229,6 +260,18 @@ const TipoDesplazamiento = ({
   };
   const obtenerCargosPorSigla = (nomenclatura) => {
     return organicos.filter((item) => item.nomenclatura === nomenclatura);
+  };
+
+  const senpladesVal = senplades ? senplades : [];
+
+  const obtenerCantonesPorProvincia = (provincia) => {
+    return senpladesVal.filter((item) => item.provincia === provincia);
+  };
+
+  const handleProvinciaChange = (selected) => {
+    setSelectedProvincia(selected);
+    const cantonesByProvinca = obtenerCantonesPorProvincia(selected);
+    setCantonesOption(cantonesByProvinca);
   };
 
   const handleDireccionChange = (selected) => {
@@ -323,6 +366,8 @@ const TipoDesplazamiento = ({
                 setSelectedUnidad("");
                 setSelectedSiglas("");
                 setSelectedCargo("");
+                setSelectedProvincia("");
+                setSelectedCanton("");
                 setHide(true);
                 setDesplazamientoEdit();
                 reset({
@@ -584,6 +629,50 @@ const TipoDesplazamiento = ({
                 />
               </label>
             )}
+
+            <label className="label__form">
+              <span className="span__form__info">
+                Provincia Desplazamiento:
+              </span>
+
+              <select
+                {...register("provinciaDesplazamiento")}
+                required
+                className="select__form__info"
+                value={selectedProvincia}
+                onChange={(e) => handleProvinciaChange(e.target.value)}
+              >
+                <option value="">Seleccione la Provincia de residencia</option>
+                {[...new Set(senplades?.map((e) => e.provincia))].map(
+                  (provincia) => (
+                    <option key={provincia} value={provincia}>
+                      {provincia}
+                    </option>
+                  )
+                )}
+              </select>
+            </label>
+            <label className="label__form">
+              <span className="span__form__info">Cantón:</span>
+
+              <select
+                {...register("cantonDesplazamiento")}
+                required
+                className="select__form__info"
+                value={selectedCanton}
+                onChange={(e) => setSelectedCanton(e.target.value)}
+              >
+                <option value="">Seleccione el Cantón de residencia</option>
+                {[...new Set(cantonesOption.map((e) => e.canton))].map(
+                  (canton) => (
+                    <option key={canton} value={canton}>
+                      {canton}
+                    </option>
+                  )
+                )}
+              </select>
+            </label>
+
             <label className="label__form">
               <span className="span__form__info">Causa del Desplazamiento</span>
               <input
@@ -736,6 +825,8 @@ const TipoDesplazamiento = ({
                   )}
                 </th>
                 <th>DESPLAZAMIENTO</th>
+                <th>FECHA PRESENTACIÓN</th>
+                <th>FECHA FINALIZACIÓN</th>
                 <th>DOCUMENTO</th>
                 <th>NUM DOCUMENTO</th>
                 <th>FECHA DOCUMENTO</th>
@@ -750,8 +841,6 @@ const TipoDesplazamiento = ({
                 <th>DESIGNADO A UN PLAN</th>
                 <th>PLAN DE ACCIÓN</th>
                 <th>PERSONAL RELEVO</th>
-                <th>FECHA PRESENTACIÓN</th>
-                <th>FECHA FINALIZACIÓN</th>
               </tr>
             </thead>
             <tbody>
@@ -809,6 +898,12 @@ const TipoDesplazamiento = ({
                       {desplazamiento.tipoDesplazamiento}
                     </td>
                     <td className="table__td">
+                      {desplazamiento.fechaPresentacion}
+                    </td>
+                    <td className="table__td">
+                      {desplazamiento.fechaFinalización}
+                    </td>
+                    <td className="table__td">
                       {desplazamiento.tipoDocumento}
                     </td>
                     <td className="table__td">
@@ -837,12 +932,6 @@ const TipoDesplazamiento = ({
                     <td className="table__td">{desplazamiento.planAccion}</td>
                     <td className="table__td">
                       {desplazamiento.personalRelevo}
-                    </td>
-                    <td className="table__td">
-                      {desplazamiento.fechaPresentacion}
-                    </td>
-                    <td className="table__td">
-                      {desplazamiento.fechaFinalización}
                     </td>
                   </tr>
                 ))}

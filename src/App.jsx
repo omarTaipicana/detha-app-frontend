@@ -15,6 +15,7 @@ import ChangePassword from "./components/User/ChangePassword";
 import ResetPassword from "./components/User/ResetPassword";
 import Alert from "./components/shared/Alert";
 import { UsersContent } from "./components/User/UsersContent";
+import { Prueba } from "./components/HomePage/Prueba";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
 
           <Route element={<UserActiveRoutes />}>
             <Route path="/" element={<HomePage />} />
+            <Route path="/direcciones-unidades/:code" element={<Prueba />} />
             <Route path="/servidores" element={<ServidoresPoliciales />} />
             <Route path="/partediario" element={<ParteDiario />} />
 
@@ -43,7 +45,7 @@ function App() {
           </Route>
         </Route>
       </Routes>
-      <Alert/>
+      <Alert />
     </div>
   );
 }

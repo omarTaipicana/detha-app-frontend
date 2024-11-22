@@ -7,8 +7,6 @@ const HomePage = () => {
   return (
     <div>
       <DireccionesList />
-      <ResumenTh />
-      <TablaOrganico />
     </div>
   );
 };
