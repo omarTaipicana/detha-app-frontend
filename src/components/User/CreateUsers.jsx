@@ -50,15 +50,19 @@ const CreateUsers = ({
     getUsers,
     updateUser,
     handleRes,
+    deleteUser,
+    getUserLogged,
+    user,
   ] = useAuth();
 
   useEffect(() => {
+    getUserLogged();
     getUsers();
   }, []);
 
   const [organicos, setOrganicos] = useState([]);
-  const userRol = JSON.parse(localStorage.user).rol;
-  const userCI = JSON.parse(localStorage.user ? localStorage.user : 0).cI;
+  const userRol = user?.rol;
+  const userCI = user?.cI;
 
   const submit = (data) => {
     const frontBaseUrl = `${location.protocol}//${location.host}/#/reset_password`;
@@ -86,31 +90,6 @@ const CreateUsers = ({
         },
         userEdit.id
       );
-      if (userCI === userEdit.cI) {
-        localStorage.setItem(
-          "user",
-          JSON.stringify({
-            cI: data.cI,
-            email: data.email,
-            enabled:
-              data.enabled === "true"
-                ? true
-                : data.enabled === "false"
-                ? false
-                : undefined,
-            firstName: data.firstName,
-            frontBaseUrl: frontBaseUrl,
-            lastName: data.lastName,
-            direccion: data.direccion,
-            unidad: data.unidad,
-            unidadSubzona: data.unidadSubzona,
-            tipoDesignacion: tipoDesignacion,
-            rol: data.rol,
-            usuarioControl: data.usuarioControl,
-            usuarioEdicion: userCI,
-          })
-        );
-      }
     } else {
       registerUser({
         cI: data.cI,

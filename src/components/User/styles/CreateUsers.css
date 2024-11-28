@@ -40,14 +40,6 @@
   transition: transform 1000ms ease;
 }
 
-.title__create__user__card {
-  text-align: center;
-  font-size: 2em;
-  margin-bottom: 0.5em;
-  color: var(--blue-color);
-  text-shadow: 1px 1px 3px black;
-}
-
 .create__user__form {
   display: flex;
   flex-direction: column;
@@ -61,6 +53,15 @@
   border-radius: 0.8rem;
   position: relative;
 }
+
+.title__create__user__card {
+  text-align: center;
+  font-size: 2em;
+  margin-bottom: 0.5em;
+  color: var(--blue-color);
+  text-shadow: 1px 1px 3px black;
+}
+
 
 .form__exit {
   color: rgb(3, 3, 3);

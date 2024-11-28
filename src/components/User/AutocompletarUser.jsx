@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Downshift from "downshift";
 import "./styles/CreateUsers.css";
+import useAuth from "../../hooks/useAuth";
 
 const getSuggestions = (value, users, isSubAdmin) => {
   const rolSubAdmin = import.meta.env.VITE_ROL_SUB_ADMIN;
@@ -45,6 +46,12 @@ const AutocompletarUser = ({ users, setValue, isDisabled, userEdit }) => {
   const rolSubAdmin = import.meta.env.VITE_ROL_SUB_ADMIN;
   const [inputValue, setInputValue] = useState("");
   const [isValid, setIsValid] = useState(false);
+  const [, , , , , , , , , , , getUserLogged, userLoggued] = useAuth();
+  const isSubAdmin = userLoggued?.rol === rolSubAdmin;
+
+  useEffect(() => {
+    getUserLogged();
+  }, []);
 
   useEffect(() => {
     if (userEdit) {
@@ -57,8 +64,8 @@ const AutocompletarUser = ({ users, setValue, isDisabled, userEdit }) => {
     }
   }, [userEdit, users]);
 
-  const userLoggued = JSON.parse(localStorage.getItem("user"));
-  const isSubAdmin = userLoggued?.rol === rolSubAdmin;
+
+
 
   return (
     <Downshift

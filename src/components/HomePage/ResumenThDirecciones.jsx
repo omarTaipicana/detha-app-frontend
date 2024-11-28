@@ -1,8 +1,21 @@
 import React, { useEffect, useState } from "react";
 import "./style/ResumenTh.css";
 
-const ResumenThDirecciones = ({ serv, org, desp }) => {
-  const data = [...serv, ...desp];
+const ResumenThDirecciones = ({
+  serv,
+  org,
+  desp,
+  fondoClase,
+  showTableDesp,
+  setShowTableDesp,
+}) => {
+  const seenIds = new Set();
+  const data = [...serv, ...desp].filter((item) => {
+    if (!item.id) return false;
+    if (seenIds.has(item.id)) return false;
+    seenIds.add(item.id);
+    return true;
+  });
 
   const [expandedDireccion, setExpandedDireccion] = useState({});
   const [expandedUnidad, setExpandedUnidad] = useState({});
@@ -87,7 +100,6 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
       )
     )
   );
-
   const today = new Date();
 
   const groupedData = data.reduce((acc, item) => {
@@ -376,40 +388,48 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
     if (latestDesplazamientos) {
       const tipo = latestDesplazamientos.tipoDesplazamiento;
 
-      acc[direccion].tipoDesplazamientoCounts[tipo] =
-        (acc[direccion].tipoDesplazamientoCounts[tipo] || 0) + 1;
+      if (latestDesplazamientos.direccion !== direccion) {
+        acc[direccion].tipoDesplazamientoCounts[tipo] =
+          (acc[direccion].tipoDesplazamientoCounts[tipo] || 0) + 1;
 
-      acc[latestDesplazamientos?.direccion].tipoDesplazamientoIntCounts[tipo] =
-        (acc[latestDesplazamientos?.direccion].tipoDesplazamientoIntCounts[
+        acc[latestDesplazamientos?.direccion].tipoDesplazamientoIntCounts[
           tipo
-        ] || 0) + 1;
+        ] =
+          (acc[latestDesplazamientos?.direccion].tipoDesplazamientoIntCounts[
+            tipo
+          ] || 0) + 1;
+      }
 
-      acc[direccion].unidades[unidad].tipoDesplazamientoCounts[tipo] =
-        (acc[direccion].unidades[unidad].tipoDesplazamientoCounts[tipo] || 0) +
-        1;
+      if (latestDesplazamientos.unidad !== unidad) {
+        acc[direccion].unidades[unidad].tipoDesplazamientoCounts[tipo] =
+          (acc[direccion].unidades[unidad].tipoDesplazamientoCounts[tipo] ||
+            0) + 1;
 
-      acc[latestDesplazamientos?.direccion].unidades[
-        latestDesplazamientos?.unidad
-      ].tipoDesplazamientoIntCounts[tipo] =
-        (acc[latestDesplazamientos?.direccion].unidades[
+        acc[latestDesplazamientos?.direccion].unidades[
           latestDesplazamientos?.unidad
-        ].tipoDesplazamientoIntCounts[tipo] || 0) + 1;
+        ].tipoDesplazamientoIntCounts[tipo] =
+          (acc[latestDesplazamientos?.direccion].unidades[
+            latestDesplazamientos?.unidad
+          ].tipoDesplazamientoIntCounts[tipo] || 0) + 1;
+      }
 
-      acc[direccion].unidades[unidad].subzonas[
-        unidadSubzona
-      ].tipoDesplazamientoCounts[tipo] =
-        (acc[direccion].unidades[unidad].subzonas[unidadSubzona]
-          .tipoDesplazamientoCounts[tipo] || 0) + 1;
+      if (latestDesplazamientos.unidadSubzona !== unidadSubzona) {
+        acc[direccion].unidades[unidad].subzonas[
+          unidadSubzona
+        ].tipoDesplazamientoCounts[tipo] =
+          (acc[direccion].unidades[unidad].subzonas[unidadSubzona]
+            .tipoDesplazamientoCounts[tipo] || 0) + 1;
 
-      acc[latestDesplazamientos?.direccion].unidades[
-        latestDesplazamientos?.unidad
-      ].subzonas[
-        latestDesplazamientos?.unidadSubzona
-      ].tipoDesplazamientoIntCounts[tipo] =
-        (acc[latestDesplazamientos?.direccion].unidades[
+        acc[latestDesplazamientos?.direccion].unidades[
           latestDesplazamientos?.unidad
-        ].subzonas[latestDesplazamientos?.unidadSubzona]
-          .tipoDesplazamientoIntCounts[tipo] || 0) + 1;
+        ].subzonas[
+          latestDesplazamientos?.unidadSubzona
+        ].tipoDesplazamientoIntCounts[tipo] =
+          (acc[latestDesplazamientos?.direccion].unidades[
+            latestDesplazamientos?.unidad
+          ].subzonas[latestDesplazamientos?.unidadSubzona]
+            .tipoDesplazamientoIntCounts[tipo] || 0) + 1;
+      }
 
       acc[direccion].unidades[unidad].subzonas[unidadSubzona].nomenclaturas[
         nomenclatura
@@ -491,11 +511,37 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
   });
 
   return (
-    <div>
-      <table border="1">
-        <thead>
-          <tr>
+    <div
+      className={`table__desp__container ${
+        !showTableDesp && "table__desp__close"
+      } fondo__${fondoClase}`}
+    >
+      <div
+        onClick={() => {
+          setShowTableDesp(false);
+          setExpandedDireccion({});
+          setExpandedUnidad({});
+          setExpandedUnidadSubzona({});
+          setExpandedNomenclatura({});
+          setExpandedCargo({});
+        }}
+        className="cerrar__content"
+      >
+        ❌
+      </div>
+      <table className="table__desp" border="1">
+        <thead className="table__desp__thead">
+          <tr className="table__desp__title">
             <th
+              colSpan={tipoDesplazamientoColumns.length * 2 + 3}
+              className="table__desp__title"
+            >
+              TABLA DE DESAGREGACIÓN DE DESPLAZAMIENTOS
+            </th>
+          </tr>
+          <tr className="table__desp__tr__encab">
+            <th
+              rowSpan={2}
               onClick={() => {
                 setExpandedDireccion({});
                 setExpandedUnidad({});
@@ -504,19 +550,25 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                 setExpandedCargo({});
               }}
             >
-              DIRECC / UNI / SUBZ / NOMEN / CARGO{" "}
-              <div>
-                <img
-                  src={`../../../up.png`}
-                  className="img__flecha__direccion"
-                />
-              </div>{" "}
+              DIRECC / UNI / SUBZ / NOMEN / CARGO
             </th>
-            <th>LEGALIZADOS</th>
+            <th rowSpan={2}>LEGALIZADOS</th>
+            <th colSpan={tipoDesplazamientoColumns.length}>
+              FUERA DE LA UNIDAD
+            </th>
+
+            <th colSpan={tipoDesplazamientoColumns.length}>
+              DENTRO DE LA UNIDAD
+            </th>
+
+            <th rowSpan={2}>TOTAL LABORANDO</th>
+          </tr>
+
+          <tr className="table__desp__tr__encab">
             {tipoDesplazamientoColumns.map(
               (tipo) =>
                 totals.tipoDesplazamientoCounts[tipo] > 0 && (
-                  <th key={tipo}>{tipo}- S</th>
+                  <th key={tipo}>{tipo}</th>
                 )
             )}
             {tipoDesplazamientoColumns.map(
@@ -525,10 +577,9 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                   <th key={tipo}>{tipo}</th>
                 )
             )}
-            <th>TOTAL LABORANDO</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="table__desp__tbody">
           {Object.keys(groupedData)
             .sort((a, b) => {
               if (a === "OTROS") return 1;
@@ -554,9 +605,9 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                   </td>
                   <td
                     onClick={() => toggleExpandDireccion(direccion)}
-                    className="direccion"
+                    className="direccion td__color"
                   >
-                    {groupedData[direccion].count}
+                    {groupedData[direccion].count || ""}
                   </td>
 
                   {tipoDesplazamientoColumns.map(
@@ -564,12 +615,12 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                       totals.tipoDesplazamientoCounts[tipo] > 0 && (
                         <td
                           onClick={() => toggleExpandDireccion(direccion)}
-                          className="direccion"
+                          className="direccion td__color"
                           key={tipo}
                         >
                           {groupedData[direccion].tipoDesplazamientoCounts[
                             tipo
-                          ] || 0}
+                          ] || ""}
                         </td>
                       )
                   )}
@@ -579,18 +630,18 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                       totals.tipoDesplazamientoCounts[tipo] > 0 && (
                         <td
                           onClick={() => toggleExpandDireccion(direccion)}
-                          className="direccion"
+                          className="direccion td__color"
                           key={tipo}
                         >
                           {groupedData[direccion].tipoDesplazamientoIntCounts[
                             tipo
-                          ] || 0}
+                          ] || ""}
                         </td>
                       )
                   )}
                   <td
                     onClick={() => toggleExpandDireccion(direccion)}
-                    className="direccion"
+                    className="direccion td__color"
                   >
                     {groupedData[direccion].count -
                       tipoDesplazamientoColumns.reduce(
@@ -632,24 +683,24 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                           </div>
                         </td>
                         <td
-                          className="unidad"
+                          className="unidad td__color"
                           onClick={() => toggleExpandUnidad(direccion, unidad)}
                         >
-                          {groupedData[direccion].unidades[unidad].count}
+                          {groupedData[direccion].unidades[unidad].count || ""}
                         </td>
 
                         {tipoDesplazamientoColumns.map(
                           (tipo) =>
                             totals.tipoDesplazamientoCounts[tipo] > 0 && (
                               <td
-                                className="unidad"
+                                className="unidad td__color"
                                 onClick={() =>
                                   toggleExpandUnidad(direccion, unidad)
                                 }
                                 key={tipo}
                               >
                                 {groupedData[direccion].unidades[unidad]
-                                  .tipoDesplazamientoCounts[tipo] || 0}
+                                  .tipoDesplazamientoCounts[tipo] || ""}
                               </td>
                             )
                         )}
@@ -658,21 +709,21 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                           (tipo) =>
                             totals.tipoDesplazamientoCounts[tipo] > 0 && (
                               <td
-                                className="unidad"
+                                className="unidad td__color"
                                 onClick={() =>
                                   toggleExpandUnidad(direccion, unidad)
                                 }
                                 key={tipo}
                               >
                                 {groupedData[direccion].unidades[unidad]
-                                  .tipoDesplazamientoIntCounts[tipo] || 0}
+                                  .tipoDesplazamientoIntCounts[tipo] || ""}
                               </td>
                             )
                         )}
 
                         <td
                           onClick={() => toggleExpandUnidad(direccion, unidad)}
-                          className="unidad"
+                          className="unidad td__color"
                         >
                           {groupedData[direccion].unidades[unidad].count -
                             tipoDesplazamientoColumns.reduce(
@@ -730,12 +781,10 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                                     unidadSubzona
                                   )
                                 }
-                                className="unidadSubzona"
+                                className="unidadSubzona td__color"
                               >
-                                {
-                                  groupedData[direccion].unidades[unidad]
-                                    .subzonas[unidadSubzona].count
-                                }
+                                {groupedData[direccion].unidades[unidad]
+                                  .subzonas[unidadSubzona].count || ""}
                               </td>
                               {tipoDesplazamientoColumns.map(
                                 (tipo) =>
@@ -748,12 +797,12 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                                           unidadSubzona
                                         )
                                       }
-                                      className="unidadSubzona"
+                                      className="unidadSubzona td__color"
                                       key={tipo}
                                     >
                                       {groupedData[direccion].unidades[unidad]
                                         .subzonas[unidadSubzona]
-                                        .tipoDesplazamientoCounts[tipo] || 0}
+                                        .tipoDesplazamientoCounts[tipo] || ""}
                                     </td>
                                   )
                               )}
@@ -769,12 +818,13 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                                           unidadSubzona
                                         )
                                       }
-                                      className="unidadSubzona"
+                                      className="unidadSubzona td__color"
                                       key={tipo}
                                     >
                                       {groupedData[direccion].unidades[unidad]
                                         .subzonas[unidadSubzona]
-                                        .tipoDesplazamientoIntCounts[tipo] || 0}
+                                        .tipoDesplazamientoIntCounts[tipo] ||
+                                        ""}
                                     </td>
                                   )
                               )}
@@ -787,7 +837,7 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                                     unidadSubzona
                                   )
                                 }
-                                className="unidadSubzona"
+                                className="unidadSubzona td__color"
                               >
                                 {groupedData[direccion].unidades[unidad]
                                   .subzonas[unidadSubzona].count -
@@ -853,13 +903,12 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                                           nomenclatura
                                         )
                                       }
-                                      className="nomenclatura"
+                                      className="nomenclatura td__color"
                                     >
-                                      {
-                                        groupedData[direccion].unidades[unidad]
-                                          .subzonas[unidadSubzona]
-                                          .nomenclaturas[nomenclatura].count
-                                      }
+                                      {groupedData[direccion].unidades[unidad]
+                                        .subzonas[unidadSubzona].nomenclaturas[
+                                        nomenclatura
+                                      ].count || ""}
                                     </td>
                                     {tipoDesplazamientoColumns.map(
                                       (tipo) =>
@@ -874,7 +923,7 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                                                 nomenclatura
                                               )
                                             }
-                                            className="nomenclatura"
+                                            className="nomenclatura td__color"
                                             key={tipo}
                                           >
                                             {groupedData[direccion].unidades[
@@ -882,7 +931,7 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                                             ].subzonas[unidadSubzona]
                                               .nomenclaturas[nomenclatura]
                                               .tipoDesplazamientoCounts[tipo] ||
-                                              0}
+                                              ""}
                                           </td>
                                         )
                                     )}
@@ -900,7 +949,7 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                                                 nomenclatura
                                               )
                                             }
-                                            className="nomenclatura"
+                                            className="nomenclatura td__color"
                                             key={tipo}
                                           >
                                             {groupedData[direccion].unidades[
@@ -909,7 +958,7 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                                               .nomenclaturas[nomenclatura]
                                               .tipoDesplazamientoIntCounts[
                                               tipo
-                                            ] || 0}
+                                            ] || ""}
                                           </td>
                                         )
                                     )}
@@ -923,7 +972,7 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                                           nomenclatura
                                         )
                                       }
-                                      className="nomenclatura"
+                                      className="nomenclatura td__color"
                                     >
                                       {groupedData[direccion].unidades[unidad]
                                         .subzonas[unidadSubzona].nomenclaturas[
@@ -992,7 +1041,7 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                                             </div>
                                           </td>
                                           <td
-                                            className="cargo"
+                                            className="cargo td__color"
                                             onClick={() =>
                                               toggleExpandCargo(
                                                 direccion,
@@ -1017,7 +1066,7 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                                                 tipo
                                               ] > 0 && (
                                                 <td
-                                                  className="cargo"
+                                                  className="cargo td__color"
                                                   onClick={() =>
                                                     toggleExpandCargo(
                                                       direccion,
@@ -1036,7 +1085,7 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                                                     .cargos[cargo]
                                                     .tipoDesplazamientoCounts[
                                                     tipo
-                                                  ] || 0}
+                                                  ] || ""}
                                                 </td>
                                               )
                                           )}
@@ -1047,7 +1096,7 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                                                 tipo
                                               ] > 0 && (
                                                 <td
-                                                  className="cargo"
+                                                  className="cargo td__color"
                                                   onClick={() =>
                                                     toggleExpandCargo(
                                                       direccion,
@@ -1066,7 +1115,7 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                                                     .cargos[cargo]
                                                     .tipoDesplazamientoIntCounts[
                                                     tipo
-                                                  ] || 0}
+                                                  ] || ""}
                                                 </td>
                                               )
                                           )}
@@ -1081,7 +1130,7 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                                                 cargo
                                               )
                                             }
-                                            className="cargo"
+                                            className="cargo td__color"
                                           >
                                             {groupedData[direccion].unidades[
                                               unidad
@@ -1131,17 +1180,13 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                                                 <td className="grado">
                                                   {grado}
                                                 </td>
-                                                <td className="grado">
-                                                  {
-                                                    groupedData[direccion]
-                                                      .unidades[unidad]
-                                                      .subzonas[unidadSubzona]
-                                                      .nomenclaturas[
-                                                      nomenclatura
-                                                    ].cargos[cargo].grados[
-                                                      grado
-                                                    ].count
-                                                  }
+                                                <td className="grado td__color">
+                                                  {groupedData[direccion]
+                                                    .unidades[unidad].subzonas[
+                                                    unidadSubzona
+                                                  ].nomenclaturas[nomenclatura]
+                                                    .cargos[cargo].grados[grado]
+                                                    .count || ""}
                                                 </td>
                                                 {tipoDesplazamientoColumns.map(
                                                   (tipo) =>
@@ -1150,7 +1195,7 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                                                       tipo
                                                     ] > 0 && (
                                                       <td
-                                                        className="grado"
+                                                        className="grado td__color"
                                                         key={tipo}
                                                       >
                                                         {groupedData[direccion]
@@ -1164,7 +1209,7 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                                                         ]
                                                           .tipoDesplazamientoCounts[
                                                           tipo
-                                                        ] || 0}
+                                                        ] || ""}
                                                       </td>
                                                     )
                                                 )}
@@ -1176,7 +1221,7 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                                                       tipo
                                                     ] > 0 && (
                                                       <td
-                                                        className="grado"
+                                                        className="grado td__color"
                                                         key={tipo}
                                                       >
                                                         {groupedData[direccion]
@@ -1190,12 +1235,12 @@ const ResumenThDirecciones = ({ serv, org, desp }) => {
                                                         ]
                                                           .tipoDesplazamientoIntCounts[
                                                           tipo
-                                                        ] || 0}
+                                                        ] || ""}
                                                       </td>
                                                     )
                                                 )}
 
-                                                <td className="grado">
+                                                <td className="grado td__color">
                                                   {groupedData[direccion]
                                                     .unidades[unidad].subzonas[
                                                     unidadSubzona

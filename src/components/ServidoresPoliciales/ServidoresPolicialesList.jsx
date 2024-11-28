@@ -4,6 +4,7 @@ import CardServidoresPoliciales from "./CardServidoresPoliciales";
 import useCrud from "../../hooks/useCrud";
 import CardServidor from "./CardServidor";
 import IsLoading from "../shared/IsLoading";
+import useAuth from "../../hooks/useAuth";
 
 const ServidoresPolicialesList = ({
   setFormIsClouse,
@@ -11,7 +12,7 @@ const ServidoresPolicialesList = ({
   setServidorEdit,
   servidorEdit,
 }) => {
-  const user = JSON.parse(localStorage.user ? localStorage.user : 0);
+  const [, , , , , , , , , , , getUserLogged, user] = useAuth();
   const superAdmin = import.meta.env.VITE_CI_SUPERADMIN;
   const [hide, setHide] = useState(true);
   const [servidor, setServidor] = useState("");
@@ -25,18 +26,23 @@ const ServidoresPolicialesList = ({
   const [desplazamiento, setDesplazamiento] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
+  useEffect(() => {
+    getUserLogged();
+  }, []);
+
   const desplazamientos = Array.from(
     new Set(
       servidorPolicial.flatMap((item) => {
-        const ultimoDesplazamiento = item.desplazamientos
-          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))   
-        const filtrado = ultimoDesplazamiento
-          .filter((d) => !d.fechaFinalización)  
-        return filtrado.length > 0 ? filtrado[0].tipoDesplazamiento : [];  
+        const ultimoDesplazamiento = item.desplazamientos.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        const filtrado = ultimoDesplazamiento.filter(
+          (d) => !d.fechaFinalización
+        );
+        return filtrado.length > 0 ? filtrado[0].tipoDesplazamiento : [];
       })
     )
   );
-  
 
   const servidorPolicialFiltered = servidorPolicial
     ?.slice()

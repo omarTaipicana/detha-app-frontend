@@ -5,8 +5,10 @@ import { useDispatch } from "react-redux";
 import { showAlert } from "../../store/states/alert.slice";
 import Alert from "../shared/Alert";
 import IsLoading from "../shared/IsLoading";
+import useAuth from "../../hooks/useAuth";
 
 const Funcion = ({ servidor, desplazamientos }) => {
+  const [, , , , , , , , , , , getUserLogged, user] = useAuth();
   const dispatch = useDispatch();
   const [hide, setHide] = useState(true);
   const [hideDelete, setHideDelete] = useState(true);
@@ -16,8 +18,8 @@ const Funcion = ({ servidor, desplazamientos }) => {
   const [isDisabled2, setIsDisabled2] = useState(false);
   const superAdmin = import.meta.env.VITE_CI_SUPERADMIN;
   const diasEdicion = import.meta.env.VITE_DIAS_EDICION;
-  const userCI = JSON.parse(localStorage.user ? localStorage.user : 0).cI;
-  const userLoggued = JSON.parse(localStorage.user ? localStorage.user : 0);
+  const userCI = user?.cI;
+  const userLoggued = user;
   const PATH_FUNCION = "/funcion";
   const PATH_VARIABLES = "/variables";
 
@@ -107,6 +109,7 @@ const Funcion = ({ servidor, desplazamientos }) => {
   };
 
   useEffect(() => {
+    getUserLogged();
     getFuncion(PATH_FUNCION);
     getVariables(PATH_VARIABLES);
   }, []);
@@ -275,22 +278,22 @@ const Funcion = ({ servidor, desplazamientos }) => {
                 <th style={{ border: "none", backgroundColor: "transparent" }}>
                   {((ultimoDesplazamiento &&
                     !ultimoDesplazamiento.fechaFinalización &&
-                    ultimoDesplazamiento.unidad === userLoggued.unidad &&
+                    ultimoDesplazamiento.unidad === userLoggued?.unidad &&
                     ultimoDesplazamiento.unidadSubzona ===
-                      userLoggued.unidadSubzona) ||
+                      userLoggued?.unidadSubzona) ||
                     (ultimoDesplazamiento &&
                       ultimoDesplazamiento.fechaPresentacion &&
                       ultimoDesplazamiento.fechaFinalización &&
                       ultimoDesplazamiento.unidadSubzona !==
-                        userLoggued.unidadSubzona) ||
+                        userLoggued?.unidadSubzona) ||
                     (ultimoDesplazamiento &&
                       ultimoDesplazamiento.fechaPresentacion &&
                       ultimoDesplazamiento.fechaFinalización &&
                       ultimoDesplazamiento.unidadSubzona ===
-                        userLoggued.unidadSubzona &&
-                      ultimoPase.unidadSubzona === userLoggued.unidadSubzona) ||
+                        userLoggued?.unidadSubzona &&
+                      ultimoPase.unidadSubzona === userLoggued?.unidadSubzona) ||
                     !ultimoDesplazamiento ||
-                    userLoggued.tipoDesignacion === "NOPERA" ||
+                    userLoggued?.tipoDesignacion === "NOPERA" ||
                     userCI === superAdmin ||
                     ultimoDesplazamiento.direccion === "OTROS") && (
                     <img
@@ -317,23 +320,23 @@ const Funcion = ({ servidor, desplazamientos }) => {
                     >
                       {((ultimoDesplazamiento &&
                         !ultimoDesplazamiento.fechaFinalización &&
-                        ultimoDesplazamiento.unidad === userLoggued.unidad &&
+                        ultimoDesplazamiento.unidad === userLoggued?.unidad &&
                         ultimoDesplazamiento.unidadSubzona ===
-                          userLoggued.unidadSubzona) ||
+                          userLoggued?.unidadSubzona) ||
                         (ultimoDesplazamiento &&
                           ultimoDesplazamiento.fechaPresentacion &&
                           ultimoDesplazamiento.fechaFinalización &&
                           ultimoDesplazamiento.unidadSubzona !==
-                            userLoggued.unidadSubzona) ||
+                            userLoggued?.unidadSubzona) ||
                         (ultimoDesplazamiento &&
                           ultimoDesplazamiento.fechaPresentacion &&
                           ultimoDesplazamiento.fechaFinalización &&
                           ultimoDesplazamiento.unidadSubzona ===
-                            userLoggued.unidadSubzona &&
+                            userLoggued?.unidadSubzona &&
                           ultimoPase.unidadSubzona ===
-                            userLoggued.unidadSubzona) ||
+                            userLoggued?.unidadSubzona) ||
                         !ultimoDesplazamiento ||
-                        userLoggued.tipoDesignacion === "NOPERA" ||
+                        userLoggued?.tipoDesignacion === "NOPERA" ||
                         userCI === superAdmin ||
                         ultimoDesplazamiento.direccion === "OTROS") && (
                         <img
@@ -343,7 +346,7 @@ const Funcion = ({ servidor, desplazamientos }) => {
                         />
                       )}
 
-                      {userLoggued.cI === superAdmin && (
+                      {userLoggued?.cI === superAdmin && (
                         <img
                           src="../../../delete.png"
                           className="btn__table"

@@ -10,6 +10,7 @@ const useAuth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState();
   const [handleRes, setHandleRes] = useState();
+  const [userLogged, setUserLogged] = useState();
 
   const registerUser = (data) => {
     setIsLoading(true);
@@ -36,7 +37,7 @@ const useAuth = () => {
       .then((res) => {
         // console.log(res.data);
         localStorage.setItem("token", res.data.token);
-        localStorage.setItem("user", JSON.stringify(res.data.user));
+        // localStorage.setItem("user", JSON.stringify(res.data.user));
         // navigate("/");
       })
       .catch((error) => {
@@ -111,20 +112,34 @@ const useAuth = () => {
       .finally(() => setIsLoading(false));
   };
 
-  const deleteUser = ( id) => {
+  const deleteUser = (id) => {
     setIsLoading(true);
     const url = `${urlBase}/users/${id}`;
     axios
-      .delete(url,  getConfigToken())
+      .delete(url, getConfigToken())
       .then((res) => {
         // console.log(res.data);
         setHandleRes(res.data);
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         setError(error);
       })
       .finally(() => setIsLoading(false));
+  };
+
+  const getUserLogged = () => {
+    const url = `${urlBase}/users/me`;
+    axios
+      .get(url, getConfigToken())
+      .then((res) => {
+        // console.log(res.data);
+        setUserLogged(res.data);
+      })
+      .catch((error) => {
+        // console.log(error);
+        setError(error);
+      });
   };
 
   return [
@@ -139,6 +154,9 @@ const useAuth = () => {
     updateUser,
     handleRes,
     deleteUser,
+    getUserLogged,
+    userLogged,
+    setUserLogged,
   ];
 };
 

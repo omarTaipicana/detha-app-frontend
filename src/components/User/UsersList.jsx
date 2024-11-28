@@ -4,14 +4,15 @@ import useAuth from "../../hooks/useAuth";
 import IsLoading from "../shared/IsLoading";
 
 const UsersList = ({ userEdit, setUserEdit, setFormIsClouse, newUser }) => {
-  const userCI = JSON.parse(localStorage.user ? localStorage.user : 0).cI;
+  const [, , , , , isLoading, users, getUsers, , , , getUserLogged, user] =
+    useAuth();
+  const userCI = user?.cI;
   const rolAdmin = import.meta.env.VITE_ROL_ADMIN;
   const rolSubAdmin = import.meta.env.VITE_ROL_SUB_ADMIN;
   const superAdmin = import.meta.env.VITE_CI_SUPERADMIN;
-  const userLoggued = JSON.parse(localStorage.user ? localStorage.user : 0);
+  const userLoggued = user;
 
   const [update, setUpdate] = useState(false);
-  const [, , , , err, isLoading, users, getUsers] = useAuth();
 
   const [selectedRol, setSelectedRol] = useState("");
   const [selectedDireccion, setSelectedDireccion] = useState("");
@@ -22,15 +23,15 @@ const UsersList = ({ userEdit, setUserEdit, setFormIsClouse, newUser }) => {
 
   const filteredUsersRol = users
     ?.filter((user) => {
-      if (userLoggued.cI === superAdmin) {
+      if (userLoggued?.cI === superAdmin) {
         return true;
       }
 
-      if (userLoggued.rol === rolAdmin) {
+      if (userLoggued?.rol === rolAdmin) {
         return user.cI !== userCI;
       }
 
-      if (userLoggued.rol === rolSubAdmin) {
+      if (userLoggued?.rol === rolSubAdmin) {
         return user.usuarioControl === userCI;
       }
 
@@ -82,6 +83,10 @@ const UsersList = ({ userEdit, setUserEdit, setFormIsClouse, newUser }) => {
         user.lastName.toLowerCase().includes(searchLower)
       );
     });
+
+  useEffect(() => {
+    getUserLogged();
+  }, []);
 
   useEffect(() => {
     getUsers();

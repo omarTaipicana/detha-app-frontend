@@ -29,6 +29,10 @@
   margin: 0 auto;
 }
 
+.img_hide_show_password {
+  width: 1.5em;
+}
+
 .login__card__btn {
   width: 30%;
   border: none;
@@ -64,6 +68,21 @@
 .input__login__card {
   font-size: 1em;
   text-align: center;
+  border: solid 0.1em var(--blackT-color);
+}
+
+.input__login__card__content {
+  font-size: 1em;
+  text-align: center;
+  display: flex;
+  border: solid 0.1em var(--blackT-color);
+}
+
+.input__password {
+  border: none;
+  width: 90%;
+  outline: none;
+  text-align: center;
 }
 
 .text__error {
@@ -75,14 +94,13 @@
 }
 
 @media (max-width: 600px) {
-
   .login__card {
     width: 100%;
     margin: 0 auto;
     padding: 0.2em;
     margin-top: 1em;
   }
-  
+
   .title__login__card {
     text-align: center;
     font-size: 1.5em;
@@ -90,7 +108,7 @@
     color: var(--blue-color);
     text-shadow: 1px 1px 3px black;
   }
-  
+
   .login__form {
     display: flex;
     flex-direction: column;
@@ -105,7 +123,7 @@
     width: 40%;
     margin: 0 auto;
   }
-  
+
   .login__card__btn {
     width: 30%;
     border: none;
@@ -128,7 +146,7 @@
     -webkit-transition: all 0.35s ease;
     transition: all 0.35s ease;
   }
-  
+
   .span__login__card {
     font-size: 1.4em;
     font-weight: 600;
@@ -137,12 +155,12 @@
     -webkit-text-stroke-color: var(--black-color);
     font-style: italic;
   }
-  
+
   .input__login__card {
     font-size: 1em;
     text-align: center;
   }
-  
+
   .text__err {
     font-size: 1.2em;
     font-weight: 700;
@@ -150,5 +168,4 @@
     color: var(--red-color);
     text-shadow: 1px 1px 3px var(--blue-color);
   }
-
 }

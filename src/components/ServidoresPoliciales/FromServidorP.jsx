@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import useCrud from "../../hooks/useCrud";
 import { useDispatch } from "react-redux";
 import { showAlert } from "../../store/states/alert.slice";
+import useAuth from "../../hooks/useAuth";
 
 const FromServidorP = ({
   formIsClouse,
@@ -11,7 +12,8 @@ const FromServidorP = ({
   servidorEdit,
   setServidorEdit,
 }) => {
-  const userCI = JSON.parse(localStorage.user ? localStorage.user : 0).cI;
+  const [, , , , , , , , , , , getUserLogged, user] = useAuth();
+  const userCI = user?.cI;
   const superAdmin = import.meta.env.VITE_CI_SUPERADMIN;
   const rolAdmin = import.meta.env.VITE_ROL_ADMIN;
   const PATH_SERVIDORES = "/servidores";
@@ -35,8 +37,8 @@ const FromServidorP = ({
   const [estadoCivil, getEstadoCivil, , , , ,] = useCrud();
   const [tipoDiscapacidad, getTipoDiscapacidad, , , , ,] = useCrud();
   const [etnia, getEtnia, , , , ,] = useCrud();
-  const userRol = JSON.parse(localStorage.user).rol;
-  const useCI = JSON.parse(localStorage.user).cI;
+  const userRol = user?.rol;
+  const useCI = user?.cI;
 
   const [cantonesOption, setCantonesOption] = useState([]);
   const [selectedProvincia, setSelectedProvincia] = useState("");
@@ -88,6 +90,7 @@ const FromServidorP = ({
   };
 
   useEffect(() => {
+    getUserLogged();
     getSenplades(PATH_SENPLADES);
     getEstadoCivil(PATH_VARIABLES);
     getTipoDiscapacidad(PATH_VARIABLES);

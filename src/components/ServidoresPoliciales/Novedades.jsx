@@ -5,8 +5,10 @@ import { useDispatch } from "react-redux";
 import { showAlert } from "../../store/states/alert.slice";
 import Alert from "../shared/Alert";
 import IsLoading from "../shared/IsLoading";
+import useAuth from "../../hooks/useAuth";
 
 const Novedades = ({ servidor, desplazamientos }) => {
+  const [, , , , , , , , , , , getUserLogged, user] = useAuth();
   const dispatch = useDispatch();
   const [hide, setHide] = useState(true);
   const [hideDelete, setHideDelete] = useState(true);
@@ -16,8 +18,8 @@ const Novedades = ({ servidor, desplazamientos }) => {
   const [isDisabled2, setIsDisabled2] = useState(false);
   const superAdmin = import.meta.env.VITE_CI_SUPERADMIN;
   const diasEdicion = import.meta.env.VITE_DIAS_EDICION;
-  const userCI = JSON.parse(localStorage.user ? localStorage.user : 0).cI;
-  const userLoggued = JSON.parse(localStorage.user ? localStorage.user : 0);
+  const userCI = user?.cI;
+  const userLoggued = user;
   const PATH_NOVEDADES = "/novedades";
   const PATH_VARIABLES = "/variables";
 
@@ -84,6 +86,7 @@ const Novedades = ({ servidor, desplazamientos }) => {
     setIsDisabled2(false);
     reset({
       novedad: "",
+      descripcion: "",
       tipoDocumento: "",
       numDocumento: "",
       suscribe: "",
@@ -129,6 +132,7 @@ const Novedades = ({ servidor, desplazamientos }) => {
   };
 
   useEffect(() => {
+    getUserLogged();
     getNovedad(PATH_NOVEDADES);
     getVariables(PATH_VARIABLES);
   }, []);
@@ -212,6 +216,7 @@ const Novedades = ({ servidor, desplazamientos }) => {
                 setHide(true);
                 reset({
                   novedad: "",
+                  descripcion: "",
                   tipoDocumento: "",
                   numDocumento: "",
                   suscribe: "",
@@ -241,6 +246,17 @@ const Novedades = ({ servidor, desplazamientos }) => {
                     </option>
                   ))}
               </select>
+            </label>
+
+            <label className="label__form">
+              <span className="span__form__info">Descrición: </span>
+              <input
+                disabled={isDisabled}
+                className="input__form__info"
+                type="text"
+                required
+                {...register("descripcion")}
+              />
             </label>
 
             <label className="label__form">
@@ -368,22 +384,23 @@ const Novedades = ({ servidor, desplazamientos }) => {
                 <th style={{ border: "none", backgroundColor: "transparent" }}>
                   {((ultimoDesplazamiento &&
                     !ultimoDesplazamiento.fechaFinalización &&
-                    ultimoDesplazamiento.unidad === userLoggued.unidad &&
+                    ultimoDesplazamiento.unidad === userLoggued?.unidad &&
                     ultimoDesplazamiento.unidadSubzona ===
-                      userLoggued.unidadSubzona) ||
+                      userLoggued?.unidadSubzona) ||
                     (ultimoDesplazamiento &&
                       ultimoDesplazamiento.fechaPresentacion &&
                       ultimoDesplazamiento.fechaFinalización &&
                       ultimoDesplazamiento.unidadSubzona !==
-                        userLoggued.unidadSubzona) ||
+                        userLoggued?.unidadSubzona) ||
                     (ultimoDesplazamiento &&
                       ultimoDesplazamiento.fechaPresentacion &&
                       ultimoDesplazamiento.fechaFinalización &&
                       ultimoDesplazamiento.unidadSubzona ===
-                        userLoggued.unidadSubzona &&
-                      ultimoPase.unidadSubzona === userLoggued.unidadSubzona) ||
+                        userLoggued?.unidadSubzona &&
+                      ultimoPase.unidadSubzona ===
+                        userLoggued?.unidadSubzona) ||
                     !ultimoDesplazamiento ||
-                    userLoggued.tipoDesignacion === "NOPERA" ||
+                    userLoggued?.tipoDesignacion === "NOPERA" ||
                     userCI === superAdmin ||
                     ultimoDesplazamiento.direccion === "OTROS") && (
                     <img
@@ -394,10 +411,11 @@ const Novedades = ({ servidor, desplazamientos }) => {
                   )}
                 </th>
                 <th>NOVEDAD</th>
+                <th>DESCRIPCIÓN</th>
                 <th>TIPO DE DOCUMENTO</th>
                 <th>NUMERO DE DOCUMENTO</th>
                 <th>FECHA DOCUMENTO</th>
-                <th>QUIEN SUSCRIBE</th>
+                <th>MEDICO QUE SUSCRIBE</th>
                 <th>FECHA INICIO</th>
                 <th>FECHA FINALIZACIÓN</th>
               </tr>
@@ -414,23 +432,23 @@ const Novedades = ({ servidor, desplazamientos }) => {
                     >
                       {((ultimoDesplazamiento &&
                         !ultimoDesplazamiento.fechaFinalización &&
-                        ultimoDesplazamiento.unidad === userLoggued.unidad &&
+                        ultimoDesplazamiento.unidad === userLoggued?.unidad &&
                         ultimoDesplazamiento.unidadSubzona ===
-                          userLoggued.unidadSubzona) ||
+                          userLoggued?.unidadSubzona) ||
                         (ultimoDesplazamiento &&
                           ultimoDesplazamiento.fechaPresentacion &&
                           ultimoDesplazamiento.fechaFinalización &&
                           ultimoDesplazamiento.unidadSubzona !==
-                            userLoggued.unidadSubzona) ||
+                            userLoggued?.unidadSubzona) ||
                         (ultimoDesplazamiento &&
                           ultimoDesplazamiento.fechaPresentacion &&
                           ultimoDesplazamiento.fechaFinalización &&
                           ultimoDesplazamiento.unidadSubzona ===
-                            userLoggued.unidadSubzona &&
+                            userLoggued?.unidadSubzona &&
                           ultimoPase.unidadSubzona ===
-                            userLoggued.unidadSubzona) ||
+                            userLoggued?.unidadSubzona) ||
                         !ultimoDesplazamiento ||
-                        userLoggued.tipoDesignacion === "NOPERA" ||
+                        userLoggued?.tipoDesignacion === "NOPERA" ||
                         userCI === superAdmin ||
                         ultimoDesplazamiento.direccion === "OTROS") && (
                         <img
@@ -440,7 +458,7 @@ const Novedades = ({ servidor, desplazamientos }) => {
                         />
                       )}
 
-                      {userLoggued.cI === superAdmin && (
+                      {userLoggued?.cI === superAdmin && (
                         <img
                           src="../../../delete.png"
                           className="btn__table"
@@ -449,6 +467,7 @@ const Novedades = ({ servidor, desplazamientos }) => {
                       )}
                     </td>
                     <td className="table__td">{novedad.novedad}</td>
+                    <td className="table__td">{novedad.descripcion}</td>
                     <td className="table__td">{novedad.tipoDocumento}</td>
                     <td className="table__td">{novedad.numDocumento}</td>
                     <td className="table__td">{novedad.fechaDocumento}</td>

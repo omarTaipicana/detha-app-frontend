@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./style/DireccionUnidad.css";
+import { useNavigate } from "react-router-dom";
 
 const DireccionUnidad = ({
   direccion,
@@ -17,6 +18,8 @@ const DireccionUnidad = ({
   servidores,
   desplazamientos,
 }) => {
+  const navigate = useNavigate();
+
   const [animatedAprobado, setAnimatedAprobado] = useState(0);
   const [animatedLegalizado, setAnimatedLegalizado] = useState(0);
   const [animatedDifference, setAnimatedDifference] = useState(0);
@@ -124,6 +127,7 @@ const DireccionUnidad = ({
     setDesp(desplazamientos);
     setLegalizado(legalizado);
     setAprobado(aprobado);
+    navigate(`/direcciones-unidades/${direccion.unidad.toLowerCase()}`);
   };
 
   return (

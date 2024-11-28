@@ -6,12 +6,13 @@ import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import domtoimage from "dom-to-image";
+import useAuth from "../../hooks/useAuth";
 
 const TablaOrganico = () => {
-  const urlBase = import.meta.env.VITE_API_URL;
-  const user = JSON.parse(localStorage.user ? localStorage.user : 0);
-  const tableRef = useRef(null);
+  const [, , , , , , , , , , , getUserLogged, user] = useAuth();
 
+  const urlBase = import.meta.env.VITE_API_URL;
+  const tableRef = useRef(null);
   const [organicos, setOrganicos] = useState([]);
   const [servidores, setServidores] = useState([]);
   const [filteredOrganicos, setFilteredOrganicos] = useState([]);
@@ -19,6 +20,7 @@ const TablaOrganico = () => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
   useEffect(() => {
+    getUserLogged();
     axios
       .get(`${urlBase}/organicos`, getConfigToken())
       .then((res) => {

@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { showAlert } from "../../store/states/alert.slice";
 import Alert from "../shared/Alert";
 import IsLoading from "../shared/IsLoading";
+import useAuth from "../../hooks/useAuth";
 
 const TipoDesplazamiento = ({
   servidor,
@@ -16,11 +17,12 @@ const TipoDesplazamiento = ({
   updateDesplazamineto,
 }) => {
   const dispatch = useDispatch();
+  const [, , , , , , , , , , , getUserLogged, user] = useAuth();
   const urlBase = import.meta.env.VITE_API_URL;
   const superAdmin = import.meta.env.VITE_CI_SUPERADMIN;
   const diasEdicion = import.meta.env.VITE_DIAS_EDICION;
-  const userCI = JSON.parse(localStorage.user ? localStorage.user : 0).cI;
-  const userLoggued = JSON.parse(localStorage.user ? localStorage.user : 0);
+  const userCI = user?.cI;
+  const userLoggued = user;
 
   const [selectedProvincia, setSelectedProvincia] = useState("");
   const [selectedCanton, setSelectedCanton] = useState("");
@@ -218,6 +220,7 @@ const TipoDesplazamiento = ({
   }, [watch("verificaPlanAccion"), setValue]);
 
   useEffect(() => {
+    getUserLogged();
     getDesplazamiento(PATH_DESPLAZAMIENTOS);
     getVariables(PATH_VARIABLES);
     getServidores(PATH_SERVIDORES);
@@ -630,48 +633,54 @@ const TipoDesplazamiento = ({
               </label>
             )}
 
-            <label className="label__form">
-              <span className="span__form__info">
-                Provincia Desplazamiento:
-              </span>
+            {watch("tipoDesplazamiento") !== "COMISIÓN AL EXTERIOR" && (
+              <label className="label__form">
+                <span className="span__form__info">
+                  Provincia Desplazamiento:
+                </span>
 
-              <select
-                {...register("provinciaDesplazamiento")}
-                required
-                className="select__form__info"
-                value={selectedProvincia}
-                onChange={(e) => handleProvinciaChange(e.target.value)}
-              >
-                <option value="">Seleccione la Provincia de residencia</option>
-                {[...new Set(senplades?.map((e) => e.provincia))].map(
-                  (provincia) => (
-                    <option key={provincia} value={provincia}>
-                      {provincia}
-                    </option>
-                  )
-                )}
-              </select>
-            </label>
-            <label className="label__form">
-              <span className="span__form__info">Cantón:</span>
+                <select
+                  {...register("provinciaDesplazamiento")}
+                  required
+                  className="select__form__info"
+                  value={selectedProvincia}
+                  onChange={(e) => handleProvinciaChange(e.target.value)}
+                >
+                  <option value="">
+                    Seleccione la Provincia de residencia
+                  </option>
+                  {[...new Set(senplades?.map((e) => e.provincia))].map(
+                    (provincia) => (
+                      <option key={provincia} value={provincia}>
+                        {provincia}
+                      </option>
+                    )
+                  )}
+                </select>
+              </label>
+            )}
+            {watch("tipoDesplazamiento") !== "COMISIÓN AL EXTERIOR" && (
+              <label className="label__form">
+                <span className="span__form__info">Cantón Desplazamiento:</span>
 
-              <select
-                {...register("cantonDesplazamiento")}
-                required
-                className="select__form__info"
-                value={selectedCanton}
-                onChange={(e) => setSelectedCanton(e.target.value)}
-              >
-                <option value="">Seleccione el Cantón de residencia</option>
-                {[...new Set(cantonesOption.map((e) => e.canton))].map(
-                  (canton) => (
-                    <option key={canton} value={canton}>
-                      {canton}
-                    </option>
-                  )
-                )}
-              </select>
-            </label>
+                <select
+                  {...register("cantonDesplazamiento")}
+                  required
+                  className="select__form__info"
+                  value={selectedCanton}
+                  onChange={(e) => setSelectedCanton(e.target.value)}
+                >
+                  <option value="">Seleccione el Cantón de residencia</option>
+                  {[...new Set(cantonesOption.map((e) => e.canton))].map(
+                    (canton) => (
+                      <option key={canton} value={canton}>
+                        {canton}
+                      </option>
+                    )
+                  )}
+                </select>
+              </label>
+            )}
 
             <label className="label__form">
               <span className="span__form__info">Causa del Desplazamiento</span>
@@ -799,22 +808,23 @@ const TipoDesplazamiento = ({
                 <th style={{ border: "none", backgroundColor: "transparent" }}>
                   {((ultimoDesplazamiento &&
                     !ultimoDesplazamiento.fechaFinalización &&
-                    ultimoDesplazamiento.unidad === userLoggued.unidad &&
+                    ultimoDesplazamiento.unidad === userLoggued?.unidad &&
                     ultimoDesplazamiento.unidadSubzona ===
-                      userLoggued.unidadSubzona) ||
+                      userLoggued?.unidadSubzona) ||
                     (ultimoDesplazamiento &&
                       ultimoDesplazamiento.fechaPresentacion &&
                       ultimoDesplazamiento.fechaFinalización &&
                       ultimoDesplazamiento.unidadSubzona !==
-                        userLoggued.unidadSubzona) ||
+                        userLoggued?.unidadSubzona) ||
                     (ultimoDesplazamiento &&
                       ultimoDesplazamiento.fechaPresentacion &&
                       ultimoDesplazamiento.fechaFinalización &&
                       ultimoDesplazamiento.unidadSubzona ===
-                        userLoggued.unidadSubzona &&
-                      ultimoPase.unidadSubzona === userLoggued.unidadSubzona) ||
+                        userLoggued?.unidadSubzona &&
+                      ultimoPase.unidadSubzona ===
+                        userLoggued?.unidadSubzona) ||
                     !ultimoDesplazamiento ||
-                    userLoggued.tipoDesignacion === "NOPERA" ||
+                    userLoggued?.tipoDesignacion === "NOPERA" ||
                     userCI === superAdmin ||
                     ultimoDesplazamiento?.direccion === "OTROS") && (
                     <img
@@ -858,23 +868,23 @@ const TipoDesplazamiento = ({
                     >
                       {((ultimoDesplazamiento &&
                         !ultimoDesplazamiento.fechaFinalización &&
-                        ultimoDesplazamiento.unidad === userLoggued.unidad &&
+                        ultimoDesplazamiento.unidad === userLoggued?.unidad &&
                         ultimoDesplazamiento.unidadSubzona ===
-                          userLoggued.unidadSubzona) ||
+                          userLoggued?.unidadSubzona) ||
                         (ultimoDesplazamiento &&
                           ultimoDesplazamiento.fechaPresentacion &&
                           ultimoDesplazamiento.fechaFinalización &&
                           ultimoDesplazamiento.unidadSubzona !==
-                            userLoggued.unidadSubzona) ||
+                            userLoggued?.unidadSubzona) ||
                         (ultimoDesplazamiento &&
                           ultimoDesplazamiento.fechaPresentacion &&
                           ultimoDesplazamiento.fechaFinalización &&
                           ultimoDesplazamiento.unidadSubzona ===
-                            userLoggued.unidadSubzona &&
+                            userLoggued?.unidadSubzona &&
                           ultimoPase.unidadSubzona ===
-                            userLoggued.unidadSubzona) ||
+                            userLoggued?.unidadSubzona) ||
                         !ultimoDesplazamiento ||
-                        userLoggued.tipoDesignacion === "NOPERA" ||
+                        userLoggued?.tipoDesignacion === "NOPERA" ||
                         userCI === superAdmin ||
                         ultimoDesplazamiento?.direccion === "OTROS") && (
                         <img
@@ -886,7 +896,7 @@ const TipoDesplazamiento = ({
                         />
                       )}
 
-                      {userLoggued.cI === superAdmin && (
+                      {userLoggued?.cI === superAdmin && (
                         <img
                           src="../../../delete.png"
                           className="btn__table"

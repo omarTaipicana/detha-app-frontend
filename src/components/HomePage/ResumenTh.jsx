@@ -383,40 +383,48 @@ const ResumenTh = () => {
     if (latestDesplazamientos) {
       const tipo = latestDesplazamientos.tipoDesplazamiento;
 
-      acc[direccion].tipoDesplazamientoCounts[tipo] =
-        (acc[direccion].tipoDesplazamientoCounts[tipo] || 0) + 1;
+      if (latestDesplazamientos.direccion !== direccion) {
+        acc[direccion].tipoDesplazamientoCounts[tipo] =
+          (acc[direccion].tipoDesplazamientoCounts[tipo] || 0) + 1;
 
-      acc[latestDesplazamientos?.direccion].tipoDesplazamientoIntCounts[tipo] =
-        (acc[latestDesplazamientos?.direccion].tipoDesplazamientoIntCounts[
+        acc[latestDesplazamientos?.direccion].tipoDesplazamientoIntCounts[
           tipo
-        ] || 0) + 1;
+        ] =
+          (acc[latestDesplazamientos?.direccion].tipoDesplazamientoIntCounts[
+            tipo
+          ] || 0) + 1;
+      }
 
-      acc[direccion].unidades[unidad].tipoDesplazamientoCounts[tipo] =
-        (acc[direccion].unidades[unidad].tipoDesplazamientoCounts[tipo] || 0) +
-        1;
+      if (latestDesplazamientos.unidad !== unidad) {
+        acc[direccion].unidades[unidad].tipoDesplazamientoCounts[tipo] =
+          (acc[direccion].unidades[unidad].tipoDesplazamientoCounts[tipo] ||
+            0) + 1;
 
-      acc[latestDesplazamientos?.direccion].unidades[
-        latestDesplazamientos?.unidad
-      ].tipoDesplazamientoIntCounts[tipo] =
-        (acc[latestDesplazamientos?.direccion].unidades[
+        acc[latestDesplazamientos?.direccion].unidades[
           latestDesplazamientos?.unidad
-        ].tipoDesplazamientoIntCounts[tipo] || 0) + 1;
+        ].tipoDesplazamientoIntCounts[tipo] =
+          (acc[latestDesplazamientos?.direccion].unidades[
+            latestDesplazamientos?.unidad
+          ].tipoDesplazamientoIntCounts[tipo] || 0) + 1;
+      }
 
-      acc[direccion].unidades[unidad].subzonas[
-        unidadSubzona
-      ].tipoDesplazamientoCounts[tipo] =
-        (acc[direccion].unidades[unidad].subzonas[unidadSubzona]
-          .tipoDesplazamientoCounts[tipo] || 0) + 1;
+      if (latestDesplazamientos.unidadSubzona !== unidadSubzona) {
+        acc[direccion].unidades[unidad].subzonas[
+          unidadSubzona
+        ].tipoDesplazamientoCounts[tipo] =
+          (acc[direccion].unidades[unidad].subzonas[unidadSubzona]
+            .tipoDesplazamientoCounts[tipo] || 0) + 1;
 
-      acc[latestDesplazamientos?.direccion].unidades[
-        latestDesplazamientos?.unidad
-      ].subzonas[
-        latestDesplazamientos?.unidadSubzona
-      ].tipoDesplazamientoIntCounts[tipo] =
-        (acc[latestDesplazamientos?.direccion].unidades[
+        acc[latestDesplazamientos?.direccion].unidades[
           latestDesplazamientos?.unidad
-        ].subzonas[latestDesplazamientos?.unidadSubzona]
-          .tipoDesplazamientoIntCounts[tipo] || 0) + 1;
+        ].subzonas[
+          latestDesplazamientos?.unidadSubzona
+        ].tipoDesplazamientoIntCounts[tipo] =
+          (acc[latestDesplazamientos?.direccion].unidades[
+            latestDesplazamientos?.unidad
+          ].subzonas[latestDesplazamientos?.unidadSubzona]
+            .tipoDesplazamientoIntCounts[tipo] || 0) + 1;
+      }
 
       acc[direccion].unidades[unidad].subzonas[unidadSubzona].nomenclaturas[
         nomenclatura

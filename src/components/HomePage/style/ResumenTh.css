@@ -1,18 +1,263 @@
-table th:first-child,
-table td:first-child {
-  width: 30em;
+.table__desp__close {
+  transform: scale(0);
+}
+
+.table__desp__container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--white-color);
+  transition: transform 1000ms ease;
+  overflow-y: auto;
+  padding: 0 2em;
+  box-sizing: border-box;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.table__desp{
+  margin-bottom: 13em;
+}
+
+.fondo__DIGIN::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/DIGIN.png");
+}
+
+.fondo__DINAF::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/DINAF.png");
+}
+
+.fondo__DNPJ::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/DNPJ.png");
+}
+
+.fondo__DNA::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/DNA.png");
+}
+
+.fondo__DINASED::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/DINASED.png");
+}
+
+.fondo__DINITEC::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/DINITEC.png");
+}
+
+.fondo__DINIC::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/DINIC.png");
+}
+
+.fondo__UDT::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/UDT.png");
+}
+
+.fondo__AMERIPOL::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/AMERIPOL.png");
+}
+
+.fondo__UIAD::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/UIAD.png");
+}
+
+.fondo__UNDP::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/UNDP.png");
+}
+
+.fondo__REGPOL::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/REGPOL.png");
+}
+
+.fondo__UNRED::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/UNRED.png");
+}
+
+.fondo__INTERPOL::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/INTERPOL.png");
+}
+
+.fondo__ULCO::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/ULCO.png");
+}
+
+.fondo__CIBERPOL::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/CIBERPOL.png");
+}
+
+.fondo__UNIT::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/UNIT.png");
+}
+
+.fondo__UNPROV::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/UNPROV.png");
+}
+
+.fondo__UNAI::before {
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.2)
+    ),
+    url("../../../logos/UNAI.png");
+}
+
+.table__desp__container::before {
+  content: "";
+  position: fixed;
+  top: 5em;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
+  transform: skewY(-8deg);
+  opacity: 0.1;
+  z-index: -1;
+}
+
+
+.table__desp__title {
+  font-size: 3em;
+  color: var(--blue-color);
+  text-shadow: 1px 1px 3px var(--black-color);
+  top: 0;
+  background-color: white;
+  border: none;
+  height: 2.5em;
+}
+
+.table__desp__thead {
+  position: sticky;
+  top: 0;
+}
+
+.table__desp td:first-child {
+  min-width: 20em;
+  font-size: 1.2em;
+}
+
+.table__desp th:first-child {
+  font-size: 1.2em;
+}
+
+.table__desp__tr__encab * {
+  font-size: 1.1em;
+}
+
+.table__desp__tbody * {
+  font-size: 1.2em;
 }
 
 .direccion {
   background-color: #ffffff;
   text-align: center;
 }
+
+.td__color {
+  color: rgb(175, 76, 5);
+  font-weight: 600;
+}
 .flecha {
   display: flex;
   justify-content: space-between;
 }
+
 .img__flecha__direccion {
-  width: 1em;
+  width: 0.7em;
+  cursor: pointer;
 }
 
 .unidad {
@@ -22,6 +267,8 @@ table td:first-child {
 .img__flecha__unidad {
   width: 1em;
   margin-right: 1.5em;
+  width: 0.7em;
+  cursor: pointer;
 }
 
 .unidadSubzona {
@@ -31,6 +278,8 @@ table td:first-child {
 .img__flecha__unidadSubzona {
   width: 1em;
   margin-right: 3em;
+  width: 0.7em;
+  cursor: pointer;
 }
 
 .nomenclatura {
@@ -40,18 +289,24 @@ table td:first-child {
 .img__flecha__nomenclatura {
   width: 1em;
   margin-right: 4.5em;
+  width: 0.7em;
+  cursor: pointer;
 }
 
 .cargo {
-  background-color: #848485;
+  background-color: #cbcbce;
   text-align: center;
 }
 .img__flecha__cargo {
   width: 1em;
   margin-right: 6em;
+  width: 0.7em;
+  cursor: pointer;
 }
 
 .grado {
   background-color: #ffffff;
   text-align: center;
 }
+
+

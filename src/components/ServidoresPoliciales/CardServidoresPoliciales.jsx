@@ -3,6 +3,7 @@ import "./style/CardServidoresPoliciales.css";
 import useCrud from "../../hooks/useCrud";
 import { useDispatch } from "react-redux";
 import { showAlert } from "../../store/states/alert.slice";
+import useAuth from "../../hooks/useAuth";
 
 const CardServidoresPoliciales = ({
   servidorPolicial,
@@ -13,11 +14,12 @@ const CardServidoresPoliciales = ({
   setUpdatedelete,
   updatedelete,
 }) => {
+  const [, , , , , , , , , , , getUserLogged, user] = useAuth();
   const superAdmin = import.meta.env.VITE_CI_SUPERADMIN;
   const PATH_SERVIDORES = "/servidores";
   const dispatch = useDispatch();
 
-  const userLoggued = JSON.parse(localStorage.user ? localStorage.user : 0);
+  const userLoggued = user;
   const [hideDelete, setHideDelete] = useState(true);
   const [showTooltip, setShowTooltip] = useState(false);
   const [
@@ -32,6 +34,10 @@ const CardServidoresPoliciales = ({
     deleteReg,
     updateReg,
   ] = useCrud();
+
+  useEffect(() => {
+    getUserLogged();
+  }, []);
 
   useEffect(() => {
     if (error) {
@@ -109,46 +115,46 @@ const CardServidoresPoliciales = ({
 
   const direccion =
     desplazamientoVigente &&
-    (userLoggued.unidadSubzona === "Planta Administrativa DIGIN" &&
+    (userLoggued?.unidadSubzona === "Planta Administrativa DIGIN" &&
     desplazamientoVigente?.direccion === "OTROS"
       ? "der"
-      : userLoggued.unidadSubzona === "Planta Administrativa DIGIN" &&
+      : userLoggued?.unidadSubzona === "Planta Administrativa DIGIN" &&
         desplazamientoVigente?.direccion !== "OTROS"
       ? undefined
-      : userLoggued.tipoDesignacion === "NOPERA" &&
-        userLoggued.direccion === desplazamientoVigente?.direccion &&
-        userLoggued.direccion !== ultimoPase?.direccion &&
-        userLoggued.unidad !== ultimoPase?.unidad &&
-        userLoggued.unidadSubzona !== desplazamientoVigente?.unidadSubzona
+      : userLoggued?.tipoDesignacion === "NOPERA" &&
+        userLoggued?.direccion === desplazamientoVigente?.direccion &&
+        userLoggued?.direccion !== ultimoPase?.direccion &&
+        userLoggued?.unidad !== ultimoPase?.unidad &&
+        userLoggued?.unidadSubzona !== desplazamientoVigente?.unidadSubzona
       ? "izq"
-      : userLoggued.tipoDesignacion === "NOPERA" &&
-        userLoggued.direccion === desplazamientoVigente?.direccion &&
-        userLoggued.unidad !== desplazamientoVigente?.unidad &&
-        userLoggued.unidadSubzona !== desplazamientoVigente?.unidadSubzona
+      : userLoggued?.tipoDesignacion === "NOPERA" &&
+        userLoggued?.direccion === desplazamientoVigente?.direccion &&
+        userLoggued?.unidad !== desplazamientoVigente?.unidad &&
+        userLoggued?.unidadSubzona !== desplazamientoVigente?.unidadSubzona
       ? undefined
-      : userLoggued.tipoDesignacion === "NOPERA" &&
-        userLoggued.unidad === desplazamientoVigente?.unidad &&
-        userLoggued.unidad !== ultimoPase?.unidad &&
-        userLoggued.unidadSubzona !== desplazamientoVigente?.unidadSubzona
+      : userLoggued?.tipoDesignacion === "NOPERA" &&
+        userLoggued?.unidad === desplazamientoVigente?.unidad &&
+        userLoggued?.unidad !== ultimoPase?.unidad &&
+        userLoggued?.unidadSubzona !== desplazamientoVigente?.unidadSubzona
       ? "izq"
-      : userLoggued.tipoDesignacion === "NOPERA" &&
-        userLoggued.unidad === desplazamientoVigente?.unidad &&
-        userLoggued.unidadSubzona !== desplazamientoVigente?.unidadSubzona
+      : userLoggued?.tipoDesignacion === "NOPERA" &&
+        userLoggued?.unidad === desplazamientoVigente?.unidad &&
+        userLoggued?.unidadSubzona !== desplazamientoVigente?.unidadSubzona
       ? undefined
-      : userLoggued.tipoDesignacion === "NOPERA" &&
-        userLoggued.unidad !== desplazamientoVigente?.unidad
+      : userLoggued?.tipoDesignacion === "NOPERA" &&
+        userLoggued?.unidad !== desplazamientoVigente?.unidad
       ? "der"
-      : userLoggued.tipoDesignacion === "NOPERA" &&
-        userLoggued.unidad !== desplazamientoVigente?.unidad &&
-        userLoggued.direccion !== desplazamientoVigente?.direccion
+      : userLoggued?.tipoDesignacion === "NOPERA" &&
+        userLoggued?.unidad !== desplazamientoVigente?.unidad &&
+        userLoggued?.direccion !== desplazamientoVigente?.direccion
       ? "izq"
-      : userLoggued.tipoDesignacion === "NOPERA" &&
-        userLoggued.unidad === desplazamientoVigente?.unidad
+      : userLoggued?.tipoDesignacion === "NOPERA" &&
+        userLoggued?.unidad === desplazamientoVigente?.unidad
       ? "izq"
-      : userLoggued.unidadSubzona === desplazamientoVigente?.unidadSubzona &&
-        userLoggued.unidad !== desplazamientoVigente?.unidad
+      : userLoggued?.unidadSubzona === desplazamientoVigente?.unidadSubzona &&
+        userLoggued?.unidad !== desplazamientoVigente?.unidad
       ? "der"
-      : userLoggued.unidadSubzona !== desplazamientoVigente?.unidadSubzona
+      : userLoggued?.unidadSubzona !== desplazamientoVigente?.unidadSubzona
       ? "der"
       : "izq");
 
@@ -253,7 +259,7 @@ const CardServidoresPoliciales = ({
           src="../../../edit.png"
           alt=""
         />
-        {userLoggued.cI === superAdmin && (
+        {userLoggued?.cI === superAdmin && (
           <img
             onClick={handleHideDelete}
             className="btn__expand"

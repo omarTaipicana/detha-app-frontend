@@ -1,20 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./styles/PrincipalHeader.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { showAlert } from "../../store/states/alert.slice";
 import Alert from "./Alert";
+import useAuth from "../../hooks/useAuth";
 
 const PrincipalHeader = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = JSON.parse(localStorage.user ? localStorage.user : 0);
-  const userRol = JSON.parse(localStorage.user ? localStorage.user : 0).rol;
-  const userCI = JSON.parse(localStorage.user ? localStorage.user : 0).cI;
+  const [, , , , , , , , , , , getUserLogged, user, setUserLogged] = useAuth();
+  const userRol = user?.rol;
+  const userCI = user?.cI;
   const superAdmin = import.meta.env.VITE_CI_SUPERADMIN;
   const rolAdmin = import.meta.env.VITE_ROL_ADMIN;
   const rolSubAdmin = import.meta.env.VITE_ROL_SUB_ADMIN;
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (token) {
+      getUserLogged();
+    }
+
+    if (!token) {
+      setUserLogged(null);
+    }
+  }, [token]);
 
   const handleLogout = () => {
     if (user) {
@@ -54,7 +66,13 @@ const PrincipalHeader = () => {
           <span className="greeting__text">
             {user ? `${user.unidad} - ${user.unidadSubzona}` : ""}
           </span>
-          <button className="link__principal__header" onClick={handleLogout}>
+          <button
+            style={{
+              display: token ? "flex" : "none",
+            }}
+            className="link__principal__header"
+            onClick={handleLogout}
+          >
             <img className="img__exit" src="../../../../exit.png" alt="" />
             Salir
           </button>
@@ -63,7 +81,7 @@ const PrincipalHeader = () => {
       <nav
         className="nav__principal"
         style={{
-          display: user ? "flex" : "none",
+          display: token ? "flex" : "none",
         }}
       >
         <Link className="link__nav" to="/">

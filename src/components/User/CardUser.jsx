@@ -15,7 +15,6 @@ const CardUser = ({
   const rolAdmin = import.meta.env.VITE_ROL_ADMIN;
   const rolSubAdmin = import.meta.env.VITE_ROL_SUB_ADMIN;
   const superAdmin = import.meta.env.VITE_CI_SUPERADMIN;
-  const userLoggued = JSON.parse(localStorage.user ? localStorage.user : 0);
   const dispatch = useDispatch();
   const [hideDelete, setHideDelete] = useState(true);
   const [
@@ -30,7 +29,13 @@ const CardUser = ({
     updateUser,
     handleRes,
     deleteUser,
+    getUserLogged,
+    userLoggued,
   ] = useAuth();
+
+  useEffect(() => {
+    getUserLogged();
+  }, []);
 
   const handleEdituser = () => {
     setUserEdit(user);
@@ -65,7 +70,7 @@ const CardUser = ({
         <ul className="card__ul">
           <li className="card__li__img">
             <img onClick={handleEdituser} src="../../../edit.png" alt="" />
-            {userLoggued.cI === superAdmin && (
+            {userLoggued?.cI === superAdmin && (
               <img
                 onClick={handleHideDelete}
                 src="../../../delete.png"

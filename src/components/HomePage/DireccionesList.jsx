@@ -66,6 +66,7 @@ const DireccionesList = () => {
       setShow(true);
     }
   };
+
   return (
     <div className="direcciones__list__content">
       <section>
@@ -129,7 +130,7 @@ const DireccionesList = () => {
         </article>
       </section>
       {show && isLoading && <IsLoading />}
-      {show && loadingCompleted && (
+      {/* {show && loadingCompleted && (
         <DireccionUnidadInfo
           setShow={setShow}
           serv={serv}
@@ -138,7 +139,7 @@ const DireccionesList = () => {
           legalizado={legalizado}
           aprobado={aprobado}
         />
-      )}
+      )} */}
     </div>
   );
 };
