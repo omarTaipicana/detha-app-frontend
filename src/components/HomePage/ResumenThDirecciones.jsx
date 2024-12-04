@@ -553,13 +553,17 @@ const ResumenThDirecciones = ({
               DIRECC / UNI / SUBZ / NOMEN / CARGO
             </th>
             <th rowSpan={2}>LEGALIZADOS</th>
-            <th colSpan={tipoDesplazamientoColumns.length}>
-              FUERA DE LA UNIDAD
-            </th>
+            {tipoDesplazamientoColumns.length > 0 && (
+              <th colSpan={tipoDesplazamientoColumns.length}>
+                FUERA DE LA UNIDAD
+              </th>
+            )}
 
-            <th colSpan={tipoDesplazamientoColumns.length}>
-              DENTRO DE LA UNIDAD
-            </th>
+            {tipoDesplazamientoColumns.length > 0 && (
+              <th colSpan={tipoDesplazamientoColumns.length}>
+                DENTRO DE LA UNIDAD
+              </th>
+            )}
 
             <th rowSpan={2}>TOTAL LABORANDO</th>
           </tr>

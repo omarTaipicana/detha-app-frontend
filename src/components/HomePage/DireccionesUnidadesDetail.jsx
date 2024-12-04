@@ -22,7 +22,7 @@ const DireccionesUnidadesDetail = () => {
   const [showtableNov, setShowtableNov] = useState(false);
 
   // --------------------------------------------------------------------
-  // EXTRAER
+  // TRAER
   useEffect(() => {
     getOrganico(PATH_ORGANICOS);
     getServidores(PATH__SERVIDORES);
@@ -89,6 +89,7 @@ const DireccionesUnidadesDetail = () => {
       processDesp(data);
     }
   }, [servidores, code]);
+  
 
   // --------------------------------------------------------------------
   // FILTRAR SEGUN CODE
@@ -381,7 +382,7 @@ const DireccionesUnidadesDetail = () => {
                 </ul>
                 <div className="direccion__unidad__laborando__content">
                   <span className="direccion__unidad__laborando__span__label">
-                    PERSONAL EFECTIVO Y DISPONIBLE{" "}
+                    PERSONAL EFECTIVO Y DISPONIBLE
                   </span>
                   <img
                     className="direccion__unidad__img__flecha"
