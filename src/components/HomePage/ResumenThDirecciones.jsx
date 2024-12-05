@@ -1268,6 +1268,7 @@ const ResumenThDirecciones = ({
                                                         ] || 0),
                                                       0
                                                     ) +
+                                                    
                                                     tipoDesplazamientoColumns.reduce(
                                                       (acc, tipo) =>
                                                         acc +
