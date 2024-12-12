@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router-dom";
-import "./App.css";
 import Login from "./pages/Login";
 import PrincipalHeader from "./components/shared/PrincipalHeader";
 import HomePage from "./pages/HomePage";
@@ -22,22 +21,27 @@ function App() {
     <div>
       <PrincipalHeader />
       <Routes>
+        {/* Rutas públicas */}
         <Route path="/login" element={<Login />} />
         <Route path="/reset_password" element={<ResetPassword />} />
         <Route path="/reset_password/:code" element={<ChangePassword />} />
-
+        
+        {/* Rutas protegidas (usuario autenticado) */}
         <Route element={<ProtectedRoutes />}>
           <Route path="/inactive" element={<InactivePage />} />
 
+          {/* Rutas de usuario activo */}
           <Route element={<UserActiveRoutes />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/direcciones-unidades/:code" element={<DireccionesUnidadesDetail />} />
             <Route path="/servidores" element={<ServidoresPoliciales />} />
             <Route path="/partediario" element={<ParteDiario />} />
 
+            {/* Rutas de subadmin */}
             <Route element={<SubAdminRoutes />}>
               <Route path="/create_users" element={<UsersContent />} />
-
+              
+              {/* Rutas de admin */}
               <Route element={<AdminRoutes />}>
                 <Route path="/admin" element={<PageAdmin />} />
               </Route>
