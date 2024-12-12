@@ -59,22 +59,22 @@ const ServidoresPolicialesList = ({
       const hoy = new Date();
       hoy.setHours(0, 0, 0, 0);
 
-      if (user.cI === superAdmin) {
+      if (user?.cI === superAdmin) {
         return serv.id;
       }
 
       if (serv.pases.length === 0) {
-        return serv.usuarioRegistro === user.cI;
+        return serv.usuarioRegistro === user?.cI;
       }
 
       if (
         ultimoPase.direccion === "OTROS" &&
         serv.desplazamientos.length === 0
       ) {
-        return serv.usuarioRegistro === user.cI;
+        return serv.usuarioRegistro === user?.cI;
       }
 
-      if (user.unidadSubzona === "Planta Administrativa DIGIN") {
+      if (user?.unidadSubzona === "Planta Administrativa DIGIN") {
         return ultimoPase.direccion !== "OTROS";
       }
 
@@ -82,32 +82,32 @@ const ServidoresPolicialesList = ({
         ultimoDesplazamiento &&
         new Date(ultimoDesplazamiento?.fechaPresentacion) <= hoy &&
         !ultimoDesplazamiento?.fechaFinalización &&
-        user.unidadSubzona.slice(0, 21) === "Planta Administrativa"
+        user?.unidadSubzona.slice(0, 21) === "Planta Administrativa"
       ) {
         return (
-          ultimoPase.direccion === user.direccion ||
-          ultimoDesplazamiento?.direccion === user.direccion
+          ultimoPase.direccion === user?.direccion ||
+          ultimoDesplazamiento?.direccion === user?.direccion
         );
       }
 
-      if (user.unidadSubzona.slice(0, 21) === "Planta Administrativa") {
-        return ultimoPase.direccion === user.direccion;
+      if (user?.unidadSubzona.slice(0, 21) === "Planta Administrativa") {
+        return ultimoPase.direccion === user?.direccion;
       }
 
       if (
         ultimoDesplazamiento &&
         new Date(ultimoDesplazamiento?.fechaPresentacion) <= hoy &&
         !ultimoDesplazamiento?.fechaFinalización &&
-        user.tipoDesignacion === "NOPERA"
+        user?.tipoDesignacion === "NOPERA"
       ) {
         return (
-          ultimoPase?.unidad === user.unidad ||
-          ultimoDesplazamiento?.unidad === user.unidad
+          ultimoPase?.unidad === user?.unidad ||
+          ultimoDesplazamiento?.unidad === user?.unidad
         );
       }
 
-      if (user.tipoDesignacion === "NOPERA") {
-        return ultimoPase.unidad === user.unidad;
+      if (user?.tipoDesignacion === "NOPERA") {
+        return ultimoPase.unidad === user?.unidad;
       }
 
       if (
@@ -116,21 +116,21 @@ const ServidoresPolicialesList = ({
         !ultimoDesplazamiento?.fechaFinalización
       ) {
         return (
-          (ultimoDesplazamiento?.unidadSubzona === user.unidadSubzona &&
-            ultimoDesplazamiento?.unidad === user.unidad) ||
-          (ultimoPase.unidadSubzona === user.unidadSubzona &&
-            ultimoPase.unidad === user.unidad)
+          (ultimoDesplazamiento?.unidadSubzona === user?.unidadSubzona &&
+            ultimoDesplazamiento?.unidad === user?.unidad) ||
+          (ultimoPase.unidadSubzona === user?.unidadSubzona &&
+            ultimoPase.unidad === user?.unidad)
         );
       }
 
       return (
-        ultimoPase.unidadSubzona === user.unidadSubzona &&
-        ultimoPase.unidad === user.unidad
+        ultimoPase.unidadSubzona === user?.unidadSubzona &&
+        ultimoPase.unidad === user?.unidad
       );
     });
 
   const filterServ = (user, ignoreSelected = {}) => {
-    const ultimoPase = user.pases
+    const ultimoPase = user?.pases
       ?.slice()
       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
 
