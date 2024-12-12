@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CardUser from "./CardUser";
+import "./styles/CardUsers.css"
 import useAuth from "../../hooks/useAuth";
 import IsLoading from "../shared/IsLoading";
 

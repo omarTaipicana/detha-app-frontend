@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./style/CardServidoresPoliciales.css";
+import "./style/CardServidor.css";
 import CardServidoresPoliciales from "./CardServidoresPoliciales";
 import useCrud from "../../hooks/useCrud";
 import CardServidor from "./CardServidor";
