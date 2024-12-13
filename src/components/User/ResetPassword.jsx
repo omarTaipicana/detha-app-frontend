@@ -5,7 +5,7 @@ import useAuth from "../../hooks/useAuth";
 import IsLoading from "../../components/shared/IsLoading";
 import { useDispatch } from "react-redux";
 import { showAlert } from "../../store/states/alert.slice";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 const ResetPassword = () => {
   const dispatch = useDispatch();

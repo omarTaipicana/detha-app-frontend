@@ -8,11 +8,12 @@ import { useDispatch } from "react-redux";
 import { showAlert } from "../../store/states/alert.slice";
 
 const ChangePassword = () => {
+  const [show, setShow] = useState(false);
+  const [show2, setShow2] = useState(false);
   const { code: code } = useParams();
   const dispatch = useDispatch();
   const { register, handleSubmit, reset } = useForm();
-  const [, , verifyUser, , error, isLoading] =
-    useAuth();
+  const [, , verifyUser, , error, isLoading] = useAuth();
 
   useEffect(() => {
     if (error) {
@@ -69,25 +70,42 @@ const ChangePassword = () => {
             <span className="span__change__password__card">
               Escriba su nueva Contraseña
             </span>
-            <input
-              className="input__change__password__card"
-              type="password"
-              required
-              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$"
-              title="La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número, un símbolo y tener al menos 8 caracteres."
-              {...register("password")}
-            />
+            <span className="input__login__card__content">
+              <input
+                className="input__password"
+                type={show ? "text" : "password"}
+                required
+                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#.\-])[A-Za-z\d@$!%*?&#.\-]{8,}$"
+                title="La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número, un símbolo y tener al menos 8 caracteres."
+                {...register("password")}
+              />
+
+              <img
+                onClick={() => setShow(!show)}
+                className="img_hide_show_password"
+                src={`../../../${show ? "hide" : "show"}.png`}
+                alt=""
+              />
+            </span>
           </label>
           <label className="label__change__password__card">
             <span className="span__change__password__card">
               Valide su Contraseña
             </span>
-            <input
-              className="input__change__password__card"
-              type="password"
-              required
-              {...register("confirmPassword")}
-            />
+            <span className="input__login__card__content">
+              <input
+                className="input__password"
+                type={show2 ? "text" : "password"}
+                required
+                {...register("confirmPassword")}
+              />
+              <img
+                onClick={() => setShow2(!show2)}
+                className="img_hide_show_password"
+                src={`../../../${show2 ? "hide" : "show"}.png`}
+                alt=""
+              />
+            </span>
           </label>
           <button className="change__password__card__btn">Enviar</button>
         </form>
