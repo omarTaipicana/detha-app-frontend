@@ -56,6 +56,13 @@
   border-radius: 0.5em;
   cursor: pointer;
   text-align: center;
+  /* font-size: 1em;  */
+}
+
+.filters__users option {
+  color: var(--blue-color); 
+  background-color: var(--plomo-color); 
+  font-size: 1em; 
 }
 
 .change__color {
