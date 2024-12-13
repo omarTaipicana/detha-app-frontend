@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams } from 'react-router-dom';
 import useCrud from "../../hooks/useCrud";
 import "./style/DireccionUnidadInfo.css";
 import IsLoading from "../shared/IsLoading";
@@ -20,6 +20,8 @@ const DireccionesUnidadesDetail = () => {
   const [showTableComp, setShowTableComp] = useState(false);
   const [showTableDesp, setShowTableDesp] = useState(false);
   const [showtableNov, setShowtableNov] = useState(false);
+
+  console.log(code)
 
 
   // --------------------------------------------------------------------
@@ -71,6 +73,10 @@ const DireccionesUnidadesDetail = () => {
     });
 
   const org = organico.filter((o) => o?.unidad === direccion?.unidad);
+
+  // console.log(organico[0]?.unidad)
+  // console.log(direccion)
+
   const serv = getFilteredData(servidores, "pases");
   const desp = getFilteredData(servidores, "desplazamientos");
 
