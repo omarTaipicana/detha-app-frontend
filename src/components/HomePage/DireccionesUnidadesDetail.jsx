@@ -74,6 +74,7 @@ const DireccionesUnidadesDetail = () => {
   const serv = getFilteredData(servidores, "pases");
   const desp = getFilteredData(servidores, "desplazamientos");
 
+
   // --------------------------------------------------------------------
   // OBTENER DESPLAZAMIENTOS PROCESADOS
 
