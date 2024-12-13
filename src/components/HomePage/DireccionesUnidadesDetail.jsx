@@ -21,6 +21,7 @@ const DireccionesUnidadesDetail = () => {
   const [showTableDesp, setShowTableDesp] = useState(false);
   const [showtableNov, setShowtableNov] = useState(false);
 
+
   // --------------------------------------------------------------------
   // TRAER
   useEffect(() => {
@@ -45,7 +46,7 @@ const DireccionesUnidadesDetail = () => {
   ];
 
   const direccion = dataFilter.filter(
-    (s) => s.unidad === code.toUpperCase()
+    (s) => s.unidad === code?.toUpperCase()
   )[0];
 
   // --------------------------------------------------------------------
@@ -69,9 +70,11 @@ const DireccionesUnidadesDetail = () => {
       return false;
     });
 
-  const org = organico.filter((o) => o.unidad === direccion.unidad);
+  const org = organico.filter((o) => o?.unidad === direccion?.unidad);
   const serv = getFilteredData(servidores, "pases");
   const desp = getFilteredData(servidores, "desplazamientos");
+
+  console.log(unidad)
 
   // --------------------------------------------------------------------
   // OBTENER DESPLAZAMIENTOS PROCESADOS
