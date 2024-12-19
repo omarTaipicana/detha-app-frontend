@@ -332,19 +332,37 @@ const ServidoresPolicialesList = ({
             onChange={(e) => setSearchTerm(e.target.value)}
           />
 
-          {searchTerm && (
-            <img
-              className="clear-button img__buscar"
-              onClick={() => setSearchTerm("")}
-              aria-label="Clear search "
-              src="../../../goma.png"
-              alt=""
-            />
-          )}
+          <img
+            className="clear-button img__buscar"
+            onClick={() => setSearchTerm("")}
+            aria-label="Clear search "
+            src="../../../goma.png"
+            alt=""
+          />
         </div>
       </div>
 
       <div className="card__servidorPolicial__content">
+        <div className="filters__users__search__container__mobile">
+          <img className="img__buscar" src="../../../buscar.png" alt="" />
+
+          <input
+            type="text"
+            className="filters__users__search"
+            placeholder="Buscar"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+
+          <img
+            className="clear-button img__buscar"
+            onClick={() => setSearchTerm("")}
+            aria-label="Clear search "
+            src="../../../goma.png"
+            alt=""
+          />
+        </div>
+
         {servPerPage.map((servidorPolicial) => (
           <CardServidoresPoliciales
             key={servidorPolicial.id}

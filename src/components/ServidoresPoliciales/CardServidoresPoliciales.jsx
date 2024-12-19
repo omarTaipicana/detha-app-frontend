@@ -275,7 +275,7 @@ const CardServidoresPoliciales = ({
         <li className="card__servidorPolicial__li">
           <span className="card__servidorPolicial__label">UNIDAD: </span>
           <span
-            className="card__servidorPolicial__value"
+            className="card__servidorPolicial__value hide__pc"
             style={{
               color: servidorPolicial?.pases.length === 0 ? "red" : "inherit",
               fontWeight:
@@ -291,6 +291,25 @@ const CardServidoresPoliciales = ({
                     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
                   )[0]?.unidadSubzona || ""
                 } / ${
+                  servidorPolicial.pases.sort(
+                    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+                  )[0]?.unidad || ""
+                }`}
+          </span>
+
+          <span
+            className="card__servidorPolicial__value__mobile"
+            style={{
+              color: servidorPolicial?.pases.length === 0 ? "red" : "inherit",
+              fontWeight:
+                servidorPolicial.pases.length === 0 ? "800" : "inherit",
+              fontSize:
+                servidorPolicial.pases.length === 0 ? "0.7em" : "inherit",
+            }}
+          >
+            {servidorPolicial.pases.length === 0
+              ? "SIN REGISTRO"
+              : ` ${
                   servidorPolicial.pases.sort(
                     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
                   )[0]?.unidad || ""

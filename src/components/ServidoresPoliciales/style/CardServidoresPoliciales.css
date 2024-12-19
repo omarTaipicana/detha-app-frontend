@@ -209,6 +209,10 @@
   font-weight: 700;
 }
 
+.card__servidorPolicial__value__mobile {
+  display: none;
+}
+
 .card__servidorPolicial__value__v {
   width: 1em;
   height: 1em;
@@ -216,32 +220,130 @@
 }
 
 @media (max-width: 600px) {
-  .card__servidorPolicial__servidorPolicial__content {
-    width: 100%;
-    padding: 0.5em;
-  }
-
-  .card__servidorPolicial__servidorPolicial {
-    display: flex;
-    margin: 1em 0;
-    border: none;
-    border-radius: 0.5em;
+  .card__servidorPolicial__content {
     padding: 0.2em;
   }
 
-  .card__servidorPolicial__ul {
-    margin: 0.5em auto;
-    font-size: 0.8em;
+  .paginated-content {
+    width: 100%;
+    margin: 0.2em;
+    gap: 0.1em;
+  }
+
+  .btn-page {
+    border-radius: 0;
+    width: 2em;
+    height: 3em;
+    font-size: 0.6em;
+    padding: 0;
+    writing-mode: vertical-rl;
+  }
+
+  .btn-page-card {
+    border-radius: 100%;
+    width: 1em;
+    height: 1em;
+    padding: 0;
+    margin: 0.1em;
     display: flex;
-    text-align: center;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .triangulo_izq {
+    width: 0;
+    height: 0;
+    border-top: 0.5em solid transparent;
+    border-right: 1em solid var(--blue-color);
+    border-bottom: 0.5em solid transparent;
+  }
+
+  .triangulo_der {
+    width: 0;
+    height: 0;
+    border-top: 0.5em solid transparent;
+    border-left: 1em solid var(--blue-color);
+    border-bottom: 0.5em solid transparent;
+  }
+
+  .servidores__page {
+    font-size: 1em;
+    margin-top: 0.3em;
+  }
+
+  /* //-------------------------------------------------------------------------------------------- */
+
+  .btn__expand:hover {
+    -webkit-transition: all 0.35s ease;
+    transition: all 0.35s ease;
+    transform: scale(1.5);
+  }
+  .btn__expand {
+    width: 1em;
+  }
+
+  .card__servidorPolicial__li__img {
+    display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-around;
   }
+
+  .alert__desplazamiento {
+    width: 1em;
+    height: 1em;
+    border: solid 0.05em var(--black-color);
+    margin-bottom: 0;
+  }
+
+  .card__servidorPolicial {
+    width: 100%;
+    height: 3.5em;
+    border: 0.05em solid black;
+  }
+
+  .card__servidorPolicial:hover {
+    box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.4);
+  }
+
+  .card__servidorPolicial__ul {
+    width: 100%;
+    font-size: 0.8em;
+  }
+
+  .card__servidorPolicial__label {
+    font-size: 0.85em;
+  }
+
   .card__servidorPolicial__li {
-    border: 1px solid black;
-    width: 85%;
-    margin: 0 auto;
+    font-size: 0.8em;
+    font-weight: 700;
   }
-  .card__servidorPolicial__value__v {
-    margin: 0 auto;
+
+  .card__servidorPolicial__li__grado {
+    font-size: 0.8em;
+    font-weight: 700;
+  }
+
+  .card__servidorPolicial__value__mobile {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    overflow: hidden;
+    word-break: break-word;
+    color: var(--plomo2-color);
+    font-weight: 800;
+  }
+
+  .hide__pc {
+    display: none;
+  }
+
+  .card__servidorPolicial__value {
+    font-size: 1em;
+    font-weight: 0;
   }
 }
