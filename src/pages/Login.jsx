@@ -86,7 +86,7 @@ const HomePage = () => {
             </span>
           </label>
 
-          <Link to="/reset_password">Olvido su contraseña</Link>
+          <Link className="link__reset__password" to="/reset_password">Olvido su contraseña</Link>
           <button className="login__card__btn">Ingresar</button>
         </form>
       </div>
