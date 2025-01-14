@@ -135,6 +135,7 @@
   z-index: 10;
   white-space: nowrap;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  display: inline-block;
 }
 
 .ul__tooltip {
@@ -146,10 +147,14 @@
 }
 .label__tooltip {
   width: 50%;
+  font-size: 0.7em;
 }
 
 .value__tooltip {
   width: 50%;
+  font-size: 0.7em;
+  background-color: #333;
+  display: block;
 }
 
 .card__servidorPolicial {
@@ -179,17 +184,19 @@
   display: flex;
   flex-direction: column;
   padding-top: 0.1em;
+  font-size: 0.9em;
 }
 
 .card__servidorPolicial__li__grado {
   display: flex;
   flex-direction: column;
   padding-top: 0.1em;
+  font-size: 0.9em;
 }
 
 .card__servidorPolicial__label {
   text-align: center;
-  font-size: 1.2em;
+  font-size: 0.8em;
   font-weight: 600;
   margin-bottom: 0.5em;
   color: var(--blue2-color);
@@ -207,6 +214,7 @@
   word-break: break-word;
   color: var(--plomo2-color);
   font-weight: 700;
+  font-size: 1.1em;
 }
 
 .card__servidorPolicial__value__mobile {
@@ -222,6 +230,7 @@
 @media (max-width: 600px) {
   .card__servidorPolicial__content {
     padding: 0.2em;
+    margin-bottom: 2em;
   }
 
   .paginated-content {
@@ -234,15 +243,15 @@
     border-radius: 0;
     width: 2em;
     height: 3em;
-    font-size: 0.6em;
+    font-size: 2em;
     padding: 0;
     writing-mode: vertical-rl;
   }
 
   .btn-page-card {
     border-radius: 100%;
-    width: 1em;
-    height: 1em;
+    width: 3em;
+    height: 3em;
     padding: 0;
     margin: 0.1em;
     display: flex;
@@ -256,6 +265,7 @@
     border-top: 0.5em solid transparent;
     border-right: 1em solid var(--blue-color);
     border-bottom: 0.5em solid transparent;
+    font-size: 3em;
   }
 
   .triangulo_der {
@@ -264,11 +274,16 @@
     border-top: 0.5em solid transparent;
     border-left: 1em solid var(--blue-color);
     border-bottom: 0.5em solid transparent;
+    font-size: 3em;
   }
 
   .servidores__page {
-    font-size: 1em;
+    font-size: 5em;
     margin-top: 0.3em;
+  }
+  .servidores__page b {
+    font-size: inherit;
+    font-weight: bold;
   }
 
   /* //-------------------------------------------------------------------------------------------- */
@@ -300,6 +315,7 @@
     width: 100%;
     height: 3.5em;
     border: 0.05em solid black;
+    font-size: 2.5em;
   }
 
   .card__servidorPolicial:hover {

@@ -21,8 +21,6 @@ const DireccionesUnidadesDetail = () => {
   const [showTableDesp, setShowTableDesp] = useState(false);
   const [showtableNov, setShowtableNov] = useState(false);
 
-  console.log(code)
-
 
   // --------------------------------------------------------------------
   // TRAER
@@ -334,7 +332,7 @@ const DireccionesUnidadesDetail = () => {
                   </li>
                 </ul>
                 <section className="direccion__unidad__btn__vermas">
-                  <button className="ver__mas__button">Ver más</button>
+                  <button className="ver__mas__button ver__mas__button__mobile">Ver más</button>
                 </section>
               </article>
             </li>

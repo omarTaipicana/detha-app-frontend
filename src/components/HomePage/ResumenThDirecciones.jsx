@@ -525,7 +525,7 @@ const ResumenThDirecciones = ({
           setExpandedNomenclatura({});
           setExpandedCargo({});
         }}
-        className="cerrar__content"
+        className="cerrar__content cerrar__content__desplazamiento"
       >
         ❌
       </div>

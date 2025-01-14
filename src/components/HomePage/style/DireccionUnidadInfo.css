@@ -226,10 +226,11 @@
 .cerrar__content {
   position: fixed;
   top: 0.5em;
-  right: 1.5em;
-  font-size: 1.2em;
+  right: 1em;
+  font-size: 1.5em;
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
+  z-index: 99;
 }
 
 .cerrar__content:hover {
@@ -485,4 +486,96 @@
   align-items: center;
   justify-content: center;
   font-size: 2em;
+}
+
+@media (max-width: 600px) {
+  .direccion__unidad__content::before {
+    top: 10em;
+  }
+  .direccion__unidad__title {
+    font-size: 2.8em;
+  }
+  .direccion__unidad__resumen__content {
+    margin-top: 16.5em;
+  }
+  .direccion__unidad__ul__resumen_1 {
+    padding: 2em;
+  }
+
+  .direccion__unidad__ul__resumen_2 {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .cerrar__content {
+    right: 0.5em;
+    font-size: 3em;
+  }
+  .direccion__unidad__li__resumen__deficit {
+    border: none;
+  }
+
+  .direccion__unidad__li__resumen__logo {
+    width: 50%;
+    padding: 0;
+    margin: 0;
+    margin: auto 0;
+  }
+
+  .img__logo {
+    width: 100%;
+  }
+  .direccion__unidad__resumen__ul__deficit {
+    width: 100%;
+  }
+  .direccion__unidad__resumen__li__deficit {
+    margin: 0;
+  }
+  .direccion__unidad__resumen__deficit__span__label {
+    font-size: 2em;
+  }
+  .direccion__unidad__resumen__deficit__span__value {
+    font-size: 3em;
+  }
+
+  .direccion__unidad__li__resumen {
+    width: 90%;
+    margin: 0 auto;
+    margin-bottom: 5em;
+  }
+  .direccion__unidad__resumen__title {
+    font-size: 2.5em;
+  }
+  .direccion__unidad__span__resumen__desp {
+    font-size: 2em;
+  }
+  .direccion__unidad__laborando__span__label {
+    font-size: 2em;
+    width: 50%;
+  }
+  .direccion__unidad__laborando__span__value {
+    font-size: 5em;
+    width: 30%;
+  }
+  .value__desp_total,
+  .value__desp {
+    font-size: 3em;
+  }
+  .ver__mas__button {
+    font-size: 2.5em;
+    width: 7em;
+  }
+
+  .ver__mas__button__mobile {
+    width: 20em;
+  }
+
+  .cerrar__content__desplazamiento {
+    right: 0.4em;
+    top: 0.4em;
+    font-size: 2.5em;
+  }
+  .direccion__unidad__img__flecha {
+    width: 5em;
+  }
 }
