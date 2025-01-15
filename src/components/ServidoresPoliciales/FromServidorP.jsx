@@ -157,7 +157,6 @@ const FromServidorP = ({
     }
   }, [newReg]);
 
-  
   useEffect(() => {
     if (updateReg) {
       dispatch(
@@ -180,7 +179,7 @@ const FromServidorP = ({
         >
           <h2 className="title__create__servidor__card">
             {servidorEdit
-              ? "Actualice Informacióndel Servidor Policial"
+              ? "Actualice Información del Servidor Policial"
               : "Registro de Servidor Policial"}
           </h2>
           <div
@@ -212,7 +211,7 @@ const FromServidorP = ({
                 detalleEnfermedad: "",
               });
             }}
-            className="form__exit"
+            className="card__exit"
           >
             ❌
           </div>

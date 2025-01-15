@@ -1,185 +1,170 @@
+.cerate__servidor__btn {
+  width: 10%;
+  align-self: flex-end;
+  background-color: var(--plomo-color);
+  font-size: 0.9em;
+  color: var(--blue-color);
+  text-decoration: none;
+  font-weight: 700;
+  border: solid 0.15rem black;
+  background-color: var(--plomo-color);
+  padding: 0.1em 0.8em;
+  border-radius: 0.5em;
+}
+.cerate__servidor__btn:hover {
+  color: var(--white-color);
+  background-color: var(--blue-color);
+}
 
-  
-  .cerate__servidor__btn {
-    width: 10%;
-    align-self: flex-end;
-    background-color: var(--plomo-color);
-    font-size: 0.9em;
-    color: var(--blue-color);
-    text-decoration: none;
-    font-weight: 700;
-    border: solid 0.15rem black;
-    background-color: var(--plomo-color);
-    padding: 0.1em 0.8em;
-    border-radius: 0.5em;
-  }
-  .cerate__servidor__btn:hover {
-    color: var(--white-color);
-    background-color: var(--blue-color);
-  }
-  
-  .form__close {
-    transform: scale(0);
-  }
-  
-  .form__container__servidor {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 9999;
-    width: 100%;
-    min-height: 100vh;
-    background-color: rgba(0, 0, 0, 0.309);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: transform 1000ms ease;
-  }
-  
+.form__close {
+  transform: scale(0);
+}
+
+.form__container__servidor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100%;
+  min-height: 100vh;
+  background-color: rgba(0, 0, 0, 0.309);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 1000ms ease;
+}
+
+.title__create__servidor__card {
+  text-align: center;
+  font-size: 2em;
+  margin-bottom: 0.5em;
+  color: var(--blue-color);
+  text-shadow: 1px 1px 3px black;
+}
+
+.create__servidor__form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+  width: 80%;
+  background-color: var(--white-color);
+  padding: 2em 1em;
+  border-radius: 0.8rem;
+  position: relative;
+}
+
+.card__exit {
+  color: rgb(3, 3, 3);
+  position: absolute;
+  font-size: 1.3rem;
+  top: 1rem;
+  right: 1rem;
+  cursor: pointer;
+}
+
+.card__exit:hover {
+  -webkit-transition: all 0.35s ease;
+  transition: all 0.35s ease;
+  transform: scale(1.3);
+}
+
+.form__create__servidor__seccion__continer {
+  display: flex;
+  width: 100%;
+}
+
+.form__create__servidor__seccion {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.label__create__servidor__card {
+  display: flex;
+  gap: 0.1em;
+  width: 95%;
+  margin: 0 auto;
+  height: 15%;
+}
+
+.span__create__servidor__card {
+  width: 40%;
+  font-size: 1em;
+  font-weight: 500;
+  color: var(--blue-color);
+  text-shadow: 0.2px 0.2px 2px black;
+}
+
+.input__create__servidor__card {
+  width: 60%;
+  font-size: 0.8em;
+  border-radius: 5px;
+  margin: auto 0;
+  border: 0.15em solid black;
+}
+
+.create__servidor__card__btn {
+  width: 15%;
+  border: none;
+  font-size: 1em;
+  margin: 0 auto;
+  padding: 0.2em;
+  font-weight: 800;
+  color: var(--blue-color);
+  background: transparent;
+  border: 3px solid var(--plomo-color);
+  border-radius: 5px;
+}
+
+.create__servidor__card__btn:hover {
+  background: var(--blue-color);
+  color: var(--plomo-color);
+  border: 3px solid var(--plomo-color);
+  -webkit-transition: all 0.35s ease;
+  transition: all 0.35s ease;
+  transform: translateY(-0.25em);
+}
+
+@media (max-width: 600px) {
   .title__create__servidor__card {
-    text-align: center;
-    font-size: 2em;
-    margin-bottom: 0.5em;
-    color: var(--blue-color);
-    text-shadow: 1px 1px 3px black;
+    font-size: 5em;
   }
-  
+
   .create__servidor__form {
-    display: flex;
+    width: 90%;
+    padding: 2em;
+  }
+
+  .form__create__servidor__seccion__continer {
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 1em;
-    width: 80%;
-    background-color: var(--white-color);
-    padding: 2em 1em;
-    border-radius: 0.8rem;
-    position: relative;
-  }
-  
-  .card__exit {
-    color: rgb(3, 3, 3);
-    position: absolute;
-    font-size: 1.3rem;
-    top: 1rem;
-    right: 1rem;
-    cursor: pointer;
   }
 
-  .card__exit:hover {
-    -webkit-transition: all 0.35s ease;
-    transition: all 0.35s ease;
-    transform: scale(1.3);
-  }
-
-  .form__create__servidor__seccion__continer{
-    display: flex;
+  .form__create__servidor__seccion {
     width: 100%;
-  }
-
-  .form__create__servidor__seccion{
-    width: 50%;
-    display: flex;
     flex-direction: column;
-    gap: 1em;
-
+    gap: 2em;
+    margin-bottom: 2em;
   }
 
-  
   .label__create__servidor__card {
-    display: flex;
-    gap: 0.1em;
     width: 95%;
-    margin: 0 auto;
-    height: 15%;
   }
-  
+
   .span__create__servidor__card {
-    width: 40%;
-    font-size: 1em;
-    font-weight: 500;
-    color: var(--blue-color);
-    text-shadow: 0.2px 0.2px 2px black;
+    font-size: 2.5em;
   }
-  
+
   .input__create__servidor__card {
     width: 60%;
-    font-size: 0.8em;
-    border-radius: 5px;
-    margin: auto 0;
-    border: 0.15em solid black;
+    font-size: 2em;
   }
-  
+
   .create__servidor__card__btn {
-    width: 15%;
-    border: none;
-    font-size: 1em;
-    margin: 0 auto;
-    padding: 0.2em;
-    font-weight: 800;
-    color: var(--blue-color);
-    background: transparent;
-    border: 3px solid var(--plomo-color);
-    border-radius: 5px;
+    width: 30%;
+    font-size: 3em;
+    margin-bottom: 1em;
   }
-  
-  .create__servidor__card__btn:hover {
-    background: var(--blue-color);
-    color: var(--plomo-color);
-    border: 3px solid var(--plomo-color);
-    -webkit-transition: all 0.35s ease;
-    transition: all 0.35s ease;
-    transform: translateY(-0.25em);
-  }
-  
-  @media (max-width: 600px) {
-    .create__servidors__list__servidors {
-      display: flex;
-      flex-direction: column;
-    }
-  
-    .create__servidor__card {
-      width: 100%;
-      padding: 0em;
-      margin-top: 1em;
-    }
-  
-    .title__create__servidor__card {
-      font-size: 1.5em;
-    }
-  
-    .create__servidor__form {
-      gap: 0.5em;
-    }
-    .cerate__servidor__btn{
-      width: 40%;
-      font-size: 0.7em;
-    }
-  
-  
-    .label__create__servidor__card {
-      display: flex;
-      gap: 0.1em;
-      width: 95%;
-      margin: 0 auto;
-    }
-    
-    .span__create__servidor__card {
-      width: 30%;
-      font-size: 0.8em;
-      font-weight: 700;
-      color: var(--blue-color);
-      text-shadow: 0.5px 0.5px 2px black;
-    }
-    
-    .input__create__servidor__card {
-      width: 60%;
-      font-size: 1em;
-      border-radius: 5px;
-    }
-  
-    .create__servidor__card__btn{
-      width: 50%;
-    }
-  }
-  
+}

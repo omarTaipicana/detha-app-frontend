@@ -142,12 +142,13 @@ const CardServidor = ({ servidor, hide, setHide }) => {
                     <li className="li__servidor__info">
                       <span className="span__servidor">Nombres: </span>
                       <span className="span__servidor__info">
-                        {servidor.nombres} {servidor.apellidos}
+                        -{servidor.nombres} {servidor.apellidos}
                       </span>
                     </li>
                     <li className="li__servidor__info">
                       <span className="span__servidor">Grado: </span>
                       <span className="span__servidor__info">
+                        -
                         {servidor.ascensos && servidor.ascensos.length > 0
                           ? servidor.ascensos
                               .slice()
@@ -161,13 +162,14 @@ const CardServidor = ({ servidor, hide, setHide }) => {
                     <li className="li__servidor__info">
                       <span className="span__servidor">Cédula: </span>
                       <span className="span__servidor__info">
-                        {servidor.cI}
+                        -{servidor.cI}
                       </span>
                     </li>
 
                     <li className="li__servidor__info">
                       <span className="span__servidor">Pase Actual: </span>
                       <span className="span__servidor__info">
+                        -{" "}
                         {servidor.pases && servidor.pases.length > 0
                           ? servidor.pases
                               .slice()
@@ -183,19 +185,19 @@ const CardServidor = ({ servidor, hide, setHide }) => {
                         Fecha de nacimiento:{" "}
                       </span>
                       <span className="span__servidor__info">
-                        {servidor.fechaNacimiento}
+                        -{servidor.fechaNacimiento}
                       </span>
                     </li>
                     <li className="li__servidor__info">
                       <span className="span__servidor">Edad: </span>
-                      <span className="span__servidor__info">{edad}</span>
+                      <span className="span__servidor__info">-{edad}</span>
                     </li>
                     <li className="li__servidor__info">
                       <span className="span__servidor">
                         Ingreso a la PPNN:{" "}
                       </span>
                       <span className="span__servidor__info">
-                        {servidor.fechaIngreso}
+                        -{servidor.fechaIngreso}
                       </span>
                     </li>
 
@@ -204,7 +206,7 @@ const CardServidor = ({ servidor, hide, setHide }) => {
                         Tiempo en la Institución:{" "}
                       </span>
                       <span className="span__servidor__info">
-                        {tiempoServicio}
+                        -{tiempoServicio}
                       </span>
                     </li>
                     <li className="li__servidor__info">
@@ -212,7 +214,7 @@ const CardServidor = ({ servidor, hide, setHide }) => {
                         Provincia de Residencia:{" "}
                       </span>
                       <span className="span__servidor__info">
-                        {servidor.provinciaResidencia}
+                        - {servidor.provinciaResidencia}
                       </span>
                     </li>
                     <li className="li__servidor__info">
@@ -220,7 +222,7 @@ const CardServidor = ({ servidor, hide, setHide }) => {
                         Cantón de Residencia:{" "}
                       </span>
                       <span className="span__servidor__info">
-                        {servidor.cantonResidencia}
+                        - {servidor.cantonResidencia}
                       </span>
                     </li>
                     <li className="li__servidor__info">
@@ -228,26 +230,26 @@ const CardServidor = ({ servidor, hide, setHide }) => {
                         Dirección domiciliaria:{" "}
                       </span>
                       <span className="span__servidor__info">
-                        {servidor.direccionResidencia}
+                        - {servidor.direccionResidencia}
                       </span>
                     </li>
 
                     <li className="li__servidor__info">
                       <span className="span__servidor">Estado Civil: </span>
                       <span className="span__servidor__info">
-                        {servidor.estadoCivil}
+                        -{servidor.estadoCivil}
                       </span>
                     </li>
                     <li className="li__servidor__info">
                       <span className="span__servidor">Etnia: </span>
                       <span className="span__servidor__info">
-                        {servidor.etnia}
+                        -{servidor.etnia}
                       </span>
                     </li>
                     <li className="li__servidor__info">
                       <span className="span__servidor">Acreditado: </span>
                       <span className="span__servidor__info">
-                        {servidor.acreditado}
+                        - {servidor.acreditado}
                       </span>
                     </li>
                     <li className="li__servidor__info">
@@ -255,7 +257,7 @@ const CardServidor = ({ servidor, hide, setHide }) => {
                         Alerta de Discapacidad:{" "}
                       </span>
                       <span className="span__servidor__info">
-                        {servidor.alertaDiscapacidad}
+                        - {servidor.alertaDiscapacidad}
                       </span>
                     </li>
 
@@ -266,7 +268,7 @@ const CardServidor = ({ servidor, hide, setHide }) => {
                             Tipo de Discapacidad:{" "}
                           </span>
                           <span className="span__servidor__info">
-                            {servidor.tipoDiscapacidad}
+                            -{servidor.tipoDiscapacidad}
                           </span>
                         </li>
                         <li className="li__servidor__info">
@@ -274,7 +276,7 @@ const CardServidor = ({ servidor, hide, setHide }) => {
                             Porcentaje de Discapacidad:{" "}
                           </span>
                           <span className="span__servidor__info">
-                            {servidor.porcentajeDiscapacidad}
+                            -{servidor.porcentajeDiscapacidad}
                           </span>
                         </li>
                         <li className="li__servidor__info">
@@ -282,7 +284,7 @@ const CardServidor = ({ servidor, hide, setHide }) => {
                             Detalle de discapacidad:{" "}
                           </span>
                           <span className="span__servidor__info">
-                            {servidor.detalleDiscapacidad}
+                            - {servidor.detalleDiscapacidad}
                           </span>
                         </li>
                       </div>
@@ -293,7 +295,7 @@ const CardServidor = ({ servidor, hide, setHide }) => {
                         Alerta de Enf. Catastróf:{" "}
                       </span>
                       <span className="span__servidor__info">
-                        {servidor.alertaEnfermedadCatastrofica}
+                        - {servidor.alertaEnfermedadCatastrofica}
                       </span>
                     </li>
 
@@ -304,7 +306,7 @@ const CardServidor = ({ servidor, hide, setHide }) => {
                             Detalle de Enfermedad:{" "}
                           </span>
                           <span className="span__servidor__info">
-                            {servidor.detalleEnfermedad}
+                            -{servidor.detalleEnfermedad}
                           </span>
                         </li>
                       </div>

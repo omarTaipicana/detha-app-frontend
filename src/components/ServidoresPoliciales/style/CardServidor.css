@@ -54,7 +54,8 @@
   justify-content: center;
   align-items: center;
   gap: 1em;
-  width: 96%;
+  width: 98%;
+  margin: 0 auto;
   opacity: 95%;
   padding: 2em 1em;
   border-radius: 0.8rem;
@@ -93,6 +94,7 @@
   width: 100%;
   padding: 0.5em;
   margin: 0.5em;
+  font-size: 1em;
 }
 .div__hide {
   width: 100%;
@@ -299,6 +301,7 @@
 .table__info th {
   white-space: nowrap;
   padding: 8px;
+  font-size: 0.6em;
 }
 
 .table__container {
@@ -310,15 +313,18 @@
 .table__info__desplazamiento {
   width: 100%;
   max-width: 100%;
+  font-size: 0.6em;
 }
 
 .table__info__desplazamiento th {
   padding: 0.1em;
+  font-size: 0.6em;
 }
 
 .table__td {
   background-color: rgba(255, 255, 255, 0.509);
   padding: 1em;
+  font-size: 0.6em;
 }
 
 .delete__card {
@@ -329,4 +335,150 @@
   margin-top: 1em;
   width: 50%;
   display: flex;
+}
+
+@media (max-width: 600px) {
+  .title__servidor__card {
+    font-size: 4.5em;
+  }
+
+  .card__exit {
+    font-size: 3rem;
+    top: 0.7em;
+    right: 0.2em;
+  }
+
+  .container__servidor__info__form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .container__servidor__card {
+    width: 95%;
+    margin: 0 auto;
+  }
+
+  .container__servidor__info {
+    padding: 2em;
+    border-radius: 2em;
+    margin-bottom: 2em;
+  }
+
+  .div__hide {
+    width: 100%;
+  }
+  .li__servidor__info {
+    font-size: 2.2em;
+  }
+
+  .span__servidor {
+    width: 40%;
+  }
+
+  .span__servidor__info {
+    width: 60%;
+  }
+
+  .container__servidor__form {
+    width: 95%;
+    margin: 0 auto;
+  }
+
+  .seccion {
+    margin-bottom: 1em;
+  }
+
+  .seccion-header {
+    font-size: 3em;
+  }
+
+  .titulo__seccion {
+    font-size: 1em;
+  }
+
+  .seccion-content {
+    padding: 5px;
+  }
+
+  .form__container__info {
+    width: 100%;
+    height: 100vh;
+  }
+
+  .form__container__info__close {
+    transform: scale(0);
+  }
+
+  .btn__table {
+    width: 4em;
+  }
+
+  .form__info {
+    gap: 1.5em;
+    width: 100%;
+    max-width: 80em;
+    padding: 3em;
+    border-radius: 1rem;
+  }
+
+  .btn__exit__form__info {
+    font-size: 3em;
+    top: 0.4em;
+    right: 0.2em;
+  }
+
+  .label__form {
+    display: flex;
+    width: 100%;
+  }
+
+  .label__form__relevo {
+    display: flex;
+    width: 142%;
+    position: relative;
+    right: 11em;
+  }
+
+  .span__form__info {
+    font-size: 2em;
+    width: 27%;
+    text-align: left;
+  }
+
+  .input__form__info,
+  .select__form__info {
+    font-size: 2em;
+    width: 70%;
+  }
+
+  .btn__form__info {
+    width: 25%;
+    font-size: 2.8em;
+  }
+
+  .table__info th {
+    white-space: wrap;
+    padding: 1px;
+    font-size: 1.2em;
+  }
+
+  .table__info__desplazamiento {
+    position: relative;
+    left: 24em;
+  }
+
+  .table__info__desplazamiento th {
+    padding: 0em;
+    font-size: 1.2em;
+  }
+
+  .table__td {
+    padding: 0.1em;
+    font-size: 1.2em;
+  }
+
+  .delete__card {
+    font-size: 3em;
+  }
 }

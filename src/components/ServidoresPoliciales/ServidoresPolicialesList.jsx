@@ -209,7 +209,7 @@ const ServidoresPolicialesList = ({
   useEffect(() => {
     setPage(1);
     setPageButton(1);
-  }, [searchTerm, selectedDireccion, selectedUnidad, selectedUnidadSubzona]);
+  }, [searchTerm, selectedDireccion, selectedUnidad, selectedUnidadSubzona, desplazamiento]);
 
   const [page, setPage] = useState(1);
   const servPol = 8;

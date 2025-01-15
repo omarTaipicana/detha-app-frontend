@@ -175,6 +175,7 @@ const CardServidoresPoliciales = ({
         >
           {direccion && (
             <img
+              className="flecha__traslado"
               onClick={handleEditServidorPolicial}
               src={`../../../${direccion}.png`}
               alt=""

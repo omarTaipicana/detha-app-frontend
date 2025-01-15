@@ -110,6 +110,10 @@
   align-items: flex-start;
 }
 
+.btn__expand {
+  width: 1.45em;
+}
+
 .alert__desplazamiento {
   width: 1.5em;
   height: 1.5em;
@@ -185,6 +189,7 @@
   flex-direction: column;
   padding-top: 0.1em;
   font-size: 0.9em;
+  font-weight: 600;
 }
 
 .card__servidorPolicial__li__grado {
@@ -192,11 +197,12 @@
   flex-direction: column;
   padding-top: 0.1em;
   font-size: 0.9em;
+  font-weight: 600;
 }
 
 .card__servidorPolicial__label {
   text-align: center;
-  font-size: 0.8em;
+  font-size: 1.3em;
   font-weight: 600;
   margin-bottom: 0.5em;
   color: var(--blue2-color);
@@ -213,8 +219,8 @@
   overflow: hidden;
   word-break: break-word;
   color: var(--plomo2-color);
-  font-weight: 700;
-  font-size: 1.1em;
+  font-weight: 600;
+  font-size: 1.2em;
 }
 
 .card__servidorPolicial__value__mobile {
@@ -228,6 +234,10 @@
 }
 
 @media (max-width: 600px) {
+  .btn__expand {
+    font-size: 1em;
+  }
+
   .card__servidorPolicial__content {
     padding: 0.2em;
     margin-bottom: 2em;
@@ -294,7 +304,7 @@
     transform: scale(1.5);
   }
   .btn__expand {
-    width: 1em;
+    width: 3em;
   }
 
   .card__servidorPolicial__li__img {
@@ -305,15 +315,17 @@
   }
 
   .alert__desplazamiento {
-    width: 1em;
-    height: 1em;
+    width: 2.5em;
+    height: 2.5em;
     border: solid 0.05em var(--black-color);
     margin-bottom: 0;
   }
-
+  .alert__desplazamiento .flecha__traslado {
+    width: 2.5em !important;
+  }
   .card__servidorPolicial {
     width: 100%;
-    height: 3.5em;
+    height: 4.5em;
     border: 0.05em solid black;
     font-size: 2.5em;
   }
@@ -328,16 +340,16 @@
   }
 
   .card__servidorPolicial__label {
-    font-size: 0.85em;
+    font-size: 1.1em;
   }
 
   .card__servidorPolicial__li {
-    font-size: 0.8em;
+    font-size: 0.9em;
     font-weight: 700;
   }
 
   .card__servidorPolicial__li__grado {
-    font-size: 0.8em;
+    font-size: 0.9em;
     font-weight: 700;
   }
 
@@ -359,7 +371,7 @@
   }
 
   .card__servidorPolicial__value {
-    font-size: 1em;
+    font-size: 1.15em;
     font-weight: 0;
   }
 }
